@@ -1,0 +1,11 @@
+{
+  "name": "caliber-suite",
+  "plugins": [
+    {
+      "name": "caliber",
+      "version": "1.1.1",
+      "description": "caliber 工程任务定级路由 + plan-forge + plan-review-ritual 三件套，附 CONTEXT.md/INDEX.md 自动注入 hooks",
+      "source": "./caliber"
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|compact",
+        "hooks": [
+          {
+            "type": "process",
+            "command": "C:/Program Files/Git/bin/bash.exe",
+            "args": [
+              "${CLAUDE_PLUGIN_ROOT}/hooks/context-md.sh"
+            ],
+            "timeoutMs": 5000
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Skill",
+        "hooks": [
+          {
+            "type": "process",
+            "command": "C:/Program Files/Git/bin/bash.exe",
+            "args": [
+              "${CLAUDE_PLUGIN_ROOT}/hooks/index-md.sh"
+            ],
+            "timeoutMs": 5000
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "process",
+            "command": "C:/Program Files/Git/bin/bash.exe",
+            "args": [
+              "${CLAUDE_PLUGIN_ROOT}/hooks/index-registry-check.sh"
+            ],
+            "timeoutMs": 5000
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "process",
+            "command": "C:/Program Files/Git/bin/bash.exe",
+            "args": [
+              "${CLAUDE_PLUGIN_ROOT}/hooks/learnings-wrapup.sh"
+            ],
+            "timeoutMs": 5000
+          }
+        ]
+      }
+    ]
+  }
+}

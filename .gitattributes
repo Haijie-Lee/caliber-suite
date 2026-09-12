@@ -1,0 +1,3 @@
+# 分发物含 bash 脚本：无论克隆方 autocrlf 如何设置，.sh 一律 LF 出库
+# （CRLF 会让 bash 变量捕获 \r——与 hook 脚本 \r\n 陷阱同源）
+*.sh text eol=lf
