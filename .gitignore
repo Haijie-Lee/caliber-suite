@@ -1,0 +1,10 @@
+# caliber-suite 分发仓护栏（源文件 = 私有仓 tools/dist-gitignore，经 package-dist.sh 进包）
+# 本仓由私有开发仓白名单打包生成。下列路径属开发仓内部内容，永不进入本仓——
+# 若同步失误把它们带进来，git 拒绝跟踪，git status 立即暴露。
+docs/
+.caliber/
+tools/
+dist/
+# 系统噪音
+Thumbs.db
+.DS_Store
