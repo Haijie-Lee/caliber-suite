@@ -79,5 +79,3 @@ caliber 的思路：前两类靠 hooks 在事件点上**自动注入**（不依�
 <p align="center">
   <img src="assets/wechat-reward-qr.png" alt="微信收款码" width="220" />
 </p>
-
-> 本节样式参考自 [handsomestWei/patent-disclosure-skill](https://github.com/handsomestWei/patent-disclosure-skill) 的「支持作者」章节。
