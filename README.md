@@ -2,7 +2,7 @@
 
 > 最后更新：2026-09-13
 
-caliber 是一个 ZCode 插件（以 git 仓库形态作为 marketplace 源分发），把"工程纪律"打包为 **3 个 skills + 4 个工作流 hooks**：skills 让流程严谨度随任务复杂度缩放，hooks 在关键时刻把纪律自动递到 agent 眼前。
+caliber 是一个 ZCode 插件（以 git 仓库形态作为 marketplace 源分发），把"工程纪律"打包为 **4 个 skills + 4 个工作流 hooks**：skills 让流程严谨度随任务复杂度缩放，hooks 在关键时刻把纪律自动递到 agent 眼前。
 
 ## 它解决什么问题
 
@@ -16,13 +16,14 @@ caliber 的思路：前两类靠 hooks 在事件点上**自动注入**（不依�
 
 ## 组件
 
-### Skills（3 个）
+### Skills（4 个）
 
 | 组件 | 一句话职责 |
 |---|---|
 | `caliber` | 工程任务总入口：定级（S/M/L，M 档再分 MS/ML 子档）、路由、守停止点；六阶段骨架恒定、剂量随级缩放 |
 | `plan-forge` | ML/L 级出正式 plan 文档的锻造工艺：选材→制坯→锻打（L 级收敛循环）→准出闸口→成型（弱模型真实彩排） |
 | `plan-review-ritual` | 任何 plan/spec 写完后、交付实现前的对抗审查仪式：双声部共识、三级裁定、决策审计追踪 |
+| `init-docs` | 新工程 docs 体系播种：探测 gap → 预览确认 → 模板落盘，建立四件种子文件激活 hooks 订阅（CONTEXT.md / 治理宪法 / learnings 索引 / AGENTS.md 文档地图） |
 
 ### Hooks（4 个，全自动，无需调用）
 
@@ -52,8 +53,8 @@ caliber 的思路：前两类靠 hooks 在事件点上**自动注入**（不依�
 ## 使用
 
 - **hooks 全自动生效**，无需任何调用。
-- **订阅机制 = 声明即数据**：工程根存在 `CONTEXT.md`，开工即自动注入；存在 `docs/learnings/INDEX.md`，learnings 相关 hooks 自动订阅。没有这些文件的工程**零打扰**——不需要任何配置开关。
-- **skills 按需调用**：`caliber:caliber` / `caliber:plan-forge` / `caliber:plan-review-ritual`，或用裸名 `caliber` / `plan-forge` / `plan-review-ritual`。
+- **订阅机制 = 声明即数据**：工程根存在 `CONTEXT.md`，开工即自动注入；存在 `docs/learnings/INDEX.md`，learnings 相关 hooks 自动订阅。没有这些文件的工程**零打扰**——不需要任何配置开关。新工程可用 `init-docs` 一键建立种子文件。
+- **skills 按需调用**：`caliber:caliber` / `caliber:plan-forge` / `caliber:plan-review-ritual` / `caliber:init-docs`，或用裸名 `caliber` / `plan-forge` / `plan-review-ritual` / `init-docs`。
 
 ## 更新
 
@@ -70,3 +71,13 @@ caliber 的思路：前两类靠 hooks 在事件点上**自动注入**（不依�
 
 - 卸载：Settings → Plugin Management 直接卸载即可。
 - 问题与建议：走本仓库 Issues。
+
+## 支持作者
+
+如果这个插件对您有帮助，可以请作者喝杯咖啡☕随缘支持，感谢感谢🙏🙏
+
+<p align="center">
+  <img src="assets/wechat-reward-qr.png" alt="微信收款码" width="220" />
+</p>
+
+> 本节样式参考自 [handsomestWei/patent-disclosure-skill](https://github.com/handsomestWei/patent-disclosure-skill) 的「支持作者」章节。

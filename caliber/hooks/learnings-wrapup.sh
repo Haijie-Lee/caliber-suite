@@ -4,7 +4,7 @@
 # 未触 docs/learnings 时，以 Stop continuation（顶层 decision:block）递送
 # §9 收尾检查单。契约 C3/C4/C5/C6/C8；每会话至多提醒一次，有新 HEAD 可再一次。
 # exit 恒 0；任何异常静默；禁 set -e；stopHookActive=true 一律静默（防续跑循环，
-# 2026-09-12 sess_68f2c2c9 实证）
+# 2026-09-12 探针实证）
 INPUT=$(cat)
 PY=$(command -v python 2>/dev/null || command -v python3 2>/dev/null || true)
 [ -n "$PY" ] || exit 0
