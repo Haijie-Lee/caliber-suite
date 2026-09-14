@@ -2,7 +2,7 @@
 name: caliber
 description: "Use when starting any engineering task — feature, bugfix, refactor, or change request — before touching code. Not for pure Q&A, research, or open-ended discussion."
 metadata:
-  version: "1.9.0"
+  version: "1.10.0"
   source: distilled-from-practice
 ---
 
@@ -38,7 +38,7 @@ metadata:
 | plan-forge | ML/L 级阶段 2（plan 锻造；ML 级仅工序 1-2，L 级工序 1-4） | 退回：ML 级阶段 2 调 writing-plans；L 级阶段 3 调 plan-review-ritual |
 | superpowers:subagent-driven-development | ML/L 级阶段 4 实现 | 读 fallback.md §单会话SDD |
 | superpowers:finishing-a-development-branch | L 级阶段 6 分支收尾 | 读 fallback.md §分支收尾 |
-| ecc:learn 或 skillify | L 级阶段 6 经验固化 | 读 fallback.md §固化 |
+| 经验固化组件（skillify / ecc:learn / 项目级 learnings 任一） | L 级阶段 6 经验固化 | 读 fallback.md §固化 |
 
 缺失不中断：读 `fallback.md` 对应章节兜住纪律，告知用户装回完整版效果更佳。
 （分支收尾/经验固化仅 L 级用到，S/M 级任务缺席不告警；plan-forge 为 ML/L 级用到，S/MS 级任务缺席不告警，届时再验。）
@@ -99,17 +99,11 @@ dispatch 派发）；S/MS 无 dispatch 边界，主线程查表纪律实测失�
    Cargo.toml / go.mod / sdkconfig / CMakeLists.txt，存在哪个读哪个），得出
    languages + frameworks 两行结论。
 2. **预提取**（主线程执行，侦察 agent 不读大文件）：
-   - 可见组件清单：`python -c` 扫描 `~/.claude/skills/*/SKILL.md` 取
-     name+description 首行，外加 ecc 白名单 24 个与 gstack router 入口；
-     **剔除体系黑名单**（caliber 骨架无条件编排组件，与 scout prompt
-     排除清单同源）：`caliber`、`plan-forge`、`plan-review-ritual`、
-     `qwen-cli`、`minimax-cli`、`skillify`、`ecc:learn`、`superpowers:*`
-     ——入表纯冗余且挤占路由名额；
-   - 遥测 top-30：执行
+   - 可见组件清单：**主源 = 当前会话可用 skill 清单**（系统提示注入的 name + 文件路径，即"可加载"全集；注意注入清单**不含 description**，2026-09-14 实证）——以清单路径为输入跑 `python` 批量预提取（逐路径读 SKILL.md frontmatter 取 name+description 首行）；**补充源 = 磁盘扫描** `~/.zcode/skills/`、`~/.agents/skills/`、`~/.claude/skills/`（存在才扫，发现未加载组件供 visible:false 注入式激活，磁盘扫描实际获得的真实路径是合法 path 来源）；预提取输出**分两区**：主源区（会话清单条目：名称+简述）与补充源区（磁盘扫描条目：每条带 `[磁盘扫描]` 前缀 + 实得文件路径），填入 `{VISIBLE_COMPONENTS}` 槽时保持分区与标注原样——前缀是 scout 步骤 4 的 visible 判定依据，**不得丢弃**（2026-09-14 轮 3 pre-mortem 实证：无标注则磁盘组件被误标 visible:true 丢路径，注入式激活静默失效）；
+     **剔除体系黑名单**（caliber 骨架无条件编排组件，与 scout prompt 排除清单同源）：`caliber`、`plan-forge`、`plan-review-ritual`、`qwen-cli`、`minimax-cli`、经验固化组件（`skillify`/`ecc:learn`）、`superpowers:*`——入表纯冗余且挤占路由名额；
+   - 遥测 top-30：`~/.claude.json` 存在才执行下列命令；不存在（纯 ZCode 环境无对应物，2026-09-14 实证）槽位填 `EMPTY`：
      `python -c "import json,os; d=json.load(open(os.path.expanduser('~/.claude.json'),encoding='utf-8'))['skillUsage']; [print(k+': '+str(v.get('usageCount',0))) for k,v in sorted(d.items(), key=lambda x: -x[1].get('usageCount',0))[:30]]"`；
-   - 隐藏索引：槽位只填文件路径 `~/.claude/hidden-components-index.yaml`
-     （实测 ~37K tokens，2026-08-25），由侦察 agent 自行 Read；文件不存在
-     则槽位填 `EMPTY` 并继续（提示可跑 muzzle 脚本生成）。
+   - 隐藏索引：槽位只填文件路径 `~/.claude/hidden-components-index.yaml`（ecc muzzle 产物；实测 ~37K tokens，2026-08-25），由侦察 agent 自行 Read；文件不存在则槽位填 `EMPTY` 并继续（提示可跑 muzzle 脚本生成）。
 3. **dispatch 侦察 agent**：`Task(subagent_type=general-purpose, model=haiku)`，
    prompt 按 `route-scout-prompt.md` 填槽：`{TASK_SUMMARY} {CALIBER_LEVEL}
    {PROJECT_FINGERPRINT} {VISIBLE_COMPONENTS} {HIDDEN_INDEX} {TELEMETRY}`。
@@ -128,7 +122,7 @@ dispatch 派发）；S/MS 无 dispatch 边界，主线程查表纪律实测失�
 消费**（组合决定由编排层做），本段只管 `visible: false` 组件的装载手段。
 `visible: false`
 的组件注入式激活（agent → `Task(general-purpose, prompt=Read(<path>) 正文 +
-任务)`；skill/command → Read 正文遵循执行，或提示用户 `/ecc:<name>`）；
+任务)`；skill/command → Read 正文遵循执行，或提示用户 `/<plugin>:<name>` 斜杠命令形态（如 `/ecc:<name>`）；
 未命中走全局默认。路由表是优先推荐层，不屏蔽任何全局组件。
 
 ## Step 2 — 按级施准（六阶段骨架）
@@ -184,28 +178,28 @@ plan 管"做什么"（绑定权威，刚性）；本节管"拿什么做"（skill
   边界做出（C6）。
 - **agent_type = f(画像)**（dispatch 第三轴，2026-09-01 新增）：见 2b 映射表。
 
-**2b. agent_type 映射**（2026-09-01 从 1005 份历史 transcript 实测分布蒸馏；
-候选只认 Agent 工具当前可见列表，无信号退 general-purpose）：
+**2b. agent_type 映射**（dispatch 第三轴，2026-09-14 链式重写）：候选只认当前会话 Agent 工具可见列表；按**去前缀名**匹配（`${name##*:}`）取链上首个在场者；全链缺席退 `general-purpose`。选择结果记 ledger（`agent=<type>`），可审计可校准：
 
-| 画像/任务信号 | subagent_type | 实测依据 |
+| 画像/任务信号 | 优先链（取首个在场者，去前缀匹配） | 兜底 |
 |---|---|---|
-| 只读搜索/定位（fan-out 扫文件，结论导向） | `Explore` | 108 次，只读主力 |
-| 逐任务 diff 审查（SDD reviewer 槽） | `ecc:code-reviewer` | 115 次，与 ecc"改动后必须用"条款同源 |
-| 审查且领域词命中语言专项（python/go/rust/cpp/ts/react/flutter） | `ecc:<lang>-reviewer` | 低频（cpp 仅 1 次）——待账本验证增量 |
-| L 级阶段 5 多维大审查 | `comprehensive-review:*` 三件套 | 62 次 |
-| 实现（机械/集成 dispatch） | `coder` 优先，`general-purpose` 备选 | 250 次 |
-| 计划/拆解/需求分析 | `Plan` / `architect` | 39 次 |
-| 无信号 / 拿不准 | `general-purpose` | 兜底（现状 856 次即它） |
+| 只读搜索/定位（fan-out 扫文件，结论导向） | `Explore` | general-purpose |
+| 代码 diff 审查（SDD reviewer 槽） | `code-reviewer` | general-purpose |
+| plan 对抗审查（ritual 声部 A） | `plan-reviewer`（详见 ritual Step 2 选择链与双形态 prompt） | general-purpose |
+| 实现（机械/集成 dispatch） | `coder` → `general-purpose` | general-purpose |
+| 计划/拆解/需求分析 | `architect` → `code-architect` | general-purpose |
+| 疑难 bug 诊断（根因不明类） | `debugger` | general-purpose |
+| 深度调研/选型 | `researcher` | general-purpose |
+| 文档撰写/手册/报告（dispatch 形态时） | `doc-writer` | general-purpose |
+| 系统操作/安装配置/进程服务（dispatch 形态时） | `ops-operator` | general-purpose |
+| 无信号 / 拿不准 | `general-purpose` | — |
+
+注：文档/系统操作类任务缺省收回主线程 inline（§动态组合 骨架：配置、文档→TDD轻验证）；上两行在编排层决定 dispatch 时生效。
 
 纪律：
-- **只读信号不明确 → 一律给全工具 type**：权限错配（只读 agent 干写活）
-  比选择保守更危险。
-- 体系内已写死者不在本表、勿改：plan 对抗审查（ritual 声部 A）=
-  `general-purpose`（ritual Step 2 写死；plan 审查非代码 diff 审查，
-  ecc:code-reviewer 的代码场景系统提示错配）；litmus 彩排 =
-  `general-purpose + haiku`（plan-forge 工序 4 写死）。
-- 映射是启发式非绑定；agent 列表随插件增减漂移时旧映射不失效（找不到的
-  type 退 general-purpose）。
+- **只读信号不明确 → 一律给全工具 type**：权限错配（只读 agent 干写活）比选择保守更危险。
+- 体系内仍写死者（勿链化）：litmus 彩排 = `general-purpose + haiku`（plan-forge 工序 4 写死——刻意用最弱模型+零背景探测困惑，换强 agent 反而失效）；工序 3.5 准出闸口 = `general-purpose + 最强可用模型`（闸口契约=强模型全局复审；链化待 dispatch model 轴与 agent frontmatter `model` 覆盖优先级实证）。
+- 链是启发式非绑定；agent 列表随插件增减漂移时旧链不失效（全缺席退 general-purpose = 现状行为）。
+- 历史注记：旧版 ecc 专属行（ecc:code-reviewer / ecc:<lang>-reviewer / comprehensive-review 三件套）与 1005 份 Claude 环境 transcript 频次依据随环境退役，不再作为选择依据。
 
 **3. 难度决定执行形态**：
 - 机械 → **裸 SDD dispatch**（零组合或最小组合，保住便宜快）

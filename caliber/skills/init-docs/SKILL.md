@@ -2,7 +2,7 @@
 name: init-docs
 description: "Use when bootstrapping a project into the caliber docs-governance system — creates the seed files (CONTEXT.md, docs/README.md constitution, docs/learnings/INDEX.md, AGENTS.md doc-map block) that activate the plugin hooks by data-declaration subscription. 中文触发：初始化文档体系、新工程 docs 引导、建立治理宪法、播种文档体系、订阅 hooks"
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
   source: distilled-from-practice
 ---
 

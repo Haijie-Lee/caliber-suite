@@ -16,6 +16,7 @@
 {PROJECT_FINGERPRINT}
 
 ### 可见组件（名称 + 简述）
+（槽内分两区：主源 = 会话已加载组件（名称+简述）；补充源 = 磁盘扫描补出的未加载组件，每条带 `[磁盘扫描]` 前缀与实得路径——前缀是步骤 4 visible 判定依据，不得丢弃。）
 {VISIBLE_COMPONENTS}
 
 ### 隐藏组件索引（槽位为**文件路径**——用 Read 工具读该 YAML 文件，
@@ -23,6 +24,7 @@
 {HIDDEN_INDEX}
 
 ### 遥测 top-30（历史使用频次）
+（槽位为 EMPTY 则跳过遥测，不因此缺条。）
 {TELEMETRY}
 
 ## 排除清单（硬黑名单）
@@ -32,7 +34,7 @@
 不得入选**，也不计入 5-15 条名额：
 
 `caliber`、`plan-forge`、`plan-review-ritual`、`qwen-cli`、`minimax-cli`、
-`skillify`、`ecc:learn`、`superpowers:*`（superpowers 插件全套，通配前缀）。
+经验固化组件（`skillify`/`ecc:learn`）、`superpowers:*`（superpowers 插件全套，通配前缀）。
 
 黑名单组件即使出现在「可见组件」清单或「遥测 top-30」中也必须跳过；
 路由表名额让给任务领域组件。
@@ -47,11 +49,13 @@
    项目领域词 + 组件能力词**（例：`["评审", "ESP-IDF 构建脚本",
    "Python 类型标注"]`）。keywords 必须映射该组件原文的实际触发场景，
    **禁止编造原文没有的能力**。
-4. 标注激活方式：组件在「可见组件」清单 → `visible: true`；
-   在「隐藏索引」→ `visible: false` 且从其条目照抄 `path`。
-   反向约束：隐藏索引中查无条目 → **禁止标 `visible: false`、禁止编造
-   `path`**（不得凭记忆猜 cache 路径）；两清单均未命中而确需保留的组件，
-   标 `visible: true` 且不附 `path`，否则删除。
+4. 标注激活方式：组件在「可见组件」主源区（无前缀条目）→ `visible: true`；
+   带 `[磁盘扫描]` 前缀的补充源区条目 → `visible: false` 且照抄条目所附
+   实得路径；在「隐藏索引」→ `visible: false` 且从其条目照抄 `path`。
+   反向约束：隐藏索引与磁盘扫描两来源皆无 → **禁止标 `visible: false`、
+   禁止编造 `path`**（不得凭记忆猜 cache 路径）；三来源（可见清单/隐藏索引/
+   磁盘扫描）皆未命中而确需保留的组件，标 `visible: true` 且不附 `path`，
+   否则删除。
 5. 标注挂载阶段 `stages`，取值仅允许：`plan` / `implement` /
    `review` / `debug`（可多选）。
 6. **逐条相关性自检**（入选前最后一关）：对每个入选组件自问——
@@ -67,7 +71,7 @@ generated_at: "<ISO8601>"
 project: { root: "<项目根>", languages: [...], frameworks: [...] }
 task: { caliber: "<{CALIBER_LEVEL}>", summary: "<一行>" }
 routes:
-  - component: "<name>"          # 隐藏组件加来源前缀，如 ecc:deep-research
+  - component: "<name>"          # 隐藏组件加来源前缀，如 <plugin>:<component>
     visible: true | false
     path: "<仅 visible:false 时给，照抄索引>"
     keywords: ["...", "..."]     # 5-8 个
@@ -78,5 +82,5 @@ routes:
 routes 5-15 条；凑不够 5 条则宁少勿滥。
 
 **输出前复验（逐条必查）**：① 纯 YAML 输出，无 ``` 围栏；② 无任何解释
-文字；③ 每个 `visible: false` 条目的 `path` 均照抄隐藏索引。任一不满足
-先修再输出。
+文字；③ 每个 `visible: false` 条目的 `path` 均照抄其来源条目（隐藏索引 /
+磁盘扫描补充源区条目所附实得路径）。任一不满足先修再输出。

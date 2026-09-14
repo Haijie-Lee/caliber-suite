@@ -2,7 +2,7 @@
 name: plan-review-ritual
 description: "Use when you finish writing any implementation plan, spec, or design doc and are about to hand it to execution — especially when the executor is a weaker model."
 metadata:
-  version: "2.4.0"
+  version: "2.5.0"
   source: distilled-from-practice
 ---
 
@@ -15,7 +15,7 @@ autoplan）：对抗升级为**双声部共识**、发现按**三级分类**处�
 注入五视角）。v2.4 升级：新增**轮次化机制**（`ROUND`/`AUDIT_PATH` 入参，
 见 Step 0/Step 2）支撑 L 级收敛循环——本 skill 仍是**单轮引擎**，循环策略
 （轮次编排/收敛判据/重锻出口）由调用方 plan-forge 工序 3 持有
-（2026-09-01 用户裁定）。
+（2026-09-01 用户裁定）。v2.5 升级（2026-09-14）：声部 A 链化（plan-reviewer 优先、general-purpose 兜底、去前缀匹配、选择留痕）；声部 B 调用前能力预检；污染条款限定 ecc 在场。
 
 ## 为什么有效（不要跳过，理解了才会用对）
 
@@ -75,9 +75,15 @@ autoplan）：对抗升级为**双声部共识**、发现按**三级分类**处�
 
 ## Step 2 — 双声部对抗审查
 
-**声部 A**（必须）：fresh-context 对抗 subagent（`general-purpose`），
-零写作参与——它读的是"纸上实际写了什么"。prompt 模板（按需裁剪，保留
-粗体纪律）：
+**声部 A**（必须）：fresh-context 对抗 subagent，零写作参与——它读的是"纸上实际写了什么"。
+
+**选择链**（2026-09-14 链化，替代写死 general-purpose）：dispatch 前查当前会话 Agent 工具可见列表，按**去前缀名**匹配（`${name##*:}`，与 hooks 剥 skill 插件前缀同纪律），取链上首个在场者：
+1. `plan-reviewer`（含插件前缀形态，如 `caliber:plan-reviewer`）在场 → 用它。其系统提示已内置审查方法论、上报纪律与输出格式，dispatch prompt 用**精简形态**：PLAN 路径 + CHECKLIST（调用方注入视角）+ CONTEXT（2-3 句背景 + 已验证领域事实）+ ROUND≥2 时的 DELTA/防重复段——**不再内联下方通用模板**，避免双份纪律打架。
+2. 不在场 → `general-purpose` + 下方**完整 prompt 模板**（指令化注入，与 caliber §动态组合 注入档同理）。
+
+留痕：解析结果写一行进审计表（`声部A = <type>`）。链式兜底是**设计内行为，非降级**——声部 A 的核心契约是 fresh-context 零写作参与，不是某个具体 agent；2026-09-01"降级须用户裁定"针对声部 B 外部通道，不适用本链。
+
+prompt 模板（general-purpose 形态用；按需裁剪，保留粗体纪律）：
 
 ```
 You are a brutally honest technical reviewer examining an implementation plan
@@ -102,6 +108,7 @@ runtime or make tests fail. No style comments. No task-organization comments.
 **声部 B**（固定必须；缺席/故障同样走 Step 2 修复梯子与停止点，**不得单声部续跑**）：同一 PLAN、换模型来源，**分工与声部 A 不同**（2026-09-01 实证改版）：**B = 纯文本内部一致性专责**——只读 PLAN 本体（内部矛盾/回填漂移/字面执行者陷阱），**不做仓库与代码交叉核对**。依据：A（主声部 subagent）无外部超时约束、上下文预算大，事实核查养得起；B 走外部通道有超时上限，开放式 grep 仓内大文件会把上下文炸到 100K+ 必超时。B 的 CHECKLIST 取 A 清单中不依赖仓库读取的条目（拿不准是否依赖仓库 = 视为依赖，剔除）；共识表机制不变（A 全量覆盖，文本类发现仍可与 B 双命中成 CONFIRMED）。**调用按规程执行，
 禁止凭感觉判断"配没配"**：
 
+0. **能力预检**（2026-09-14 新增）：调用前先查当前会话 skill 清单有无 `qwen-cli`（备选 `minimax-cli`）——有 → 按下方规程；无 → 不发起注定失败的调用，直接进第 3 条用户裁定停止点（证据 = 会话清单缺席）。预检只判 skill 在场；skill 在场 ≠ claude CLI 可用——CLI 缺席仍走梯子 ③ 配置类上报，预检不替代 qwen-cli skill 自身的前台预检。
 1. **固定声部：qwen-cli 外部声部**（Qwen，与主声部不同模型家族，对抗价值最高；
    2026-09-01 用户裁定：qwen-cli 是声部 B 的**固定通道**，非可让渡首选项）。
    **调用规程以 qwen-cli skill 为唯一准绳**——预检、调用命令、stdin 重定向
@@ -120,7 +127,7 @@ runtime or make tests fail. No style comments. No task-organization comments.
       失败即固定封顶误杀健康任务。）
    ③ **配置类**（403/429/CLI 缺失、settings 缺失）→ 报告用户修配置（装
       CLI、换 API key、核 API_TIMEOUT_MS），修复后重试；
-   ④ **污染** → 确认 `ECC_SESSION_START_CONTEXT=off` 未被剥离 + 强化 prompt
+   ④ **污染** → 确认 `ECC_SESSION_START_CONTEXT=off` 未被剥离（仅 ecc 在场时适用；纯 ZCode 环境无此污染源，跳过本项）+ 强化 prompt
       免疫锚 + 缩 prompt，重试。
 3. **降级 = 用户裁定停止点**：修复梯子 ①-④ 耗尽仍失败 → **停**，把验尸
    证据 + 已尝试修复清单 + 失败定性贴给用户；经用户批准才可换备用外部
@@ -170,7 +177,7 @@ CONFIRMED = **无条件修**；SINGLE 按置信度进裁定队列；critical 级
 
 ```
 <!-- REVIEW DECISION LOG -->
-## 审查决策审计（plan-review-ritual v2.4）
+## 审查决策审计（plan-review-ritual v2.5）
 | ID | 来源 | 发现 | 分类 | 裁定 | 理由 | 修复位置 | 涟漪 |
 ```
 

@@ -48,8 +48,8 @@
 列出选项（合并回主干 / 开 PR / 保留分支 / 删除分支）及各自后果一句话，
 **停**——让用户选，不替用户定。
 
-## §固化（替代 ecc:learn / skillify）
+## §固化（替代经验固化组件：skillify / ecc:learn）
 
 问用户一句："本次会话有没有值得固化的模式？"有则起草 SKILL.md（name /
 description 以 Use when 开头、只写触发条件不写流程 / 问题 / 方案 / 示例），
-经用户确认后写入 `~/.claude/skills/<name>/`；无则跳过。
+经用户确认后写入用户级 skills 目录（ZCode：`~/.zcode/skills/<name>/`；Claude 环境：`~/.claude/skills/<name>/`）；无则跳过。
