@@ -2,7 +2,7 @@
 name: init-docs
 description: "Use when bootstrapping a project into the caliber docs-governance system — creates the seed files (CONTEXT.md, docs/README.md constitution, docs/learnings/INDEX.md, AGENTS.md doc-map block) that activate the plugin hooks by data-declaration subscription. 中文触发：初始化文档体系、新工程 docs 引导、建立治理宪法、播种文档体系、订阅 hooks"
 metadata:
-  version: "1.1.0"
+  version: "1.2.0"
   source: distilled-from-practice
 ---
 
@@ -43,7 +43,7 @@ caliber 插件的四个 hook 以**文件存在性**为订阅开关（数据声�
 | docs/README.md | <状态> | 新建（模板）/ 跳过 / 仅报告（缺 §9 锚点） |
 | AGENTS.md | <状态> | 新建 / 预览后追加 / 跳过 |
 
-### Step 2 — 决策点（唯一停止点）
+### Step 2 — 决策点（落盘前唯一停止点）
 
 - **四件已齐** → 报告「已订阅，零动作」并退出。
 - **AGENTS.md 存在且无 docs-map 块** → 完整展示渲染后的追加块（占位符
@@ -74,7 +74,8 @@ AGENTS.md 两种形态：
   迁走后重跑本 skill。」
 - `docs/learnings/` 有 N 份 .md 且 INDEX.md 本次新建，逐字报告：
   「已有 N 份 learning 未登记 INDEX.md。补登需逐份判断『何时需要』，属
-  判断类工作，本 skill 不代劳——建议作为独立任务进行。」
+  判断类工作，本 skill 不代劳——可由 caliber:update-docs 接续完成（见
+  Step 7）。」
 - `CONTEXT.md` 已存在 → 跳过；SessionStart 注入对它早已生效，内容归
   工程主。
 
@@ -96,12 +97,28 @@ AGENTS.md 两种形态：
 （caliber Stop hook 机械提醒）逼着知识归口；新类别目录随第一份对应知识
 出现而建立，扩容流程见宪法 §7。
 
+### Step 7 — update-docs 链接询问（条件触发，逐字）
+
+落盘与报告完成后，下列条件命中任一 → 向用户逐字输出询问：
+
+- 本次新建了 `docs/learnings/INDEX.md` 且 docs/learnings/ 有未登记 .md
+  （Step 4 第二条已触发）；
+- 本次新建了 `CONTEXT.md` 且工程已有代码或文档（README* / docs/ 下已有
+  内容 / 清单元件任一存在）。
+
+询问文案（逐字）：
+「检测到可回填内容。caliber:update-docs 可把已有 learnings 登记进
+INDEX.md，并扫描仓库已有文档与清单提炼 CONTEXT.md——是否现在接续调用？」
+
+两条件均不命中（真空工程）→ 不询问，零打扰。用户答「是」→ 立即调用
+caliber:update-docs skill。
+
 ## 铁律
 
 1. **不覆盖**：已有文件只有「跳过」与「预览确认后追加」两种命运；重写、
    合并、改写一律禁止。
 2. **占位符**仅 `{{PROJECT_NAME}}` 与 `{{DATE}}`；落盘后工程文件全文
    不得残留 `{{`（落盘后自检一次）。
-3. **决策点唯一**（Step 2 的 AGENTS.md 追加确认）；其余分支自动推进。
+3. **文件落盘决策点唯一**（Step 2 的 AGENTS.md 追加确认）；Step 7 的 update-docs 链接询问属收尾引导，不产生文件动作；其余分支自动推进。
 4. **报告文案逐字**用本 skill 给定的文本，不即兴改写——它们会被工程主
    原样转发或存档。

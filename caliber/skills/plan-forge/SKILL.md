@@ -1,27 +1,36 @@
 ---
 name: plan-forge
-description: "Use when writing a formal implementation plan document for M/L-level tasks — caliber M/L 级阶段 2 自动路由；especially when the plan's executor will be a weaker model that follows instructions verbatim."
+description: "Use when writing a formal implementation plan document for M/L-level tasks — caliber M/L 级阶段 2 自动路由；especially when the plan will be executed verbatim by a less-capable executor."
 metadata:
-  version: "1.2.0"
+  version: "1.4.1"
   source: distilled-from-practice
 ---
 
 # Plan Forge — 选材、制坯、锻打、成型
 
-把"写出一份弱执行者能逐字执行的 plan"固化为四道工序。本 skill 是**锻造工艺**，
+把"写出一份较弱执行者能逐字执行的 plan"固化为四道工序。本 skill 是**锻造工艺**，
 不是审查机制：工序 1-2 产出 plan 初稿（编排 writing-plans），工序 3 调
-plan-review-ritual 做对抗审查（注入五视角清单），工序 4 弱模型字面验收。
+plan-review-ritual 做对抗审查（注入五视角清单），工序 4 基线执行者字面验收。
 审查视角细目在 `checklists.md`——用到哪道工序读哪节，不预读。
 v1.2 升级：工序 3 从单轮对抗升级为 **L 级收敛循环**（逐轮锻打至收敛判据
 达标，≤3 轮，不收敛回工序 2 重锻）；工序 4 从作者脑内模拟升级为**真实彩排**
-（fresh 弱模型 confusion-hunt）（2026-09-01 用户裁定）。
+（fresh 零背景基线 agent confusion-hunt）（2026-09-01 用户裁定）。
 2026-09-08 并入（不升版）：新增**工序 3.5 准出闸口**——收敛后、彩排前，
-凡经修复的 plan 派 fresh 强模型做全量复审（goal drift / 事实再核查 /
+凡经修复的 plan 派 fresh 独立 agent 做全量复审（goal drift / 事实再核查 /
 假设链连贯性），守护**工件收敛**；收敛判据加局限命名句。
+v1.3 升级（2026-09-14）：工序 2 新增第 6 道锻造「执行编排预分配」（非 coding
+主导或无 git 的 ML/L plan 必产预分配表，与 caliber:exec-forge 共有 schema）；
+交接节执行选项改三态（SDD / exec-forge / inline）；画像性质枚举扩为 8 值。
+v1.4 升级（2026-09-15，用户裁定去强弱模型档）：工序 2 预分配表 schema 删
+模型档列（9→8，与 exec-forge §输入 逐字一致）；工序 3.5/4 派遣去 model=
+参数（fresh 独立 / 零背景基线 agent）；交接「强弱模型缺省」改「实现/审查
+分席缺省」（Claude 侧档位映射注记保留其功能）。
+v1.4.1（2026-09-15，独立复核修复）：frontmatter description 英文残留
+"weaker model" 换词；补 v1.4 注记。
 
 ## 为什么有效（理解了才会用对）
 
-1. **plan 的读者是逐字执行的执行者，不是会心领神会的同事。** 执行模型越弱，
+1. **plan 的读者是逐字执行的执行者，不是会心领神会的同事。** 执行者越弱，
    plan 里每个"显然如此"都变成一次猜测，猜错就是 bug。判断必须全部前置到
    写作时。
 2. **未测量的值不进 plan。** 凭印象的数字（"大概 2 秒""应该够大"）执行时会
@@ -34,7 +43,7 @@ v1.2 升级：工序 3 从单轮对抗升级为 **L 级收敛循环**（逐轮�
 
 ## 何时使用 / 不使用
 
-- **用**：M/L 级任务出正式 plan 文档（执行者是较弱模型时**必须**用）。
+- **用**：M/L 级任务出正式 plan 文档（执行者能力较弱时**必须**用）。
   caliber M/L 级阶段 2 自动路由到这里；M 级仅用工序 1-2。
 - **不用**：S 级任务；产品方向/选型审查（那是 autoplan / plan-eng-review 的对象）。
 
@@ -78,9 +87,20 @@ v1.2 升级：工序 3 从单轮对抗升级为 **L 级收敛循环**（逐轮�
    处置（修/兜底/接受）；延期决策必带重访触发器。
 5. **任务画像标注。** 逐任务标画像，供 caliber 阶段 4 §动态组合 消费。
    格式定死：`画像: 性质=…; 难度=…; 领域词=[…]`。性质（新增/修bug/重构/
-   配置/文档）、难度（机械/集成/判断，自设三档，信号源自 SDD 复杂度信号）、
+   原型/配置/文档/调研/操作）、难度（机械/集成/判断，自设三档，信号源自 SDD 复杂度信号）、
    领域词（供路由表关键词匹配）。**只标画像、不锁 skill 组合**——组合是
    执行层决策，锁了丢运行时信息。画像缺失 → caliber 按"集成"对待。
+6. **执行编排预分配**（非 coding 主导或无 git 的 ML/L plan 必产；coding 主导
+   plan 免产——SDD 自带角色分配）。逐任务填执行编排预分配表，列 = 任务 |
+   性质 | 难度 | 形态(inline/dispatch) | 执行者(主线程/agent_type 链) |
+   审查者(≠执行者上下文) | 注入档(指令化/许可清单/无) |
+   领域组件(路由表命中，候选非绑定)。枚举外行（如 用户协作，用于冒烟/发布决策
+   等人工任务）：引擎不派工、不进审查门，仅在 ledger 记一行。规则：判断类/组合
+   复杂 → inline 主线程 +
+   独立审查；机械 → dispatch + 独立审查；集成 → dispatch +
+   注入。**只预分配、不锁死**——dispatch 边界可据运行时信息微调，微调记
+   ledger Ruling；阶段 4 入口批量确认停止点（caliber）确认的是本表。schema
+   与 caliber:exec-forge §输入节共有，两处逐字一致。
 
 检查细目：读 `checklists.md` 工序 2 节。
 
@@ -153,9 +173,10 @@ User Challenge 永不自动定，用户原方向为默认）。各轮 stance 与
 循环的信息设计上不可能。迷雾的解药不是让迷雾者更努力，而是引入没有
 迷雾的人。
 
-**派遣**：fresh 强模型 agent——`Task(subagent_type=general-purpose,
-model=<最强可用>)`。与工序 4 的 haiku 刻意相反：工序 4 测"弱模型能否
-看懂"，本闸口测"强模型能否发现漂移"。要求零轮次参与、零写作参与。
+**派遣**：fresh 独立 agent（ZCode：`Task(subagent_type=general-purpose)`——
+无 model 参数可配，fresh 零参与即独立性的载体；模型档可配平台用最高档）。
+与工序 4 刻意相反：工序 4 测"零背景基线执行者能否看懂"，本闸口测"fresh
+全局视角能否发现漂移"。要求零轮次参与、零写作参与。
 
 **输入设计（机制核心——信息隔离制造认知多样性）**：
 
@@ -182,17 +203,17 @@ model=<最强可用>)`。与工序 4 的 haiku 刻意相反：工序 4 测"弱�
 ## 工序 4 — 成型（litmus 真实彩排）
 
 交付前最后一道，与工序 3.5 分工（2026-09-08 写死）：**3.5 = 纵向一致性**
-（plan vs 原始目标 / vs 仓库现实 / 内部假设链；强模型、看 CONTEXT），
-**工序 4 = 字面可执行性**（plan vs 弱执行者理解力；弱模型、只看 plan）。
+（plan vs 原始目标 / vs 仓库现实 / 内部假设链；独立全局视角、看 CONTEXT），
+**工序 4 = 字面可执行性**（plan vs 较弱执行者理解力；零背景基线、只看 plan）。
 先 3.5 后 4——先确认"做对的事"，再确认"事能被做对"。
 
 **L 级把字面验收从作者脑内模拟升级为真实彩排**（2026-09-01
 用户裁定）：作者持全上下文做 litmus 恰好犯作者盲区（重读的是"我记得想写
-什么"，不是纸上实际写了什么）——改为派 **fresh 弱模型 subagent**
-（`Task(subagent_type=general-purpose, model=haiku)`——2026-09-01 写死：
+什么"，不是纸上实际写了什么）——改为派 **fresh 零背景基线 subagent**
+（`Task(subagent_type=general-purpose)`——2026-09-01 写死：
 Explore 的系统提示为代码搜索优化、与 confusion-hunt 的阅读理解任务
-错配；haiku 最弱、对歧义最敏感，暴露困惑的探测效率最高；零项目背景，
-除 plan 外不持有任何上下文）做
+错配；模型档可配平台用最低档（对歧义最敏感、暴露困惑的探测效率最高），
+档不可配的本平台零背景基线即最弱现实执行者；除 plan 外不持有任何上下文）做
 **confusion-hunt**：
 
 - 输入只有 plan 文件；逐任务叙述"我会怎么执行这一步"；
@@ -214,14 +235,17 @@ NO UNRESOLVED），进入交接。
 
 ## 交接
 
-plan 交付时给执行选项（沿用 writing-plans handoff）：
+plan 交付时按引擎路由规则给执行选项（caliber ML/L 级阶段 4 入口批量确认）：
 
-1. **Subagent-Driven（推荐）**——subagent-driven-development：弱实现 +
-   强审查逐任务把关
-2. **Inline**——executing-plans 批量执行 + checkpoint
+1. **Subagent-Driven**——superpowers:subagent-driven-development：代码主导
+   且有 git 的 plan；实现/审查分席逐任务把关
+2. **exec-forge**——caliber:exec-forge：非代码主导 / 无 git / 混合 plan；
+   执行编排预分配表 + 逐任务审查门 + ledger 断点恢复
+3. **Inline**——executing-plans 批量执行 + checkpoint（MS 级或用户指定）
 
-**强弱模型缺省**：实现者降配弱模型（sonnet/haiku）、审查槽放最强可用模型
-（与 caliber 强弱缺省对齐；plan-forge 单独使用时本句即默认）。
+**实现/审查分席缺省**：实现者可基线执行、审查槽 fresh 独立（与 caliber
+分席缺省对齐；plan-forge 单独使用时本句即默认；模型档可配平台：实现降配、
+审查用最高档）。
 
 ## 收尾
 

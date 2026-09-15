@@ -70,6 +70,8 @@
 generated_at: "<ISO8601>"
 project: { root: "<项目根>", languages: [...], frameworks: [...] }
 task: { caliber: "<{CALIBER_LEVEL}>", summary: "<一行>" }
+exclusions:                  # 仅 routes 为空时必填：候选逐条排除理由
+  - "<组件>: <一句理由>"
 routes:
   - component: "<name>"          # 隐藏组件加来源前缀，如 <plugin>:<component>
     visible: true | false
@@ -80,6 +82,11 @@ routes:
 ```
 
 routes 5-15 条；凑不够 5 条则宁少勿滥。
+
+**空表举证**（2026-09-15 P4）：`routes: []` 合法，但 YAML 头部必须带
+`exclusions:` 块——工作步骤 1 圈定过的候选逐条一句排除理由；候选圈定
+为零时写一句圈定依据（任务与组件集无交集的判断）。无举证空表 = 懒惰，
+打回。
 
 **输出前复验（逐条必查）**：① 纯 YAML 输出，无 ``` 围栏；② 无任何解释
 文字；③ 每个 `visible: false` 条目的 `path` 均照抄其来源条目（隐藏索引 /

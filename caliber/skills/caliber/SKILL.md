@@ -2,7 +2,7 @@
 name: caliber
 description: "Use when starting any engineering task — feature, bugfix, refactor, or change request — before touching code. Not for pure Q&A, research, or open-ended discussion."
 metadata:
-  version: "1.10.0"
+  version: "1.12.1"
   source: distilled-from-practice
 ---
 
@@ -11,6 +11,19 @@ metadata:
 工程任务总入口。流程骨架恒定，剂量随任务缩放：简单任务走完全程但每站从轻，
 复杂任务全剂量。编排 superpowers 与 plan-review-ritual；依赖缺失时读
 `fallback.md` 对应章节兜住底线纪律。
+v1.11（2026-09-14）：阶段 4 引擎路由（代码主导+git → SDD，其余 →
+caliber:exec-forge）+ 阶段 4 入口执行编排批量确认停止点；画像性质枚举扩 8 值。
+v1.11.2（2026-09-15）：组合决策消费钩子指针（→ exec-forge §任务环组合
+决策步，P1）+ 接续任务路由新鲜度检查（P2）+ routing.yaml `visible_count`
+（P3）+ scout 空表举证（P4）+ 组合行格式扩 注入档/命中 字段（P5 注记随
+exec-forge §模型轴）。
+v1.12.0（2026-09-15，用户裁定去 Claude 遗产词汇）：「实现/审查分席缺省」
+替代强弱模型档（分席价值=上下文隔离承载，Claude 侧档位映射注记保留其
+功能）；注入档=策略选择（指令化=默认、许可清单须显式授予）；dispatch
+三轴改选择轴 agent_type×prompt；scout/彩排派遣去 model= 参数。
+（1.11.3 并入：接续条款补无 visible_count 字段跳过。）
+v1.12.1（2026-09-15，独立复核修复）：组合行占位符对齐 exec-forge §组合行
+（model=<平台基底>）。
 
 ## 为什么有效（理解了才会用对）
 
@@ -37,11 +50,12 @@ metadata:
 | plan-review-ritual | MS/ML 级自审；L 级完整 + plan-forge 工序 3 内部调用 | 读 fallback.md §自审 |
 | plan-forge | ML/L 级阶段 2（plan 锻造；ML 级仅工序 1-2，L 级工序 1-4） | 退回：ML 级阶段 2 调 writing-plans；L 级阶段 3 调 plan-review-ritual |
 | superpowers:subagent-driven-development | ML/L 级阶段 4 实现 | 读 fallback.md §单会话SDD |
+| caliber:exec-forge | ML/L 级阶段 4 非 coding 执行引擎（路由见 §动态组合） | 有 git 退 SDD；无 git 退 inline + 独立补审门 |
 | superpowers:finishing-a-development-branch | L 级阶段 6 分支收尾 | 读 fallback.md §分支收尾 |
 | 经验固化组件（skillify / ecc:learn / 项目级 learnings 任一） | L 级阶段 6 经验固化 | 读 fallback.md §固化 |
 
 缺失不中断：读 `fallback.md` 对应章节兜住纪律，告知用户装回完整版效果更佳。
-（分支收尾/经验固化仅 L 级用到，S/M 级任务缺席不告警；plan-forge 为 ML/L 级用到，S/MS 级任务缺席不告警，届时再验。）
+（分支收尾/经验固化仅 L 级用到，S/M 级任务缺席不告警；plan-forge 与 exec-forge 为 ML/L 级用到，S/MS 级任务缺席不告警，届时再验。）
 输出一行：`✓ 全配` 或 `⚠ 缺 X（已按 fallback 兜底）`。
 
 **docs 体系订阅检查（每次入口必做，一行输出）**：工程根同时缺 `CONTEXT.md` 与
@@ -73,7 +87,7 @@ metadata:
 **人工拍板**。不设机械阈值——任务类型多样，量化锚点会失效，agent 综合判断
 + 人工确认兜底（2026-08-14 用户裁决）。
 
-**接续任务**（会话压缩 / 恢复后）：沿用已定级，仅重跑 Step 0，不重新定级。
+**接续任务**（会话压缩 / 恢复后）：沿用已定级，仅重跑 Step 0，不重新定级；ML/L 级另查 routing.yaml 存在性与新鲜度（缺席 → 按 Step 1.5 门控重装；表含 `visible_count` 且与会话 skill 清单条目数不符 → 同门控；无该字段 → 新鲜度比对跳过）。
 
 **执行中复量**：发现根因牵涉面比定级时大、或冒出不可逆操作 → 停下宣布升级，
 按新级别补齐已走过阶段的差额深度，再继续。**降级同理**：方案确认后范围缩小、
@@ -104,21 +118,30 @@ dispatch 派发）；S/MS 无 dispatch 边界，主线程查表纪律实测失�
    - 遥测 top-30：`~/.claude.json` 存在才执行下列命令；不存在（纯 ZCode 环境无对应物，2026-09-14 实证）槽位填 `EMPTY`：
      `python -c "import json,os; d=json.load(open(os.path.expanduser('~/.claude.json'),encoding='utf-8'))['skillUsage']; [print(k+': '+str(v.get('usageCount',0))) for k,v in sorted(d.items(), key=lambda x: -x[1].get('usageCount',0))[:30]]"`；
    - 隐藏索引：槽位只填文件路径 `~/.claude/hidden-components-index.yaml`（ecc muzzle 产物；实测 ~37K tokens，2026-08-25），由侦察 agent 自行 Read；文件不存在则槽位填 `EMPTY` 并继续（提示可跑 muzzle 脚本生成）。
-3. **dispatch 侦察 agent**：`Task(subagent_type=general-purpose, model=haiku)`，
+3. **dispatch 侦察 agent**：`Task(subagent_type=general-purpose)`
+   （模型档可配平台用最低档——侦察是机械转写；本平台档不可配即默认），
    prompt 按 `route-scout-prompt.md` 填槽：`{TASK_SUMMARY} {CALIBER_LEVEL}
    {PROJECT_FINGERPRINT} {VISIBLE_COMPONENTS} {HIDDEN_INDEX} {TELEMETRY}`。
-4. **落盘**：agent 输出写入 `<项目根>/.caliber/routing.yaml`。首次创建
+4. **落盘**：agent 输出写入 `<项目根>/.caliber/routing.yaml`，主线程落盘
+   时在表头加 `visible_count: <当前会话可用 skill 清单条目数>`（消费方
+   新鲜度比对用，2026-09-15 P3）。首次创建
    `.caliber/` 时：项目根存在 `.git` 目录且 `.gitignore` 无 `.caliber/` 行
    → 追加一行 `.caliber/`；无 `.git` → 跳过并输出一行说明。
 5. **采用**：ML/L 级展示全表，**停**，用户确认后继续（S/MS 按门控无表）。
+   **折叠条件**（2026-09-15 用户裁定；exec-forge 两轮冒烟实证同款模式）
+   ——三条件**全部**满足时允许不停：① 用户消息含明确执行授权；② 全表
+   无取舍待决（唯一 route 或全部 route 均为本任务骨架既定组件，用户无
+   选/改空间）；③ 无新增不可逆操作。折叠须一行展示依据 + ledger
+   `Ruling:` 记折叠与三条件核对；任一不满足 → 必须展示全表停下等确认。
 6. **合法性兜底**：输出非合法 YAML（`yaml.safe_load` 失败或缺 `routes` 键）
-   → 原样重试一次；仍失败 → 写 `routes: []` 空表 + 一行警告，流程继续
-   （等同无路由表，不阻塞）。
+   或 `routes` 为空且缺 `exclusions` 块（空表举证，见 scout prompt）
+   → 原样重试一次；仍失败 → 写 `routes: []` 空表（同样加
+   `visible_count` 表头）+ 一行警告，流程继续（等同无路由表，不阻塞）。
 
 **后续各阶段入口**（仅 ML/L 级——S/MS 按门控无表）：`.caliber/routing.yaml`
 存在时，由**编排者**（主线程）在阶段入口与 dispatch 边界按 `keywords` 匹配
 消费，命中组件**优先**使用；路由表是编排者的选料单，不是执行者的自助购物
-指南——执行者不查表，组合由编排者注入。**implement 阶段命中移交 §动态组合
+指南——被 dispatch 的执行者不查表，组合由编排者注入。**implement 阶段命中移交 §动态组合
 消费**（组合决定由编排层做），本段只管 `visible: false` 组件的装载手段。
 `visible: false`
 的组件注入式激活（agent → `Task(general-purpose, prompt=Read(<path>) 正文 +
@@ -133,8 +156,8 @@ dispatch 派发）；S/MS 无 dispatch 边界，主线程查表纪律实测失�
 |---|---|---|---|---|---|
 | 1 | 澄清 | agent 一句话重述需求（歧义才停，见铁律 7）；bug 类先用 systematic-debugging 定位根因 | 列出方案选项，**停**，用户选定（同停止点拍板 MS/ML，见 Step 1 子档段） | 同 MS | 调 brainstorming 问答澄清（**停**） |
 | 2 | 计划 | 一句话方案 | 对话内步骤列表（文件+改法+验证） | 调 plan-forge 工序 1-2（选材+制坯）出正式 plan 文档落盘（缺时 writing-plans）——**ML 级必出 plan 文档** | 调 plan-forge 工序 1-2（选材+制坯）出 plan 初稿 |
-| 3 | 审查 | 自问：有没有更简单的做法？ | 跑 plan-review-ritual Step 1 自审（对象：阶段 2 步骤列表） | 跑 plan-review-ritual Step 1 自审（对象：阶段 2 落盘的 plan 文档） | plan-forge 工序 3-4（锻打=**收敛循环**：双声部逐轮对抗至收敛判据，≤3 轮，轮 3 不收敛回工序 2 重锻**停**；准出=**exit gate**：凡经修复的 plan 必经 fresh 强模型全局复审；成型=litmus **真实彩排**：fresh 弱模型 confusion-hunt；Taste 裁定**停**可批量，User Challenge 必停） |
-| 4 | 实现 | TDD 直接改，一次一 commit | TDD 逐步，每步跑验证（inline） | SDD 为默认骨架：逐任务按 §动态组合 派发（机械→裸 dispatch / 集成→SDD+注入 / 判断类、组合复杂→收回主线程 inline 并补独立审查） | SDD 为默认骨架：逐任务按 §动态组合 派发（机械→裸 dispatch / 集成→SDD+注入 / 判断类、组合复杂→收回主线程 inline 并补独立审查） |
+| 3 | 审查 | 自问：有没有更简单的做法？ | 跑 plan-review-ritual Step 1 自审（对象：阶段 2 步骤列表） | 跑 plan-review-ritual Step 1 自审（对象：阶段 2 落盘的 plan 文档） | plan-forge 工序 3-4（锻打=**收敛循环**：双声部逐轮对抗至收敛判据，≤3 轮，轮 3 不收敛回工序 2 重锻**停**；准出=**exit gate**：凡经修复的 plan 必经 fresh 独立全局复审；成型=litmus **真实彩排**：fresh 零背景基线 agent confusion-hunt；Taste 裁定**停**可批量，User Challenge 必停） |
+| 4 | 实现 | TDD 直接改，一次一 commit | TDD 逐步，每步跑验证（inline） | 引擎路由（规则见 §动态组合 首节）：代码主导+git → SDD；其余 → exec-forge。逐任务按执行编排预分配表派发（机械→裸 dispatch / 集成→dispatch+注入 / 判断类、组合复杂→主线程 inline + 独立审查）；阶段 4 入口批量确认停止点 | 引擎路由（规则见 §动态组合 首节）：代码主导+git → SDD；其余 → exec-forge。逐任务按执行编排预分配表派发（机械→裸 dispatch / 集成→dispatch+注入 / 判断类、组合复杂→主线程 inline + 独立审查）；阶段 4 入口批量确认停止点 |
 | 5 | 验证 | 跑验证命令，输出即证据 | 单测 + 相关集成测试 | 单测 + 相关集成测试 | 分层验证 + 真机最小验证（先离线模拟核心路径）+ 全分支 review |
 | 6 | 收尾 | 规范 commit message | commit + 三行简报（改动/验证/遗留） | commit + 三行简报（改动/验证/遗留） | ledger 收尾 + 调 learn/skillify 固化新经验 + 分支收尾决策（**停**） |
 
@@ -147,19 +170,19 @@ dispatch 派发）；S/MS 无 dispatch 边界，主线程查表纪律实测失�
 
 ## §动态组合（阶段 4 执行层：任务画像 → 组合 + 派遣 → 执行形态）
 
-**作用域**：本节仅适用 ML/L 级（SDD 场景）阶段 4。S/MS 阶段 4 语义不变
+**作用域**：本节仅适用 ML/L 级阶段 4（两引擎通用——组合决策与引擎无关）。S/MS 阶段 4 语义不变
 （TDD inline），不适用本节。
 
 阶段 4 的**过程节拍**恒定（TDD/SDD 是骨架），**领域装备**按任务动态组合。
 plan 管"做什么"（绑定权威，刚性）；本节管"拿什么做"（skill 组合，动态）
-与"派谁做"——dispatch 三轴：agent_type（2b）× model（强弱缺省）× prompt
-（注入两档）。组合点在 dispatch 边界，决策者是编排层（主线程），不是弱执行者——判断只是
+与"派谁做"——dispatch 选择轴：agent_type（2b）× prompt（注入两档）；
+model 轴在 ZCode 塌缩为 platform-default（仅记录，见"实现/审查分席缺省"段）。组合点在 dispatch 边界，决策者是编排层（主线程），不是执行者——判断只是
 从"派发时做"前移为"在信息最多的时刻做"（运行时能看到前序任务的实际产出
-与真实代码状态），弱执行者拿到的仍是逐字指令（注入的 skill 正文摘录）。
+与真实代码状态），执行者拿到的仍是逐字指令（注入的 skill 正文摘录）。
 
 **1. 任务画像（组合输入）**：plan（plan-forge 工序 2）为每任务标注画像，
 格式定死：`画像: 性质=…; 难度=…; 领域词=[…]`
-- 性质：新增 / 修bug / 重构 / 配置 / 文档
+- 性质：新增 / 修bug / 重构 / 原型 / 配置 / 文档 / 调研 / 操作
 - 难度：机械 / 集成 / 判断——**自设三档**（信号源自 SDD 复杂度信号但独立
   设档；SDD 原档为 cheap/standard/most-capable，不可直接引用）
 - 领域词：供路由表关键词匹配
@@ -167,16 +190,31 @@ plan 管"做什么"（绑定权威，刚性）；本节管"拿什么做"（skill
 产出、真实代码状态）丢掉，回到死板。画像是执行层的输入，不是执行层的指令。
 任务缺画像标注 → 按"集成"对待（dispatch+注入，安全向）。
 
+**执行引擎选择**（阶段 4 入口先定引擎，再谈组合）：按 plan 任务性质画像分布——
+代码主导（过半任务性质 ∈ {新增,修bug,重构} 且涉及源码）且仓库有 git
+→ superpowers:subagent-driven-development；其余（非代码主导 / 无 git /
+混合但代码任务不涉 git 语义）→ caliber:exec-forge；同一 plan 引擎唯一不混跑。
+exec-forge 内代码任务用其"代码"验证菜单。主导判定歧义 → 停（铁律 7）。
+引擎与组合的分工：引擎持任务环机制（brief/四状态/审查门/fix loop/ledger），
+本节持组合决策（骨架×领域组件×agent_type×注入档），引擎消费本节决策不复制。
+
 **2. 组合公式**：每任务 dispatch 前，编排层算组合 = 过程骨架 ×1 + 领域组件 ≤3
 + agent_type = f(画像)：
 - **过程骨架 ×1**：按画像性质查映射选取（枚举集，不许开放即兴）：
   新增→TDD直改 / 修bug→调试先行 / 重构→重构-验证 / 原型→原型-验证 /
-  配置、文档→TDD轻验证。
+  配置、文档→TDD轻验证 / 调研→证据登记 / 操作→回滚先行。非 coding 任务的
+  骨架语义与验证形式见 caliber:exec-forge 菜单节（同源，不复制；非 coding
+  任务的组合行骨架名以彼菜单为准）。
 - **领域组件 ≤3**：路由表 `stages` ⊇ implement 命中 + 任务文本关键词匹配；
   候选源只认路由表与全局 skill 清单，不许凭空造（C2）。领域组件以画像
   领域词的形式记入 plan（候选依据，非绑定）；组合决定由编排层在 dispatch
   边界做出（C6）。
 - **agent_type = f(画像)**（dispatch 第三轴，2026-09-01 新增）：见 2b 映射表。
+
+exec-forge 路径的消费钩子 = caliber:exec-forge §任务环「组合决策与注入」
+步（机制在引擎、决策规则在本节；其操作版三原子——匹配句、`领域组件 ≤3`、
+`命中=<表/plan/无>`——与本节同源逐字）；SDD
+路径由编排者在 dispatch 边界应用本节。
 
 **2b. agent_type 映射**（dispatch 第三轴，2026-09-14 链式重写）：候选只认当前会话 Agent 工具可见列表；按**去前缀名**匹配（`${name##*:}`）取链上首个在场者；全链缺席退 `general-purpose`。选择结果记 ledger（`agent=<type>`），可审计可校准：
 
@@ -197,7 +235,7 @@ plan 管"做什么"（绑定权威，刚性）；本节管"拿什么做"（skill
 
 纪律：
 - **只读信号不明确 → 一律给全工具 type**：权限错配（只读 agent 干写活）比选择保守更危险。
-- 体系内仍写死者（勿链化）：litmus 彩排 = `general-purpose + haiku`（plan-forge 工序 4 写死——刻意用最弱模型+零背景探测困惑，换强 agent 反而失效）；工序 3.5 准出闸口 = `general-purpose + 最强可用模型`（闸口契约=强模型全局复审；链化待 dispatch model 轴与 agent frontmatter `model` 覆盖优先级实证）。
+- 体系内仍写死者（勿链化）：litmus 彩排 = fresh 零背景基线 agent（plan-forge 工序 4 写死——刻意零背景探测困惑；模型档不可配的本平台，零背景基线即最弱现实执行者，换熟手反而失效）；工序 3.5 准出闸口 = fresh 独立复审 agent（闸口契约=修复后全局复审，要求零轮次参与）。
 - 链是启发式非绑定；agent 列表随插件增减漂移时旧链不失效（全缺席退 general-purpose = 现状行为）。
 - 历史注记：旧版 ecc 专属行（ecc:code-reviewer / ecc:<lang>-reviewer / comprehensive-review 三件套）与 1005 份 Claude 环境 transcript 频次依据随环境退役，不再作为选择依据。
 
@@ -206,14 +244,15 @@ plan 管"做什么"（绑定权威，刚性）；本节管"拿什么做"（skill
 - 集成 → **SDD dispatch + 注入**
 - 判断类 / 组合复杂 → **收回主线程 inline**：主线程天然持有全部 skill 与
   完整上下文，是 skill 发挥空间最大的执行者。**收回不等于免审**：inline
-  完成后派强模型 reviewer 审查该 diff（SDD 原文警告 controller 自改会跳过
-  审查，故补此门）。2026-08-29 用户裁决：此为 2026-08-13 强弱分工理由的
-  授权例外，见"强弱模型缺省"段。
+  完成后派独立 reviewer 审查该 diff（SDD 原文警告 controller 自改会跳过
+  审查，故补此门）。2026-08-29 用户裁决：此为 2026-08-13 分席理由的
+  授权例外，见"实现/审查分席缺省"段。
 
-**4. 注入两档**（仅对 dispatch 的任务）：
-- **弱模型实现者** → skill **指令化**：编排者 Read skill 正文、抽取与本任务
+**4. 注入两档**（仅对 dispatch 的任务；档=策略选择非模型档）：
+- **指令化**（默认档）：编排者 Read skill 正文、抽取与本任务
   相关段落写进 brief，subagent 不碰 Skill 工具。
-- **强模型实现者** → skill **许可清单**：dispatch 带一行"本任务许可调用：
+- **许可清单**（须显式授予——plan 预绑定或编排层 Ruling，工具授权永不
+  默认）：dispatch 带一行"本任务许可调用：
   X、Y、Z"——枚举式、可审计，不是自由购物。（subagent 调 skill 的障碍是
   纪律级而非工具级：general-purpose 持 Skill 工具，SUBAGENT-STOP 是
   using-superpowers 的纪律条款，直接指令优先于它。）
@@ -223,26 +262,27 @@ plan 管"做什么"（绑定权威，刚性）；本节管"拿什么做"（skill
   plan 冲突 → plan 赢 + ruling 记录。
 - 组合上限（骨架 1 + 领域 ≤3）、候选源封闭，防编排者即兴。
 - 审查门不变：reviewer 的 constraints 块加"核对 diff 是否符合绑定组件约定"，
-  注入由强模型验证闭环；收回 inline 的 diff 另过独立强模型审查（见第 3 条）。
-- 组合进 ledger（`Task N: 组合=[…] agent=X model=Y 理由=…`），收尾可审计
-  （agent_type 分布是 2b 映射表校准的数据源）；实现者运行中
+  注入由独立 reviewer 验证闭环；收回 inline 的 diff 另过独立审查（见第 3 条）。
+- 组合进 ledger（`Task N: 组合=[…] agent=X model=<平台基底> 注入档=Z 命中=<表/plan/无> 理由=…`），收尾可审计
+  （agent_type 分布是 2b 映射表校准的数据源；平台基底字段与 exec-forge §组合行同源——ZCode 记 platform-default(agent_type=<x>)，模型档可配平台记映射档）；实现者运行中
   报缺组合，走既有 NEEDS_CONTEXT / DONE_WITH_CONCERNS 状态（SDD 四状态
   契约封闭，不造新通道），编排者裁定是否补组合后重派。
 
-**强弱模型缺省**（阶段 4 ML/L 级；dispatch 的 model 轴，与 2b 的 agent_type
-轴正交、各自独立设置）：有用户指令按指令；无指令时**实现者降配
-sonnet/haiku、审查者用最强可用模型**（opus 级）。SDD 的核心价值是强弱分工：
-实现已被 plan 拆解为机械步骤，弱模型干得快且省；强模型把住逐任务审查关。
-整体执行质量高于同级模型单干（2026-08-13 用户裁决：ML 级同样走 SDD 即为此；
-2026-08-14 MS 子档拆分后，MS 保持 inline TDD 不走 SDD）。
-**不要**让实现者继承会话模型——那等于放弃了审查者与实现者的能力差。
+**实现/审查分席缺省**（阶段 4 ML/L 级；dispatch 的分席轴，与 2b 的
+agent_type 轴正交、各自独立设置）：实现已被 plan 拆解为机械步骤，实现者可
+基线执行；审查者 fresh 独立于实现上下文，把住逐任务审查关——分席价值在
+上下文隔离与作者盲区，不独在模型差（2026-08-13 用户裁决：ML 级同样走 SDD
+即为此；2026-08-14 MS 子档拆分后，MS 保持 inline TDD 不走 SDD）。模型档
+平台映射：Claude=实现降配 sonnet/haiku、审查 opus 级，且**不要**让实现者
+继承会话模型（=放弃审查者与实现者的能力差）；**ZCode=Agent 工具无 model
+参数，统一 platform-default（轴塌缩，组合行 model 字段仅记录实际基底）**。
 
 **与 §动态组合 的关系**：本段"实现者"指**被 dispatch** 的实现者——裸/注入
-dispatch 仍按此降配弱模型。**判断类/组合复杂收回主线程 inline** 不是
+dispatch 仍按此分席。**判断类/组合复杂收回主线程 inline** 不是
 dispatch，由主线程（会话模型）执行、天然持全部 skill——这是 skill 的发挥
-空间，与强弱分工不冲突；收回的 inline diff 必须过独立强模型 reviewer 审查
+空间，与分席不冲突；收回的 inline diff 必须过独立 reviewer 审查
 （防跳过审查门）。
-（2026-08-29 用户裁决：2026-08-13 强弱分工理由适用于机械/集成 dispatch；
+（2026-08-29 用户裁决：2026-08-13 分席理由适用于机械/集成 dispatch；
 判断类收回是本裁决授权的例外，以审查门补偿为前提；2026-08-14 MS 拆分后
 MS 保持 inline 同此渊源。）
 
@@ -262,7 +302,7 @@ MS 保持 inline 同此渊源。）
 
 - **S 级**：不可逆操作前、歧义。
 - **MS/ML 级**：+ 方案确认（同停止点拍板 MS/ML 子档）。
-- **ML/L 级**：+ 路由表确认（Step 1.5 第 5 步）。
+- **ML/L 级**：+ 路由表确认（Step 1.5 第 5 步）+ 阶段 4 入口执行编排批量确认（exec-forge/SDD 预分配表）——两确认均带折叠条件（见 Step 1.5 第 5 步与 exec-forge §阶段 4 入口停止点，2026-09-15 裁定）。
 - **L 级**：+ brainstorming 问答、plan 逐条裁定（可批量）、审查轮 3 不收敛
   重锻、分支收尾。
 
