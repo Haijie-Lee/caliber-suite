@@ -24,6 +24,7 @@
 - [ ] fixture 数据来源标注（真实样本路径 / 抓取日期）
 - [ ] **残留/存在性检查正则的反身自伤**（实证：2026-08-13 文档整合——`(doc|plans|reference)/` 模式命中迁移后的合法新路径 `docs/plans/`、`../plans/`、树行 `├── plans/`，4 条验收命令在完美执行下全部误报"残留"）：设计验证时先枚举**合法新内容**的形态（前缀 s、前缀 /、树行、表行、白名单行），用前导字符排除（`[^A-Za-z0-9s/]`）+ 白名单行号显式列出；新写入的文档内容尽量用全名（`docs/plans/` 而非 `plans/`）减少白名单
 - [ ] **计数验证命令的尾换行陷阱**（实证：`printf '%s' "$G1" | wc -l` 吞掉尾换行——非零残留显示为 0，假绿）：用 `printf '%s\n'`；"0 行"期望必须能证明是真 0，不是公式吞了输出
+- [ ] **禁忌/红线词表的规则定义自嵌**（实证：2026-09-16 file-hygiene T9 F-1——AGENTS.md 纪律行逐字内嵌五词禁忌表，仓级禁忌 grep 对该文件永久假阳性、词表随每会话注入）：定义「禁出现词 X」类规则时，规则文本用指针式（词表见 <单一权威件>），词表逐字只存在于唯一权威位置；验证 grep 扫描范围只含被约束产物目录，不含规则定义件
 
 ### 风险登记
 - [ ] 每条风险四要素齐全：触发条件 / 爆炸半径 / 可逆性 / 处置
@@ -35,7 +36,7 @@
 - [ ] 每任务画像三要素齐全：性质（新增/修bug/重构/原型/配置/文档/调研/操作）、难度
       （机械/集成/判断）、领域词
 - [ ] 格式与 `画像: 性质=…; 难度=…; 领域词=[…]` 逐字一致
-- [ ] 画像只记性质/难度/领域词，未记 skill 组合决定（组合是执行层决策）
+- [ ] 画像只记性质/难度/领域词，未记 skill 组合决定（锁定发生在工序 4 彩排后预绑定回写，见 SKILL.md 工序 4）
 
 ## 工序 3 — 锻打五视角清单（轮 1 注入 plan-review-ritual 的 CHECKLIST；轮 ≥2 stance/prompt 骨架见本节末尾）
 
@@ -76,6 +77,7 @@
 - fixture 是真实数据还是手编的？手编数据的"干净度假象"排了吗？
 - 模块级语句（regex、常量、装饰器）：import 时就执行——它会炸吗？
 - 有没有测试只断言"不抛异常"（= 没断言）？
+- 逐字交付的破坏性/不可逆核心脚本，有没有只被 plan 自带断言（快乐路径）验证？——补对抗性边界探针（盘符相对路径 / 同 basename 碰撞 / 异常 schema 输入），实证：2026-09-16 file-hygiene T4 F1/F2（3 轮审查+3 闸口+彩排全过快乐路径，执行期对抗探针抓出「崩溃无 manifest」与「trash 静默覆盖」两缺陷）
 
 ### 轮次化 stance 与 prompt 骨架（轮 ≥2 由 forge 工序 3 装配注入）
 
@@ -197,3 +199,64 @@ Q3 ASSUMPTION CHAIN — for each task, do its stated/implied prerequisites
 Report: PASS, or FINDINGS table (location | question | claim | evidence).
 Any FINDING is P2 minimum. Fix nothing. No style comments.
 ```
+
+## 工序 4 — 成型检查清单（litmus 真实彩排，2026-09-16 新增）
+
+机制与级别语义在 SKILL.md 工序 4；本节只放派遣 prompt 骨架与回收检查。
+
+### 派遣 prompt 骨架（填槽 {PLAN_PATH} {ROUTING_YAML_PATH} {VISIBLE_MAP}）
+
+```
+You are a fresh baseline executor with ZERO context beyond what this prompt
+gives you. You did not write this plan and know nothing about the project.
+
+PHASE 1 — confusion-hunt (do this FIRST; complete it fully before Phase 2):
+Input: ONLY the plan file at {PLAN_PATH}. Read it in full.
+For each task, narrate how you would execute it step by step, and report
+four kinds of points:
+1. what you cannot understand;
+2. where you would have to guess;
+3. references (files / functions / constants) you cannot locate;
+4. missing steps that are "obviously" implied but not written.
+Check kernel (verbatim):
+- Is every test expectation given down to the exact digit?
+- Is every signature/field defined before use?
+- Any "obvious" steps left unwritten?
+- Any reference to undefined types/functions/constants/files?
+Rules: read-only; do NOT execute any write operation; do NOT open any file
+other than the plan during Phase 1 — especially NOT {ROUTING_YAML_PATH} or
+any skill file; component knowledge would mask your confusion points.
+Write your Phase 1 report in full before starting Phase 2.
+
+PHASE 2 — skill-consumption mapping (start only after the Phase 1 report
+is fully written):
+Inputs (only these three): the plan you already read; the routing table at
+{ROUTING_YAML_PATH}; the SKILL.md bodies of the components you intend to
+assess (visible:true entries — resolve paths from this name→path map:
+{VISIBLE_MAP}; visible:false entries — read the `path` field verbatim).
+For EACH task in the plan, answer explicitly: which step/action fits which
+component? Base judgments on the real capability intersection between task
+text and component description/body — never guess from component names.
+If no component fits a task, answer "无" explicitly (silence = you forgot
+to judge).
+Output TWO tables:
+技能消费建议表: | 任务 | 适用步骤 | 建议组件 | 来源(路由表命中/全局清单) | 理由 |
+弃用建议(可空): | 任务 | plan 已有候选组件 | 弃用理由 |
+Suggestions from the 全局清单 must quote the component's description line
+as evidence. For tasks whose 画像 has 领域词: check them against
+routing.yaml keywords; a keyword hit you do NOT recommend needs a one-line
+why-not.
+If {ROUTING_YAML_PATH} does not exist: skip Phase 2 and report exactly one
+line: 无路由表，技能映射未执行.
+```
+
+（{VISIBLE_MAP} = 编排者预提取的 visible:true 组件「名称 → SKILL.md 路径」
+映射，一行一条；彩排 agent 只 Read 不碰 Skill 工具。）
+
+### 回收检查（编排者逐条）
+
+- [ ] Phase 1 报告不含任何组件名 / routing 内容（G8 时序隔离纯度抽查）
+- [ ] 建议表覆盖 plan 每个任务（含显式"无"）
+- [ ] 全局清单来源的建议逐条附 description 摘录
+- [ ] 弃用建议逐条有理由
+- [ ] 编排者裁定逐条留痕（采用/调整/弃用 + 理由），SKILL.md 工序 4「回传与回写」三处回写完成

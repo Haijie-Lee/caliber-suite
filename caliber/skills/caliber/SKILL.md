@@ -2,7 +2,7 @@
 name: caliber
 description: "Use when starting any engineering task — feature, bugfix, refactor, or change request — before touching code. Not for pure Q&A, research, or open-ended discussion."
 metadata:
-  version: "1.12.1"
+  version: "1.14.0"
   source: distilled-from-practice
 ---
 
@@ -24,6 +24,10 @@ v1.12.0（2026-09-15，用户裁定去 Claude 遗产词汇）：「实现/审查
 （1.11.3 并入：接续条款补无 visible_count 字段跳过。）
 v1.12.1（2026-09-15，独立复核修复）：组合行占位符对齐 exec-forge §组合行
 （model=<平台基底>）。
+v1.13.0（2026-09-16，用户裁定）：ML 级阶段 3 接入 plan-forge 工序 4 真实彩排（与 L 同构全量；单派遣两阶段 = confusion-hunt + 技能消费映射）；skill 消费从「候选非绑定、dispatch 边界现决」升级为「预绑定+偏离留痕」（彩排映射经编排者裁定回写 plan 为默认消费，dispatch 边界偏离记 ledger Ruling，终审闭环核查——执行期遗忘 = 实证失败模式 A2）。
+v1.14.0（2026-09-16，用户裁定）：阶段 6 通用注——docs/known-issues.md
+重访触发命中项的显式处置义务（exec-forge 1.5.0 登记端的消费闭环；与
+plan-forge 1.6.0 工序 1 选材第 5 条同为登记表消费侧）。
 
 ## 为什么有效（理解了才会用对）
 
@@ -48,7 +52,7 @@ v1.12.1（2026-09-15，独立复核修复）：组合行占位符对齐 exec-for
 | superpowers:brainstorming | L 级澄清 | 读 fallback.md §三问 |
 | superpowers:writing-plans | ML/L 级计划（plan-forge 缺时） | 读 fallback.md §简plan |
 | plan-review-ritual | MS/ML 级自审；L 级完整 + plan-forge 工序 3 内部调用 | 读 fallback.md §自审 |
-| plan-forge | ML/L 级阶段 2（plan 锻造；ML 级仅工序 1-2，L 级工序 1-4） | 退回：ML 级阶段 2 调 writing-plans；L 级阶段 3 调 plan-review-ritual |
+| plan-forge | ML/L 级阶段 2（plan 锻造；ML 级工序 1-2 + 工序 4 彩排，L 级工序 1-4） | 退回：ML 级阶段 2 调 writing-plans；L 级阶段 3 调 plan-review-ritual |
 | superpowers:subagent-driven-development | ML/L 级阶段 4 实现 | 读 fallback.md §单会话SDD |
 | caliber:exec-forge | ML/L 级阶段 4 非 coding 执行引擎（路由见 §动态组合） | 有 git 退 SDD；无 git 退 inline + 独立补审门 |
 | superpowers:finishing-a-development-branch | L 级阶段 6 分支收尾 | 读 fallback.md §分支收尾 |
@@ -156,17 +160,21 @@ dispatch 派发）；S/MS 无 dispatch 边界，主线程查表纪律实测失�
 |---|---|---|---|---|---|
 | 1 | 澄清 | agent 一句话重述需求（歧义才停，见铁律 7）；bug 类先用 systematic-debugging 定位根因 | 列出方案选项，**停**，用户选定（同停止点拍板 MS/ML，见 Step 1 子档段） | 同 MS | 调 brainstorming 问答澄清（**停**） |
 | 2 | 计划 | 一句话方案 | 对话内步骤列表（文件+改法+验证） | 调 plan-forge 工序 1-2（选材+制坯）出正式 plan 文档落盘（缺时 writing-plans）——**ML 级必出 plan 文档** | 调 plan-forge 工序 1-2（选材+制坯）出 plan 初稿 |
-| 3 | 审查 | 自问：有没有更简单的做法？ | 跑 plan-review-ritual Step 1 自审（对象：阶段 2 步骤列表） | 跑 plan-review-ritual Step 1 自审（对象：阶段 2 落盘的 plan 文档） | plan-forge 工序 3-4（锻打=**收敛循环**：双声部逐轮对抗至收敛判据，≤3 轮，轮 3 不收敛回工序 2 重锻**停**；准出=**exit gate**：凡经修复的 plan 必经 fresh 独立全局复审；成型=litmus **真实彩排**：fresh 零背景基线 agent confusion-hunt；Taste 裁定**停**可批量，User Challenge 必停） |
+| 3 | 审查 | 自问：有没有更简单的做法？ | 跑 plan-review-ritual Step 1 自审（对象：阶段 2 步骤列表） | 跑 plan-review-ritual Step 1 自审（对象：阶段 2 落盘的 plan 文档）→ plan-forge 工序 4 真实彩排（单派遣两阶段：confusion-hunt + 技能消费映射；映射裁定回写预绑定；自审修复落地后再彩排） | plan-forge 工序 3-4（锻打=**收敛循环**：双声部逐轮对抗至收敛判据，≤3 轮，轮 3 不收敛回工序 2 重锻**停**；准出=**exit gate**：凡经修复的 plan 必经 fresh 独立全局复审；成型=litmus **真实彩排**（单派遣两阶段：fresh 零背景基线 agent confusion-hunt + 技能消费映射，映射裁定回写预绑定）；Taste 裁定**停**可批量，User Challenge 必停） |
 | 4 | 实现 | TDD 直接改，一次一 commit | TDD 逐步，每步跑验证（inline） | 引擎路由（规则见 §动态组合 首节）：代码主导+git → SDD；其余 → exec-forge。逐任务按执行编排预分配表派发（机械→裸 dispatch / 集成→dispatch+注入 / 判断类、组合复杂→主线程 inline + 独立审查）；阶段 4 入口批量确认停止点 | 引擎路由（规则见 §动态组合 首节）：代码主导+git → SDD；其余 → exec-forge。逐任务按执行编排预分配表派发（机械→裸 dispatch / 集成→dispatch+注入 / 判断类、组合复杂→主线程 inline + 独立审查）；阶段 4 入口批量确认停止点 |
 | 5 | 验证 | 跑验证命令，输出即证据 | 单测 + 相关集成测试 | 单测 + 相关集成测试 | 分层验证 + 真机最小验证（先离线模拟核心路径）+ 全分支 review |
 | 6 | 收尾 | 规范 commit message | commit + 三行简报（改动/验证/遗留） | commit + 三行简报（改动/验证/遗留） | ledger 收尾 + 调 learn/skillify 固化新经验 + 分支收尾决策（**停**） |
+
+**阶段 6 通用（1.14.0）**：`docs/known-issues.md` 存在时做**触发核查**——
+重访触发命中本任务的 open 项必须显式处置（关闭记理由 / 带新触发再延 /
+转 TODO.md），处置结果进三行简报；文件不存在或零命中 → 跳过不记。
 
 **路由表查表**（仅 ML/L 级；S/MS 按 Step 1.5 门控无表，直接跳过本步）：
 上表各阶段（1-6）开始时由编排者先查 `.caliber/routing.yaml`
 （Step 1.5 产物），命中优先、未命中走全局默认；无表则跳过本步。
 **implement 阶段**（ML/L 级）的命中不走"主线程自读"，经 §动态组合 进入
-执行：画像领域词记入 plan（候选依据，非绑定），组合决定由编排层在 dispatch
-边界做出（注入两档：指令化/许可清单）。S/MS 级命中按上句默认（主线程自读）。
+执行：画像领域词记入 plan（候选依据，工序 4 彩排后升级为预绑定），组合决定由编排层在 dispatch
+边界做出（注入两档：指令化/许可清单；预绑定语义见 §动态组合）。S/MS 级命中按上句默认（主线程自读）。
 
 ## §动态组合（阶段 4 执行层：任务画像 → 组合 + 派遣 → 执行形态）
 
@@ -176,9 +184,7 @@ dispatch 派发）；S/MS 无 dispatch 边界，主线程查表纪律实测失�
 阶段 4 的**过程节拍**恒定（TDD/SDD 是骨架），**领域装备**按任务动态组合。
 plan 管"做什么"（绑定权威，刚性）；本节管"拿什么做"（skill 组合，动态）
 与"派谁做"——dispatch 选择轴：agent_type（2b）× prompt（注入两档）；
-model 轴在 ZCode 塌缩为 platform-default（仅记录，见"实现/审查分席缺省"段）。组合点在 dispatch 边界，决策者是编排层（主线程），不是执行者——判断只是
-从"派发时做"前移为"在信息最多的时刻做"（运行时能看到前序任务的实际产出
-与真实代码状态），执行者拿到的仍是逐字指令（注入的 skill 正文摘录）。
+model 轴在 ZCode 塌缩为 platform-default（仅记录，见"实现/审查分席缺省"段）。组合决策分两点落定（2026-09-16 用户裁定）：**技能消费在 plan 期彩排后预绑定**（plan-forge 工序 4 Phase 2 映射 + 编排者裁定回写——预绑定 = 默认消费——dispatch 边界偏离须记 ledger Ruling，终审闭环核查）；**消费方式与偏离裁定在 dispatch 边界**，决策者是编排层（主线程），不是执行者——执行者拿到的仍是逐字指令（注入的 skill 正文摘录）。无彩排产出的 plan（旧 plan / 免彩排级别）按旧语义：组合在 dispatch 边界现决、路由命中候选非绑定。
 
 **1. 任务画像（组合输入）**：plan（plan-forge 工序 2）为每任务标注画像，
 格式定死：`画像: 性质=…; 难度=…; 领域词=[…]`
@@ -186,8 +192,11 @@ model 轴在 ZCode 塌缩为 platform-default（仅记录，见"实现/审查分
 - 难度：机械 / 集成 / 判断——**自设三档**（信号源自 SDD 复杂度信号但独立
   设档；SDD 原档为 cheap/standard/most-capable，不可直接引用）
 - 领域词：供路由表关键词匹配
-画像前置进 plan，但**不锁 skill 组合**——锁了就把运行时信息（前序任务实际
-产出、真实代码状态）丢掉，回到死板。画像是执行层的输入，不是执行层的指令。
+画像前置进 plan，工序 2 不锁 skill 组合——锁定发生在 plan-forge 工序 4
+彩排后：Phase 2 映射 + 编排者裁定把技能消费以预绑定形态回写 plan（默认
+消费；dispatch 边界仍可据运行时信息——前序任务实际产出、真实代码状态——
+偏离，偏离必须记 ledger Ruling）。画像是执行层的输入；预绑定是执行层的
+缺省，不是锁死。
 任务缺画像标注 → 按"集成"对待（dispatch+注入，安全向）。
 
 **执行引擎选择**（阶段 4 入口先定引擎，再谈组合）：按 plan 任务性质画像分布——
@@ -205,10 +214,11 @@ exec-forge 内代码任务用其"代码"验证菜单。主导判定歧义 → �
   配置、文档→TDD轻验证 / 调研→证据登记 / 操作→回滚先行。非 coding 任务的
   骨架语义与验证形式见 caliber:exec-forge 菜单节（同源，不复制；非 coding
   任务的组合行骨架名以彼菜单为准）。
-- **领域组件 ≤3**：路由表 `stages` ⊇ implement 命中 + 任务文本关键词匹配；
-  候选源只认路由表与全局 skill 清单，不许凭空造（C2）。领域组件以画像
-  领域词的形式记入 plan（候选依据，非绑定）；组合决定由编排层在 dispatch
-  边界做出（C6）。
+- **领域组件 ≤3**：plan 预绑定（工序 4 回写）> 路由表 `stages` ⊇
+  implement 命中 + 任务文本关键词匹配 > 全局 skill 清单；候选源封闭，
+  不许凭空造（C2）。预绑定组件默认消费（跳过须 Ruling）；预绑定外路由
+  命中照常消费；无预绑定的 plan 按旧语义（命中候选非绑定，dispatch
+  边界现决，C6）。
 - **agent_type = f(画像)**（dispatch 第三轴，2026-09-01 新增）：见 2b 映射表。
 
 exec-forge 路径的消费钩子 = caliber:exec-forge §任务环「组合决策与注入」

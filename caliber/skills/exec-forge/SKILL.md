@@ -2,7 +2,7 @@
 name: exec-forge
 description: "Use when executing an ML/L-level implementation plan whose tasks are predominantly non-coding (文档/配置/调研/操作) or the workspace has no git — caliber 阶段 4 执行引擎，在非 coding 场景替换 superpowers:subagent-driven-development：plan 期预分配混合执行编排（执行者×审查者×形态）、routing.yaml 驱动注入两档、逐任务审查门、四状态契约、ledger 断点恢复、过程日志契约（动作级留痕）。中文触发：执行 plan、非代码任务派发、混合执行、执行编排、subagent 派工、阶段 4"
 metadata:
-  version: "1.3.4"
+  version: "1.5.0"
   source: distilled-from-practice
 ---
 
@@ -45,6 +45,7 @@ ML/L 级阶段 4 入口，按 plan 任务性质画像分布选引擎：
 - `PLAN`（绑定权威）：含逐任务画像与**执行编排预分配表**（plan-forge ≥1.4.0
   工序 2 产物；更早的 9 列表多模型档列 → 忽略该列按 8 列消费，不另记偏差）。
   缺表 → 按 §输入 预分配表默认规则现场分配，进入口停止点展示。
+  plan-forge ≥1.5.0 工序 4 彩排后，预分配表 领域组件列 经编排者裁定回写为**预绑定**（语义见下 schema 节）；SDD 路径 plan 的任务块 `技能消费` 行同语义（1.4.0）。
 - `routing.yaml`（可选）：`<项目根>/.caliber/routing.yaml` 存在才消费；
   消费方式 = §任务环 step 2 组合决策步（每任务，含无表处置与新鲜度比
   对）。查表与命中决策在主线程（step 2，规则同源 caliber §动态组合）；
@@ -68,8 +69,11 @@ ML/L 级阶段 4 入口，按 plan 任务性质画像分布选引擎：
   reviewer（制度化补审门，防 controller 自审跳过）。
 - **注入档**：`指令化` / `许可清单` / `无`（决策见 §任务环 step 2 ③；
   ledger 组合行对 inline 任务记 N/A——主线程无需注入档）。
-- **领域组件**：路由表命中（候选，非绑定——组合决定由编排层在 dispatch
-  边界做出）。
+- **领域组件**：路由表命中（候选）；plan-forge ≥1.5.0 工序 4 彩排后经编排者
+  裁定回写为**预绑定**（1.4.0；与 plan-forge 工序 2、caliber §动态组合 同源逐字：
+  预绑定 = 默认消费——dispatch 边界偏离须记 ledger Ruling，终审闭环核查）；
+  未经彩排的 plan 保持候选非绑定旧语义（组合决定由编排层在 dispatch 边界
+  做出）。
 - 默认规则（plan 未预分配时）：判断类/组合复杂 → inline + 独立审查；
   机械 → dispatch + 独立审查；集成 → dispatch + 注入。
 
@@ -138,12 +142,13 @@ task 全文提取到文件，brief = 需求唯一真源（实测 2026-09-14，�
 
 ```bash
 awk '/^```/{fence=!fence} !fence && /^## /{inb=0} \
-!fence && /^### Task [0-9]+/{inb=($3==n)} inb' n="$N" "$PLAN" \
+!fence && /^### Task [0-9]+/{t=$3; sub(/:.*/,"",t); inb=(t==n)} inb' n="$N" "$PLAN" \
   > "<ws>/task-${N}-brief.md"
 ```
 
-验证：`head -1` = `### Task <N> …`；`wc -l` > 5；`grep -c "Task <N+1>"` = 0
-（混入下一任务 = 提取错误）。精确值（数字/魔法串/签名/判据）只出现在
+验证：`head -1` = `### Task <N> …`；`wc -l` > 5；`tail` 最后一个
+非空行属本任务内容（不再用下一任务号 grep 判零——Interfaces 块合法
+交叉引用会假阳性，2026-09-16 实证；提取尾随空行合法）。精确值（数字/魔法串/签名/判据）只出现在
 brief，不出现在 dispatch prompt。
 
 ### 2. 组合决策与注入（每任务，brief 之后、dispatch/inline 之前）
@@ -154,7 +159,7 @@ brief，不出现在 dispatch prompt。
 ② **查组件**：`<项目根>/.caliber/routing.yaml` 存在才查——
    - 匹配（与 caliber §动态组合 2 同源逐字）：路由表 `stages` ⊇ implement 命中 + 任务文本关键词匹配；领域组件 ≤3。审查边界同法（`stages` ⊇ review → 摘录进审查包 constraints 块）。
    - 新鲜度（2026-09-15 P3）：表含 `visible_count` 时与当前会话 skill 清单条目数比对，不等 → 一行警告（表或陈腐，建议回 caliber Step 1.5 重装）后继续消费，不阻塞（接续恢复由 caliber 接续条款先行门控；本条为执行中兜底，仅警告不重复门控）。
-   - 优先级：路由命中 > plan 预绑定 > "—"；冲突 → plan 赢 + Ruling；命中但运行时判不适用（陈腐/前序产出变化）→ 不注入 + Ruling。
+   - 优先级与消费义务（1.4.0）：plan 预绑定组件（工序 4 回写 / 任务块 `技能消费` 行）= 默认消费，跳过或替换须 Ruling；预绑定外路由命中照常注入（现规则不变）；冲突（同槽位互斥）→ plan 赢 + Ruling；命中但运行时判不适用（陈腐/前序产出变化）→ 不注入 + Ruling。
    - plan="—" 而路由有命中 → **照常注入**：查表消费不算 §阶段 4 入口停止点 折叠条件②的"运行时调整"（②约束形态/执行者轴微调）。注入档=无 伴随 领域组件="—" = 默认空、非禁令；plan 明令禁注须写进 Global Constraints 或 Ruling。
    - 无表 → 组合行注"无表，仅 plan 预绑定可注入"；无命中且 plan="—" → 注入档=无（dispatch 形态取值，inline 记 N/A 见 ③；合法空转，本步不省略，组合行照写）。
 ③ **定档注入**（仅 dispatch；inline 主线程天然持全部组件，组合行记骨架+命中，注入档=N/A）：
@@ -245,6 +250,10 @@ reviewer 输入（全走文件路径）：
 
    合并写入审查包；有 git 时可用 `git diff <BASE> HEAD` 替代（BASE = 任务
    前记录，禁 `HEAD~1`——多提交任务会被截断）。
+   ⚠️ 装配命令禁裸 `&&` 链：`diff`/`grep -c` 等 exit 码携带语义（diff
+   exit 1 = 有差异是预期形态，链内后续命令静默丢失）——三度实证
+   （2026-09-15/16 learnings 同族两条：diff exit 1 / grep -c 归零 + v9
+   冒烟装配短路一次）；用 `;` 分隔或独立调用。
 4. **全局约束块**：从 plan Global Constraints 逐字复制——reviewer 的注意力
    透镜（精确值、精确格式、组件关系句）。
 
@@ -261,6 +270,18 @@ reviewer 输入（全走文件路径）：
 - ⚠️ **cannot-verify 项**（reviewer 报"从变更包无法验证"）：不阻塞审查，
   但 controller 必须逐条自解后才许标完成——你持有 reviewer 没有的
   跨任务上下文；确认是真缺口 = 按 spec ❌ 进 fix loop。
+- **来源标签**（1.5.0）：reviewer prompt 要求每条发现（含 Minor）带来源
+  标签四选一——`计划强制`（plan/简介锁定文本的原样产物，修 = 偏离绑定
+  权威）/ `执行引入`（实现者自选产物）/ `报告准确性`（report 或日志叙述
+  与产物事实不符）/ `无法验证`（= 既有 cannot-verify 项）。标签是 §6 出口
+  与 §终审 处置路由的输入；reviewer 漏标 → 编排者补标或退回，不凭严重度
+  猜路由。
+- **内容级检测许可**（2026-09-17，v9 冒烟实证：三级 reviewer + 终审对锁文本
+  内种子缺陷零上报）：spec 合规 PASS 不豁免内容级 Minor——plan/锁文本
+  强制的内容本身有质量疑虑（死代码、过时引用、可疑常量）时照报 Minor，
+  来源标签=`计划强制`。上报 ≠ 要求修改：处置权属 §终审「Minor 处置评估
+  loop」，任务环 fix loop 语义不变。审查包「锁文本/不得增删」约束的是
+  产物形态，不豁免审查眼；本条与来源标签条同随 reviewer prompt。
 - inline 任务同构：主线程自写 report 文件（同契约），reviewer 输入同构。
 - 注入任务（2026-09-15 组合决策步配套）：constraints 块加"核对 diff
   是否符合绑定组件约定"（与 caliber §动态组合 5 同源）。指令化任务：
@@ -271,9 +292,13 @@ reviewer 输入（全走文件路径）：
 ### 6. fix loop（上限 5 轮）
 
 触发：spec ❌ / 任何 Critical 或 Important / 确认真实的 ⚠️。
-先走两条出口再进环：
+先走三条出口再进环：
 - **Minor** → ledger `Task <N>: minor (deferred): <一行>`，终审时 triage；
   永不进环。
+- **报告准确性类**（来源标签=报告准确性，1.5.0）→ 不 defer：当场原位修正
+  report（把值改对），并记独立一条 ledger Ruling（启用过程日志时另记
+  偏离恢复 类条目）——report 是终审与判读的证据底座，失真承重，修复窗口
+  不过夜；产物本体不动，无需 scoped 重审。
 - **plan-mandated / 与 plan 文本冲突的发现** → controller 裁定（Spec 为
   绑定权威、plan 是其论证），ruling 记 ledger 后才行动；不许因 plan
   要求而静默驳回，也不许派与 plan 矛盾的修复而无 ruling 记录。
@@ -381,9 +406,15 @@ v4 实证全量 ≈6-8K tokens 输出、subagent 零摊派）；⑤ 压缩幸存
 ## [<序号>] <动作类型> — <一行摘要>
 ```
 
-动作类型枚举（12 类，不得自创）：现场勘查 / 装配 / 折叠判定 / 注入 /
-dispatch / 审查门 / fix轮 / 验证 / Ruling / 偏离恢复 / 终审 / 收尾。
-归类指引：现场勘查/装配/折叠判定/注入/dispatch 对应 §任务环 各步；
+动作类型枚举（13 类，不得自创）：现场勘查 / 装配 / 折叠判定 / 注入 /
+dispatch / inline执行 / 审查门 / fix轮 / 验证 / Ruling / 偏离恢复 / 终审 / 收尾。
+归类指引：现场勘查/装配/折叠判定/注入/dispatch/inline执行 对应 §任务环
+各步（inline执行 = inline 形态任务的主线程实做，其机检命令实跑拆 验证
+类——枚举缺位实证：2026-09-16 file-hygiene L 任务 inline 四任务自创
+「inline 执行」类 ×4，process-log [21][26][30][36]）；inline 路径组合行
+落账与 dispatch 路径对齐——inline执行 条目先记「组合行（即时落账）」
+一笔再记实做（v9 终审 M1 实证：dispatch 条目 [4]/[6] 有而 inline 条目
+[7] 无）；
 审查门 含**任务级** report 抵达与四状态处置；验证 = 任务验证命令实跑；
 fix轮 = 修复往返；Ruling = 四停止外自行裁定；偏离恢复 = 失真/意外修正；
 终审/收尾 对应同名节——终审 verdict、其 report 抵达与四状态处置及
@@ -422,11 +453,47 @@ deferred triage 均归 终审 类，不归 审查门（v5 实证：终审误归 
 
 ## 终审（final review）
 
-全任务完成后：fresh 独立 agent 全产物终审（审查包 = 全变更合并）+ 指向 ledger
-deferred/parked 行让其 triage；另核 ledger 组合行逐任务存在性（缺席 =
+全任务完成后：fresh 独立 agent 全产物终审（审查包 = 全变更合并；reviewer
+prompt 同含 §5 来源标签条与内容级检测许可条）+ 指向 ledger
+deferred/parked 行让其分类（triage 处置权属见下「Minor 处置评估 loop」段）；另核 ledger 组合行逐任务存在性（缺席 =
 组合决策步被跳过）与时序（补记/迟记 = 时序漂移，§任务环 step 2 ④
-即时落账条款，1.3.4）并抽查一处注入保真/组件使用锚点；启用过程日志时
+即时落账条款，1.3.4）并抽查一处注入保真/组件使用锚点；plan 含预绑定（预分配表 领域组件列 彩排回写或任务块 `技能消费` 行）时，逐任务核查预绑定组件被消费（brief ## 注入 节 / 许可清单任务 report 组件使用字段 / inline 任务 ledger 组合行命中=plan）或有对应 Ruling 偏离留痕——两者皆无 = 预绑定被遗忘，报 Important（1.4.0）；启用过程日志时
 输入含 process-log 路径，抽查动作类型覆盖与失真（§过程日志契约）。
+**Minor 处置评估 loop（1.5.0）**：终审 reviewer 对 ledger deferred minor 与
+自身新发现的 Minor 只做分类——Critical/Important 升级（进 findings）或
+进评估（默认全部）；「修不修、怎么处置」不由终审 reviewer 独判。终审报告
+返回后、fix dispatch 派出前，编排者装配评估包（留存逐条原文 + 来源标签 +
+plan 概要 + 任务依赖关系 + 判据清单 + 上下文指针 report/diff 路径；来源
+标签漏标/误标时编排者可补标——评估包内留痕原标签 + 补标理由，v9 M2 实证），
+**单次 dispatch `caliber:code-reviewer`**（缺席退 general-purpose，2b 链）
+按判据逐条裁定四档：
+- **当场修复**：满足任一——① 修复工作量小且价值高（单点文件级改动可清零、
+  收益用户可感知）；② 全局重要性高于单次 review 呈现（跨任务承重 / 阻塞
+  验收 / 证据链部件）。两判据必须引用具体证据（行号/调用链/验收条目），
+  禁止凭感觉。**裁定本档必须附修复方案参考**（file:line + 改法要点）——
+  方案随 findings 进 fix dispatch，实现者照方案修、scoped 重审照方案核。
+- **TODO**：真实且值得排期，但工作量或时机不适合本轮（跨任务改动 / 依赖
+  外部条件 / 方向级取舍）→ 写 `docs/TODO.md`（照其表头
+  `| 日期 | 条目 | 触发条件 | 状态 |`）。
+- **known-issues**：真实但不值得排期 → 写 `docs/known-issues.md`（schema
+  见 §收尾；文件不存在则按 schema 创建）；重访触发必填，禁写「以后再说」
+  类空触发。
+- **关闭**：误报/噪声 → Ruling 一行（每条裁定都是 ledger 行，静默丢弃
+  禁止）。
+  路由门槛（2026-09-17，v9 run2 实证：三条 eval 自述发现系 plan 强制却标
+  「误报」——范畴错误）：关闭档仅限发现不成立或无信息价值，发现为真
+  禁入；评估席不得把工件/场景的生命周期（一次性 fixture、临时分支）
+  当作发现本身的属性。来源标签=`计划强制` 且发现为真 → 默认
+  known-issues（修复 = 偏离绑定权威，登记即处置；例外仅可升档
+  （当场修复/TODO）、不得入关闭，并须 Ruling 说明）；一次性场景的
+  重访触发写「该工件复用或同类问题再现时」即合法。本条与四档定义
+  同随评估包。
+时序：「当场修复」档并入终审既有 **ONE** fix dispatch（全清单，不一发现
+一派）+ exactly one scoped 重审——Minor 的唯一修复窗口在此；任务环内
+Minor 永不进环的现纪律不变（1.5.0）。parked 行维持既有裁定语义，不重进
+评估。评估逐条裁定进 ledger（`final review: eval <ID>=<档> — <一行理由>`，
+可一行多条）。
+
 有 findings → **ONE** fix dispatch（全清单，
 不一发现一派）+ exactly one scoped 重审 + 残量裁定（同 breaker）。
 无第二波——残量承重 findings 进收尾简报呈用户。
@@ -468,13 +535,21 @@ deferred/parked 行让其 triage；另核 ledger 组合行逐任务存在性（�
 
 1. **Rulings 全量收集**：ledger 里每条 `Ruling:` 行进最终简报
    （"Rulings I made"，逐条带"错了的代价"）——清单必须穷举，这是用户
-   唯一看到代决的地方。
+   唯一看到代决的地方。**评估 loop 裁定（1.5.0）同责穷举**：每条 `<ID>=<档> — <理由>` 进简报（当场修复档附修复落点一行）。
 2. **ledger 保留**：无 git 环境 ledger + snapshots 是执行证据，保留至
    plan 验收（caliber 阶段 5-6）后由收尾决策处置。
 3. **经验固化**：执行中抓到的新型陷阱 → 项目 learnings / 平台清单回写
    （出处一行：哪次任务、什么现象）。
 4. **过程日志（启用时）**：复盘文档与收尾简报以 process-log 为唯一
    素材源——证据驱动不凭记忆（§过程日志契约）。
+5. **known-issues 登记（1.5.0）**：评估 loop 裁定为 known-issues 的条目写
+   `docs/known-issues.md`——文件不存在则创建，布局依次为：标题行
+   `# Known Issues — 执行期登记（exec-forge §收尾产出；caliber 阶段 6
+   触发核查 / plan-forge 工序 1 选材消费）`、空行、3 行治理说明（`>`
+   引用：条目来源与写入权限 / 重访触发必填 / 关闭语义）、空行、表头
+   `| ID | 日期 | 来源(plan/任务) | 发现 | 类别 | 重访触发 | 状态 |`
+   与分隔行（类别 ∈ {计划强制, 执行引入, 其他}；状态 ∈ {open, closed}）。
+   关闭 = 状态改 closed 并补关闭理由，不删除原行——处置留痕。
 
 ## 与 SDD 对照表（移植依据；底线 = 逐项保留或显式泛化）
 
