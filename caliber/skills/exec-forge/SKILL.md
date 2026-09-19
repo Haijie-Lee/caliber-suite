@@ -1,8 +1,8 @@
 ---
 name: exec-forge
-description: "Use when executing an ML/L-level implementation plan whose tasks are predominantly non-coding (文档/配置/调研/操作) or the workspace has no git — caliber 阶段 4 执行引擎，在非 coding 场景替换 superpowers:subagent-driven-development：plan 期预分配混合执行编排（执行者×审查者×形态）、routing.yaml 驱动注入两档、逐任务审查门、四状态契约、ledger 断点恢复、过程日志契约（动作级留痕）。中文触发：执行 plan、非代码任务派发、混合执行、执行编排、subagent 派工、阶段 4"
+description: "Use when executing an ML/L-level implementation plan whose tasks are predominantly non-coding (文档/配置/调研/操作) or the workspace has no git — caliber 阶段 4 非 coding 主场执行引擎（coding 归兄弟引擎 caliber:coding-forge）：plan 期预分配混合执行编排（执行者×审查者×形态）、routing.yaml 驱动注入两档、逐任务审查门、四状态契约、ledger 断点恢复、过程日志契约（动作级留痕）。中文触发：执行 plan、非代码任务派发、混合执行、执行编排、subagent 派工、阶段 4"
 metadata:
-  version: "1.5.0"
+  version: "1.6.0"
   source: distilled-from-practice
 ---
 
@@ -11,7 +11,8 @@ metadata:
 caliber ML/L 级**阶段 4 执行引擎**（非 coding 主场）。与 plan-forge 的分工：
 plan-forge 管"做什么"（plan = 绑定权威），本 skill 管"派谁做、拿什么做、
 怎么验"。机制血缘：移植 superpowers:subagent-driven-development（下称 SDD）
-的核心纪律，泛化其代码绑定（对照表见末节）；coding + git 场景仍归 SDD——
+的核心纪律，泛化其代码绑定（对照表见末节）；coding + git 场景归兄弟引擎
+caliber:coding-forge——
 两引擎按 §何时使用 路由，不竞争同一触发。
 
 ## 为什么有效（理解了才会用对）
@@ -34,7 +35,7 @@ plan-forge 管"做什么"（plan = 绑定权威），本 skill 管"派谁做、�
 ML/L 级阶段 4 入口，按 plan 任务性质画像分布选引擎：
 
 - **代码主导（过半任务性质 ∈ {新增,修bug,重构} 且涉及源码）且仓库有 git
-  → superpowers:subagent-driven-development；其余（非代码主导 / 无 git /
+  → caliber:coding-forge；其余（非代码主导 / 无 git /
   混合但代码任务不涉 git 语义）→ caliber:exec-forge；同一 plan 引擎唯一不混跑**；
 - exec-forge 内的代码任务用 §验证手段菜单 的"代码"行；
 - MS 级 = inline TDD、S 级 = 直改，均不适用本 skill；
@@ -45,7 +46,7 @@ ML/L 级阶段 4 入口，按 plan 任务性质画像分布选引擎：
 - `PLAN`（绑定权威）：含逐任务画像与**执行编排预分配表**（plan-forge ≥1.4.0
   工序 2 产物；更早的 9 列表多模型档列 → 忽略该列按 8 列消费，不另记偏差）。
   缺表 → 按 §输入 预分配表默认规则现场分配，进入口停止点展示。
-  plan-forge ≥1.5.0 工序 4 彩排后，预分配表 领域组件列 经编排者裁定回写为**预绑定**（语义见下 schema 节）；SDD 路径 plan 的任务块 `技能消费` 行同语义（1.4.0）。
+  plan-forge ≥1.5.0 工序 4 彩排后，预分配表 领域组件列 经编排者裁定回写为**预绑定**（语义见下 schema 节）；coding-forge 路径 plan 的任务块 `技能消费` 行同语义（1.4.0）。
 - `routing.yaml`（可选）：`<项目根>/.caliber/routing.yaml` 存在才消费；
   消费方式 = §任务环 step 2 组合决策步（每任务，含无表处置与新鲜度比
   对）。查表与命中决策在主线程（step 2，规则同源 caliber §动态组合）；
@@ -332,6 +333,10 @@ reviewer 输入（全走文件路径）：
   做编排，且 controller 修复跳过审查。（inline 任务主线程即实现者，
   "resume 实现者" = 主线程自修，但每轮仍过独立 reviewer。）
 
+- **同模式复发升级（1.6.0）**：模式签名 = （判定面， 失败形态） 归一化；
+  同一签名第 2 次出现 = 结构性定性，禁同法第 3 次重试，上浮编排者 Ruling
+  （定性 + 换法或改契约）；签名与计数写过程日志。
+
 每轮结束 ledger：`Task <N>: fix round <R>/5 (<X> addressed, <Y> open — <一行>)`。
 
 ### 7. 完成任务
@@ -349,7 +354,7 @@ reviewer 输入（全走文件路径）：
 | 脚本 | `bash -n`；干跑（无副作用模式）；期望输出逐字比对 |
 | 调研 | 事实抽查 ≥30%（每条带出处）；来源可达性 |
 | 操作 | 回滚路径存在且实测；干跑先行；状态前后对比 |
-| 代码 | 跑测试 / build / lint（轻量代码任务；git 重度场景归 SDD） |
+| 代码 | 跑测试 / build / lint（轻量代码任务；git 重度场景归 coding-forge） |
 
 通用：期望给不出具体值 = plan 缺陷 → NEEDS_CONTEXT 退回，不许现场编。
 **仪器校准**：断言"归零"前，先用同形命令断言一个已知存在的串能命中——
@@ -440,7 +445,8 @@ deferred triage 均归 终审 类，不归 审查门（v5 实证：终审误归 
   内联更正注记只是留痕的一部分，不替代条目；只改值不改模式必复发
   （v4 [11]/[21]、v5 [17]/[20]、v6-run2 [19] 三轮五起实证：失真全靠
   事后修正兜底、预防零拦截，原则条款拦不住故升级为可机检格式；
-  v5 两次只写注记未写条目，同类失误当场复发）。
+  v5 两次只写注记未写条目，同类失误当场复发）。**同类偏离签名第 2 次 =
+  Ruling 必记**（与 coding-forge 同源双写——改同源节必双改，GC1/R1）。
 - **失败原样**：失败输出不裁剪、不概括；任何"第一次没成"的动作
   原样记录失败形态 + 修正动作——禁止只记成功路径。条目义务限
   **语义性失败**（命令 exit≠0、产物不符预期、验证未过、dispatch
@@ -459,6 +465,8 @@ deferred/parked 行让其分类（triage 处置权属见下「Minor 处置评估
 组合决策步被跳过）与时序（补记/迟记 = 时序漂移，§任务环 step 2 ④
 即时落账条款，1.3.4）并抽查一处注入保真/组件使用锚点；plan 含预绑定（预分配表 领域组件列 彩排回写或任务块 `技能消费` 行）时，逐任务核查预绑定组件被消费（brief ## 注入 节 / 许可清单任务 report 组件使用字段 / inline 任务 ledger 组合行命中=plan）或有对应 Ruling 偏离留痕——两者皆无 = 预绑定被遗忘，报 Important（1.4.0）；启用过程日志时
 输入含 process-log 路径，抽查动作类型覆盖与失真（§过程日志契约）。
+**②核查端（1.6.0）**：同模式偏离签名计数 >1 的任务必有 Ruling 入账，缺 =
+终审不通过（与 §6 同模式复发升级条联动）。
 **Minor 处置评估 loop（1.5.0）**：终审 reviewer 对 ledger deferred minor 与
 自身新发现的 Minor 只做分类——Critical/Important 升级（进 findings）或
 进评估（默认全部）；「修不修、怎么处置」不由终审 reviewer 独判。终审报告
@@ -582,6 +590,13 @@ caliber ML/L 级阶段 4 按 §何时使用 路由到本 skill；组合决策规
 务环 step 2 组合决策步（操作版三原子与彼同源逐字），本 skill 消费不复
 制决策规则。
 plan 期预分配表由 plan-forge ≥1.4.0 工序 2 产出（1.3.0 及更早的 9 列表
-带模型档列——引擎忽略该列按 8 列消费）。coding 扩展位：本引擎
-验证菜单已含"代码"行，git 重度语义（worktree/commit/branch）的完整支持
-留待后续版本——重访触发器 = 本 skill 经 ≥2 个真实任务检验后评估。
+带模型档列——引擎忽略该列按 8 列消费）。
+
+**兄弟引擎 caliber:coding-forge**（1.6.0）：coding + git 场景归
+caliber:coding-forge 主场；本引擎 coding 扩展位关闭（验证菜单"代码"行
+仍可用于轻量代码任务，git 重度语义移交兄弟引擎）。同源节清单——下列节
+与 caliber:coding-forge 对应节语义对齐，改任一引擎的同源节必双改，否则
+对照表失效：§1 brief / §2 组合决策 / §3 dispatch 五件 / §4 四状态 /
+§5 双 verdict 门 / §6 fix loop / §7 完成 / §过程日志契约 / §终审 /
+§四停止。触发条件：修改上述任一节时，同步检查另一引擎对应节是否需联动
+修订。编码引擎重访触发器移交 coding-forge §延期决策。

@@ -2,7 +2,7 @@
 name: plan-forge
 description: "Use when writing a formal implementation plan document for ML/L-level tasks — caliber ML/L 级阶段 2 自动路由；especially when the plan will be executed verbatim by a less-capable executor."
 metadata:
-  version: "1.6.0"
+  version: "1.7.0"
   source: distilled-from-practice
 ---
 
@@ -31,6 +31,10 @@ v1.5.0（2026-09-16，用户裁定）：工序 4 扩展至 ML 级（ML = 工序 
 v1.6.0（2026-09-16，用户裁定）：工序 1 选材加第 5 条「查执行期登记表」——
 docs/known-issues.md 与 docs/TODO.md 的 open/待触发项中与本 plan 同域者进
 选材输入（与 exec-forge 1.5.0 Minor 处置评估 loop 的产出端闭环）。
+v1.7.0（2026-09-19，coding-forge 自研）：交接节引擎名切换（option 1 =
+caliber:coding-forge，option 3 = coding-forge §inline TDD 骨架）；新增隔离
+模式提醒句（默认 branch / 可选 worktree）；工序 2 checklists 加任务粒度判据
+与 Review Focus 节两条清单。
 
 ## 为什么有效（理解了才会用对）
 
@@ -103,7 +107,7 @@ docs/known-issues.md 与 docs/TODO.md 的 open/待触发项中与本 plan 同域
    原型/配置/文档/调研/操作）、难度（机械/集成/判断，自设三档，信号源自 SDD 复杂度信号）、
    领域词（供路由表关键词匹配）。**只标画像、不锁 skill 组合**——工序 2 时执行信息未齐，锁定发生在工序 4 彩排后的预绑定回写（彼时信息最全，见工序 4）。画像缺失 → caliber 按"集成"对待。
 6. **执行编排预分配**（非 coding 主导或无 git 的 ML/L plan 必产；coding 主导
-   plan 免产——SDD 自带角色分配）。逐任务填执行编排预分配表，列 = 任务 |
+   plan 免产——coding-forge 自带角色分配）。逐任务填执行编排预分配表，列 = 任务 |
    性质 | 难度 | 形态(inline/dispatch) | 执行者(主线程/agent_type 链) |
    审查者(≠执行者上下文) | 注入档(指令化/许可清单/无) |
    领域组件(路由表命中，候选；工序 4 彩排后经编排者裁定回写为预绑定——预绑定 = 默认消费——dispatch 边界偏离须记 ledger Ruling，终审闭环核查；未经彩排的 plan 保持候选非绑定旧语义)。枚举外行（如 用户协作，用于冒烟/发布决策
@@ -272,7 +276,7 @@ subagent（`Task(subagent_type=general-purpose)`——2026-09-01 写死：Explor
 - 技能消费建议表 → 编排者逐条裁定（采用/调整/弃用 + 理由），全部弃用
   也留一行裁定记录；裁定结果回写 plan：
   - 有执行编排预分配表的 plan：回写 领域组件列 为预绑定组件清单；
-  - 无预分配表的 plan（SDD 路径）：任务块内加一行
+  - 无预分配表的 plan（coding-forge 路径）：任务块内加一行
     `技能消费: [组件A, 组件B]`（无合适组件写 `技能消费: 无`——显式空
     防漏判）；
   - plan 末尾加「技能消费裁定」节：`| 任务 | 建议 | 裁定 | 理由 |`。
@@ -291,11 +295,16 @@ NO UNRESOLVED），进入交接。
 
 plan 交付时按引擎路由规则给执行选项（caliber ML/L 级阶段 4 入口批量确认）：
 
-1. **Subagent-Driven**——superpowers:subagent-driven-development：代码主导
-   且有 git 的 plan；实现/审查分席逐任务把关
+1. **coding-forge**——caliber:coding-forge：代码主导且有 git 的 plan；
+   实现/审查分席逐任务把关
 2. **exec-forge**——caliber:exec-forge：非代码主导 / 无 git / 混合 plan；
    执行编排预分配表 + 逐任务审查门 + ledger 断点恢复
-3. **Inline**——executing-plans 批量执行 + checkpoint（MS 级或用户指定）
+3. **Inline**——coding-forge §inline TDD 骨架 批量执行 + checkpoint（MS 级
+   或用户指定）
+
+**隔离模式提醒**（C7）：代码主导 plan 交付时，交接文本注明：默认新 branch
+隔离开发，可切换 worktree 模式（coding-forge §Setup）——由用户在阶段 4 入口
+停止点裁定。
 
 **预绑定回写**：工序 4 产出的预分配表，其 领域组件列 已是预绑定语义——caliber 阶段 4 入口批量确认停止点确认的是含预绑定的全表。
 

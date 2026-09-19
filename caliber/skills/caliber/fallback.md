@@ -3,17 +3,17 @@
 仅在 SKILL.md Step 0 检测到依赖缺失时阅读对应章节（缺哪个读哪个，不用全读）。
 兜底目标：保住纪律的灵魂，不追求完整仪式；装回完整 skill 后以其为准。
 
-## §TDD（替代 superpowers:test-driven-development）
+## §TDD（替代 coding-forge §inline TDD 骨架；血缘 superpowers:test-driven-development）
 
 先写失败测试 → 跑它看红 → 最小实现 → 跑它看绿 → commit。
 没有测试的改动不算改动，算许愿。
 
-## §证据（替代 superpowers:verification-before-completion）
+## §证据（替代 coding-forge §验证手段菜单；血缘 superpowers:verification-before-completion）
 
 任何"完成/修好/通过"的声称之前：跑验证命令，把输出贴出来。
 输出与声称不符时，以输出为准。
 
-## §根因（替代 superpowers:systematic-debugging）
+## §根因（替代 coding-forge §过程骨架菜单 调试骨架；血缘 superpowers:systematic-debugging）
 
 复现 → 最小化 → 定位到具体文件/行/条件 → 单变量验证假设 → 修 → 回归测试锁定。
 禁止"改改看行不行"的散弹式修复。
@@ -38,12 +38,12 @@
 4. 自己定的每条约束，正文里有没有自己违反的？
 5. 平台事实核查：目标环境的真实行为是这样吗（不凭想象）？
 
-## §单会话SDD（替代 superpowers:subagent-driven-development）
+## §单会话执行（替代 coding-forge；血缘 superpowers:subagent-driven-development）
 
 任务逐个来：每任务独立实现 → 跑测试 → commit → 换"找茬"的脑子重读 diff 自审 →
 对话内记 ledger（任务/提交/审查结论/遗留项）。标准：任何人凭 ledger 能接手。
 
-## §分支收尾（替代 superpowers:finishing-a-development-branch）
+## §分支收尾（替代 coding-forge §git 语义节；血缘 superpowers:finishing-a-development-branch）
 
 列出选项（合并回主干 / 开 PR / 保留分支 / 删除分支）及各自后果一句话，
 **停**——让用户选，不替用户定。
