@@ -2,7 +2,7 @@
 name: exec-forge
 description: "Use when executing an ML/L-level implementation plan whose tasks are predominantly non-coding (文档/配置/调研/操作) or the workspace has no git — caliber 阶段 4 非 coding 主场执行引擎（coding 归兄弟引擎 caliber:coding-forge）：plan 期预分配混合执行编排（执行者×审查者×形态）、routing.yaml 驱动注入两档、逐任务审查门、四状态契约、ledger 断点恢复、过程日志契约（动作级留痕）。中文触发：执行 plan、非代码任务派发、混合执行、执行编排、subagent 派工、阶段 4"
 metadata:
-  version: "1.6.0"
+  version: "1.6.1"
   source: distilled-from-practice
 ---
 
@@ -10,10 +10,10 @@ metadata:
 
 caliber ML/L 级**阶段 4 执行引擎**（非 coding 主场）。与 plan-forge 的分工：
 plan-forge 管"做什么"（plan = 绑定权威），本 skill 管"派谁做、拿什么做、
-怎么验"。机制血缘：移植 superpowers:subagent-driven-development（下称 SDD）
-的核心纪律，泛化其代码绑定（对照表见末节）；coding + git 场景归兄弟引擎
+怎么验"。coding + git 场景归兄弟引擎
 caliber:coding-forge——
 两引擎按 §何时使用 路由，不竞争同一触发。
+v1.6.1（2026-09-20）：ledger 节补 plan 期台账续写注 + §输入节两处同源括注改中性（caliber v1.16.0 台账前置联动）。
 
 ## 为什么有效（理解了才会用对）
 
@@ -57,7 +57,7 @@ ML/L 级阶段 4 入口，按 plan 任务性质画像分布选引擎：
   注入）"后继续，不阻塞。
 - 全局约束：plan 的 Global Constraints 节（逐字复制给每个 reviewer）。
 
-### 执行编排预分配表（schema——与 plan-forge 工序 2 共有，两处逐字一致）
+### 执行编排预分配表（schema——caliber 引擎契约，plan-drafting 与 exec-forge 两处逐字一致）
 
 | 任务 | 性质 | 难度 | 形态 | 执行者 | 审查者 | 注入档 | 领域组件 |
 |---|---|---|---|---|---|---|---|
@@ -71,7 +71,7 @@ ML/L 级阶段 4 入口，按 plan 任务性质画像分布选引擎：
 - **注入档**：`指令化` / `许可清单` / `无`（决策见 §任务环 step 2 ③；
   ledger 组合行对 inline 任务记 N/A——主线程无需注入档）。
 - **领域组件**：路由表命中（候选）；plan-forge ≥1.5.0 工序 4 彩排后经编排者
-  裁定回写为**预绑定**（1.4.0；与 plan-forge 工序 2、caliber §动态组合 同源逐字：
+  裁定回写为**预绑定**（1.4.0；与 plan-drafting §六道锻造、caliber §动态组合 同源逐字：
   预绑定 = 默认消费——dispatch 边界偏离须记 ledger Ruling，终审闭环核查）；
   未经彩排的 plan 保持候选非绑定旧语义（组合决定由编排层在 dispatch 边界
   做出）。
@@ -82,13 +82,14 @@ ML/L 级阶段 4 入口，按 plan 任务性质画像分布选引擎：
 
 1. **工作区**：`<项目根>/.caliber/exec/<plan-stem>/`（plan-stem = plan 文件名
    去 `.md`）。`mkdir -p <ws>/snapshots`。另一个 plan 的目录不许读写。
-2. **ledger**：`<ws>/progress.md`，首行 `# exec-forge ledger — plan: <plan 路径>`。
+2. **ledger**：`<ws>/progress.md`，首行 `# exec-forge ledger — plan: <plan 路径>`（v1.16.0 起亦接受任务台账表头首行——见本条末追加注）。
    恢复语义：首行对不上 = 别人的进度，原样保留、另起新 ledger；已有
    `Task <N>: complete` 行的任务**不重派**，从首个无完成行的任务续；末行
    是 fix round = 中途，从下一轮续。续跑以 ledger 既有留痕为准——阶段 4
    入口停止点不重复停等、pre-flight 不重复扫描；有新增调整另记 Ruling。
    压缩后信 ledger 不信记忆。启用过程
    日志（§过程日志契约）时同建 `<ws>/process-log.md`。
+   plan 期台账：caliber 阶段 2 出口已开账（v1.16.0 起，.caliber/exec/<plan-stem>/progress.md，首行 = 任务台账表头形态）——引擎启动续写同一文件，plan 期流水行保留，不重建不覆盖；首行为任务台账表头（含同一 plan 路径）时视同本 plan 账目直接续写，「首行对不上另起新 ledger」仅适用于其他 plan 占用。
 3. **变更快照（无 git 环境）**：每个任务动手前，把其 Files 块列出的**已存在**
    目标文件拷进 `<ws>/snapshots/`：
 
@@ -373,7 +374,7 @@ reviewer 输入（全走文件路径）：
 
 ## 模型轴（ZCode：轴塌缩实录；选择轴 = agent_type × 注入档）
 
-**ZCode 实证（2026-09-14）：Agent 工具无 model 参数**——SDD 的模型档轴
+**ZCode 实证（2026-09-14）：Agent 工具无 model 参数**——模型档轴
 在本平台不可设置，dispatch 模型统一 platform-default；用户级
 agents-state.json override 存在则尊重，不代配。组合行 model 字段 = 记录
 实际基底 `platform-default(agent_type=<x>)`（审计用，非选择轴；不另记
@@ -383,7 +384,7 @@ agents-state.json override 存在则尊重，不代配。组合行 model 字段 
 与**注入档**（§任务环 step 2 ③：指令化=默认档、许可清单=显式授予）。
 分席价值由 fresh 独立上下文承载（审查者 ≠ 实现者上下文），不由模型差承载。
 
-历史注记（SDD/Claude 平台原文，保留备查不复用）：模型档可配时缺省=实现者
+历史注记（早期平台原文，保留备查不复用）：模型档可配时缺省=实现者
 降配、审查者与终审用高档、fix 轮 4-5 升一档；轮次成本 > token 单价是档位
 选择依据。
 
@@ -559,30 +560,6 @@ Minor 永不进环的现纪律不变（1.5.0）。parked 行维持既有裁定�
    与分隔行（类别 ∈ {计划强制, 执行引入, 其他}；状态 ∈ {open, closed}）。
    关闭 = 状态改 closed 并补关闭理由，不删除原行——处置留痕。
 
-## 与 SDD 对照表（移植依据；底线 = 逐项保留或显式泛化）
-
-| SDD 机制 | exec-forge | 处置 |
-|---|---|---|
-| fresh subagent per task | 同（dispatch 形态） | 保留 |
-| 逐任务审查门（spec+质量双 verdict） | 同 + inline 形态制度化补审门 | 保留+扩展 |
-| 弱实现/强审查 + 显式模型 | 实现/审查分席 + §模型轴（ZCode 轴塌缩实录） | 泛化（本平台无模型轴） |
-| 四状态契约 | §4 同枚举同语义 | 保留 |
-| fix loop 5 轮 + breaker 裁定 | §6 同 | 保留 |
-| controller 不亲自实现 | 保留 + inline 例外（独立审查补偿） | 保留+授权例外 |
-| ledger 断点恢复 | §Setup（.caliber/exec/ 路径） | 保留+泛化路径 |
-| pre-flight 冲突扫描 | §Setup 同 | 保留 |
-| brief 文件化（scripts/task-brief） | §1（awk 实测命令） | 泛化（无脚本依赖） |
-| review package（git diff） | §5 审查包（快照 diff -u / NEW FILE 全文；git 可选） | 泛化（无 git） |
-| 测试验证 | §验证手段菜单 | 泛化（性质分档） |
-| TDD 骨架 | §过程骨架菜单（判据先行） | 泛化（本质提取） |
-| worktree 隔离 | .caliber/exec/<plan-stem>/ 工作区 | 泛化（非 git 可用） |
-| plan/spec 绑定权威 | §输入 + 冲突裁定 | 保留 |
-| 四停止 + rulings not stalls | §四停止契约 | 保留 |
-| 批处理同形 / no-subagents / 不贴史 / 心跳预算 | §3 纪律 | 保留 |
-| 终审 + ONE fix wave | §终审 | 保留 |
-| —（SDD 无对应机制） | §过程日志契约（动作级留痕，分级启用：L 默认 / ML 声明） | 扩展 |
-| finishing-a-development-branch | 不适用——caliber 阶段 6 接管收尾 | 移交 |
-
 ## 调用方关系
 
 caliber ML/L 级阶段 4 按 §何时使用 路由到本 skill；组合决策规则（骨架×
@@ -596,7 +573,7 @@ plan 期预分配表由 plan-forge ≥1.4.0 工序 2 产出（1.3.0 及更早的
 caliber:coding-forge 主场；本引擎 coding 扩展位关闭（验证菜单"代码"行
 仍可用于轻量代码任务，git 重度语义移交兄弟引擎）。同源节清单——下列节
 与 caliber:coding-forge 对应节语义对齐，改任一引擎的同源节必双改，否则
-对照表失效：§1 brief / §2 组合决策 / §3 dispatch 五件 / §4 四状态 /
+同源清单失效：§1 brief / §2 组合决策 / §3 dispatch 五件 / §4 四状态 /
 §5 双 verdict 门 / §6 fix loop / §7 完成 / §过程日志契约 / §终审 /
 §四停止。触发条件：修改上述任一节时，同步检查另一引擎对应节是否需联动
 修订。编码引擎重访触发器移交 coding-forge §延期决策。

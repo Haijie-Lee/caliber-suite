@@ -33,8 +33,8 @@
 写入路由表是纯冗余且挤占名额——候选圈定、遥测参考、最终 routes **全程
 不得入选**，也不计入 5-15 条名额：
 
-`caliber`、`plan-forge`、`plan-review-ritual`、`qwen-cli`、`minimax-cli`、
-经验固化组件（`skillify`/`ecc:learn`）、`superpowers:*`（superpowers 插件全套，通配前缀）。
+`caliber`、`plan-forge`、`plan-review-ritual`、`plan-drafting`、`deep-probe`、`coding-forge`、
+`exec-forge`、`init-docs`、`update-docs`、经验固化组件（名称/简述含 learnings、经验固化、skill 固化 类字样的任一组件）。
 
 黑名单组件即使出现在「可见组件」清单或「遥测 top-30」中也必须跳过；
 路由表名额让给任务领域组件。

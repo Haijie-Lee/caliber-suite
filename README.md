@@ -1,8 +1,8 @@
 # caliber — ZCode 工程纪律插件
 
-> 最后更新：2026-09-19
+> 最后更新：2026-09-20
 
-caliber 是一个 ZCode 插件（以 git 仓库形态作为 marketplace 源分发），把"工程纪律"打包为 **7 个 skills + 4 个工作流 hooks + 10 个 agents**：skills 让流程严谨度随任务复杂度缩放，hooks 在关键时刻把纪律自动递到 agent 眼前。
+caliber 是一个 ZCode 插件（以 git 仓库形态作为 marketplace 源分发），把"工程纪律"打包为 **9 个 skills + 4 个工作流 hooks + 10 个 agents**：skills 让流程严谨度随任务复杂度缩放，hooks 在关键时刻把纪律自动递到 agent 眼前。
 
 ## 它解决什么问题
 
@@ -16,7 +16,7 @@ caliber 的思路：前两类靠 hooks 在事件点上**自动注入**（不依�
 
 ## 组件
 
-### Skills（7 个）
+### Skills（9 个）
 
 | 组件 | 一句话职责 |
 |---|---|
@@ -26,7 +26,9 @@ caliber 的思路：前两类靠 hooks 在事件点上**自动注入**（不依�
 | `init-docs` | 新工程 docs 体系播种：探测 gap → 预览确认 → 模板落盘，建立四件种子文件激活 hooks 订阅（CONTEXT.md / 治理宪法 / learnings 索引 / AGENTS.md 文档地图） |
 | `update-docs` | docs 体系回填与同步：把已有 learnings 登记进 INDEX.md、扫描仓库已有文档/清单生成或更新 CONTEXT.md（体系未播种时引导先 init-docs） |
 | `exec-forge` | ML/L 阶段 4 非 coding 执行引擎：plan 期预分配混合执行编排、routing.yaml 驱动注入两档、逐任务审查门、ledger 断点恢复 |
-| `coding-forge` | ML/L 阶段 4 编码执行引擎：brief 文件化、双 verdict 审查门、TDD 证据强制、flash 纪律注入、ledger 断点恢复（兄弟双引擎：coding + git 场景归本引擎） |
+| `coding-forge` | ML/L 阶段 4 编码执行引擎：brief 文件化、双 verdict 审查门、TDD 证据强制、编辑纪律注入、ledger 断点恢复（兄弟双引擎：coding + git 场景归本引擎） |
+| `plan-drafting` | 全级 plan 起草引擎，MS 轻量/ML 标准/L 完整三档模板，契约矩阵先行 |
+| `deep-probe` | 澄清对齐引擎，L 级全仪式/MS·ML 轻量档，收口对齐快照 |
 
 ### Agents（10 个）
 
@@ -52,7 +54,7 @@ caliber 的 dispatch 选择链按任务信号自动选用；同名用户级 agen
 | Hook | 触发时机 | 一句话职责 |
 |---|---|---|
 | `context-md.sh` | 会话开始 / compact 后 | 工程根存在 `CONTEXT.md` 则全量注入会话上下文 |
-| `index-md.sh` | 调用 skill 前 | 仅当调用 caliber / plan-forge 且工程存在 `docs/learnings/INDEX.md` 时注入该索引——定计划前先扫历史教训 |
+| `index-md.sh` | 调用 skill 前 | 仅当调用 caliber / plan-forge / plan-drafting / deep-probe 且工程存在 `docs/learnings/INDEX.md` 时注入该索引——定计划前先扫历史教训 |
 | `learnings-wrapup.sh` | 每轮回答结束时（Stop 事件） | 会话有实质编辑（≥3 次 Write/Edit）但未触 learnings 时，递送收尾检查单提醒复盘；门控保证每会话至多提醒 1 次 |
 | `index-registry-check.sh` | 写入文件后 | 写 `docs/learnings/*.md` 未登记 INDEX.md 时注入登记提醒；同时维护编辑计数供收尾 hook 门控 |
 
@@ -76,7 +78,7 @@ caliber 的 dispatch 选择链按任务信号自动选用；同名用户级 agen
 
 - **hooks 全自动生效**，无需任何调用。
 - **订阅机制 = 声明即数据**：工程根存在 `CONTEXT.md`，开工即自动注入；存在 `docs/learnings/INDEX.md`，learnings 相关 hooks 自动订阅。没有这些文件的工程**零打扰**——不需要任何配置开关。新工程可用 `init-docs` 一键建立种子文件；已有文档积累的工程可用 `update-docs` 回填索引与 CONTEXT。ML/L 级非 coding 任务的阶段 4 执行由 `exec-forge` 接管（执行编排预分配 + 逐任务审查门）。
-- **skills 按需调用**：`caliber:caliber` / `caliber:plan-forge` / `caliber:plan-review-ritual` / `caliber:init-docs` / `caliber:update-docs` / `caliber:exec-forge` / `caliber:coding-forge`，或用裸名 `caliber` / `plan-forge` / `plan-review-ritual` / `init-docs` / `update-docs` / `exec-forge` / `coding-forge`。
+- **skills 按需调用**：`caliber:caliber` / `caliber:plan-forge` / `caliber:plan-review-ritual` / `caliber:init-docs` / `caliber:update-docs` / `caliber:exec-forge` / `caliber:coding-forge` / `caliber:plan-drafting` / `caliber:deep-probe`，或用裸名 `caliber` / `plan-forge` / `plan-review-ritual` / `init-docs` / `update-docs` / `exec-forge` / `coding-forge` / `plan-drafting` / `deep-probe`。
 
 ## 更新
 

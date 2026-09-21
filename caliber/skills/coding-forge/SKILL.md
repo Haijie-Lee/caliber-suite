@@ -1,8 +1,8 @@
 ---
 name: coding-forge
-description: "Use when executing an ML/L-level implementation plan whose tasks are predominantly coding (new features, bug fixes, refactors) with git — caliber 阶段 4 编码执行引擎（非 coding 归兄弟引擎 caliber:exec-forge）：brief 文件化、双 verdict 审查门、TDD 证据强制、flash 纪律注入、ledger 断点恢复。中文触发：编码执行、代码派发、TDD 驱动、编码 forge"
+description: "Use when executing an ML/L-level implementation plan whose tasks are predominantly coding (new features, bug fixes, refactors) with git — caliber 阶段 4 编码执行引擎（非 coding 归兄弟引擎 caliber:exec-forge）：brief 文件化、双 verdict 审查门、TDD 证据强制、编辑纪律注入、ledger 断点恢复。中文触发：编码执行、代码派发、TDD 驱动、编码 forge"
 metadata:
-  version: "1.0.0"
+  version: "1.0.1"
   source: distilled-from-practice
 ---
 
@@ -12,13 +12,10 @@ caliber ML/L 级**阶段 4 执行引擎**（coding 主场），与兄弟引擎 e
 （非 coding 主场）并列：两引擎共享同一套同源机制集（brief 文件化 / 组合决策 /
 dispatch 纪律 / 四状态 / 双 verdict 审查门 / fix loop / 过程日志契约 / 终审 /
 四停止），按任务性质分流——代码主导且有 git 走本引擎，其余走
-`caliber:exec-forge`（路由规则单一真源 = caliber §动态组合「执行引擎选择」节；
-两引擎 §与 SDD 对照表 互引）。机制血缘：移植泛化
-superpowers:subagent-driven-development（下称 SDD）的核心纪律，吸收 superpowers
-五件（test-driven-development / verification-before-completion /
-systematic-debugging / using-git-worktrees / finishing-a-development-branch）
-的编码机制（逐项映射见 §与 SDD 对照表）。本 skill 是 caliber 编排下的执行引擎，不是
+`caliber:exec-forge`（路由规则单一真源 = caliber §动态组合「执行引擎选择」节）。
+本 skill 是 caliber 编排下的执行引擎，不是
 独立工作流：定级、plan 锻造、阶段路由均在 caliber 侧完成。
+v1.0.1（2026-09-20）：MS 交接注改 caliber 直调并补轻量 plan 输入语义（caliber v1.16.0 体系自研化联动）。
 
 ## 为什么有效（理解了才会用对）
 
@@ -162,14 +159,15 @@ exec-forge §2 四步：
    审查包 constraints 块）——语义同源 exec-forge §2 ②。
 ③ **定档注入**（指令化 = 默认档 / 许可清单 = 须显式授予）：档规则同源
    exec-forge §2 ③。**编码特化——代码 dispatch 的注入默认内容源** =
-   flash-model-code-discipline 的「注入模板」节（指针：
-   `~/.agents/skills/flash-model-code-discipline/SKILL.md` 的「注入模板」
-   节——波浪号形态，编排者执行期展开为绝对路径读取；指针式引用，模板
-   正文不复制进本文档）：
+   用户环境内编辑纪律 skill 的「注入模板」节（在场才读取展开；指针式
+   引用，模板正文不复制进本文档）：
    - 槽位填充规则 = operator 填验证命令（模板末行验证命令槽，填本任务
      §验证手段菜单 编码版 的适用条目）；
+   - **缺席分支**：该 skill 不在场 → 编排者以内联最小编辑纪律块填槽
+     （Edit 连续 2 次失败停下报告 / 禁整文件 Write 覆盖 / 不动上下文外
+     内容 / 末行验证命令槽），组合行理由位注明「内联兜底」；
    - 缺省 = 全量注入；任务画像注明「注入降档」时可降为空串；
-   - 注入落点 = §3 dispatch 的 implementer-prompt `{INJECT_FLASH}` 槽位，
+   - 注入落点 = §3 dispatch 的 implementer-prompt `{INJECT_EDIT_DISCIPLINE}` 槽位，
      **非 brief 文件**（brief 保持需求唯一真源的纯净）。
 ④ **写组合行**（即时落账——随本步组合决策完成即写入 ledger，先于
    dispatch 动工；补记/迟记 = 时序漂移，终审必查）：
@@ -180,13 +178,13 @@ exec-forge §2 四步：
    差承载。命中 字段兼记注入来源与席位来源。
 
 **fix 轮与 resume**：指令化内容随 brief 文件持久，resume 天然覆盖；许可
-清单不跨轮继承——fix 轮 prompt 必须重带权限行；`{INJECT_FLASH}` 块在
+清单不跨轮继承——fix 轮 prompt 必须重带权限行；`{INJECT_EDIT_DISCIPLINE}` 块在
 fresh dispatch 的 fix 轮同样重带。
 
 ### 3. dispatch
 
 填充 `prompts/implementer-prompt.md`（槽位：`{N}` `{TASK_NAME}`
-`{BRIEF_FILE}` `{CONTEXT}` `{REPORT_FILE}` `{WORKDIR}` `{INJECT_FLASH}`）。
+`{BRIEF_FILE}` `{CONTEXT}` `{REPORT_FILE}` `{WORKDIR}` `{INJECT_EDIT_DISCIPLINE}`）。
 dispatch prompt 构成（五件，同源）：
 
 1. 一行定位（本任务在 plan 里的位置）；
@@ -253,8 +251,8 @@ context——工件走文件。）
 
 1. brief（同一份）；
 2. report 文件；
-3. **审查包** `<ws>/task-<N>-review.md`——编排者生成（编码特化，SDD
-   review-package 脚本机制移植为内联命令）：
+3. **审查包** `<ws>/task-<N>-review.md`——编排者生成（编码特化：审查包
+   脚本机制内联化）：
    - **前置校验**：`git merge-base --is-ancestor <base7> <head7>` 且
      `git diff --stat <base7>..<head7>` 非空；任一失败 = 停止点，不上送
      审查（先核 ledger 与 `git log`，区间错了修区间）；
@@ -293,7 +291,7 @@ context——工件走文件。）
   `parked — <finding> — Ruling: <为何产物成立>`；触及该区域的后序任务
   dispatch 时携带指针（见 §3）。
 - 注入任务：reviewer 以 brief「## 注入」节为保真基准核对 diff 落实；
-  `{INJECT_FLASH}` 降档（空槽）须有任务画像注明，否则按 §终审 ③核查端
+  `{INJECT_EDIT_DISCIPLINE}` 降档（空槽）须有任务画像注明，否则按 §终审 ③核查端
   处置。
 
 ### 6. fix loop（上限 5 轮）
@@ -313,7 +311,7 @@ context——工件走文件。）
 轮次（同源）：
 - **轮 1-3 — resume 原实现者**：未决 findings 逐字发回（harness 支持则
   续原 agent；不支持则 fresh dispatch 带 brief + report 路径 + findings，
-  并重带 `{INJECT_FLASH}` 块与许可清单权限行——report 文件是持久记忆）。
+  并重带 `{INJECT_EDIT_DISCIPLINE}` 块与许可清单权限行——report 文件是持久记忆）。
   修复后重跑覆盖验证、把修复报告**追加**进同一 report 文件（含新 commits
   区间）。
 - **轮 4-5 — fresh 实现者换眼**：带 brief、report 路径、未决 findings 与
@@ -401,7 +399,7 @@ S/MS 级编码任务不走 dispatch 形态——主线程内联执行，实现/�
   commit 装得下；装不下 = 拆任务，不扩大循环。
 - **完成前全量验证闸**：标完成前跑项目全量测试命令，全绿才算完成——
   非任务单文件绿；有红先定性归属再处置（与 §7 完成闸同源语义）。
-- **MS 级批量执行与 checkpoint**（plan-forge 交接节 option 3 消费）：
+- **MS 级批量执行与 checkpoint**（caliber 阶段 4 直调；MS 级输入 = .caliber/plans/ 轻量 plan 文档）：
   多任务顺序内联执行，每任务独立 R-G-R 循环，任务边界 = checkpoint
   （每任务完成向用户展示一次：完成了什么、全量套件状态、下一任务）。
 
@@ -414,8 +412,7 @@ S/MS 级编码任务不走 dispatch 形态——主线程内联执行，实现/�
   的 sha，不用相对定位——多提交任务会被 `HEAD~1` 截断。
 - **阶段 4 边界**：本引擎不 merge、不 push、不动共享分支；分支上的全部
   提交是执行证据。
-- **finishing 移交 caliber 阶段 6**（finishing-a-development-branch
-  吸收）：
+- **finishing 移交 caliber 阶段 6**：
   - 前置闸 = 项目全量测试命令绿（不绿不进收尾菜单）；
   - 分支处置菜单 = merge / PR / keep / discard，由用户在阶段 6 裁定；
   - **typed discard 授权语义**：discard 须用户明确键入选择（菜单展示 ≠
@@ -502,7 +499,7 @@ verdict、其 report 抵达与四状态处置及 deferred triage 均归 终审 �
 - **②核查端**：同模式签名计数 >1 的任务必有 Ruling 入账（ledger 与
   过程日志对账），缺 = **终审不通过**。
 - **③核查端**：代码 dispatch 的 implementer prompt 缺编辑纪律块
-  （`{INJECT_FLASH}` 空且任务画像未注明降档）= Important。
+  （`{INJECT_EDIT_DISCIPLINE}` 空且任务画像未注明降档）= Important。
 - **deferred/parked triage（同源 Minor 处置评估 loop）**：终审 reviewer
   对 ledger deferred minor 与自身新发现的 Minor 只做分类——
   Critical/Important 升级（进 findings）或进评估（默认全部）；「修不修、
@@ -570,7 +567,7 @@ scoped 重审 + 残量裁定（同 §6 breaker）。无第二波——残量承�
 | "我自己修快，dispatch 是开销" | 编排者修复污染 context 且跳过审查。resume 实现者。 |
 | "重构顺手把行为也改了" | 行为冻结：行为变更与结构变更分提交，禁同提交双改。 |
 | "HEAD~1 取基线省事" | 多提交任务会被截断——BASE 族一律用记录的 sha。 |
-| "Edit 失败就整文件重写" | flash 纪律：Edit 连续 2 次失败停下报告——Write 全覆盖抹掉上下文外的近期改动。 |
+| "Edit 失败就整文件重写" | 编辑纪律：Edit 连续 2 次失败停下报告——Write 全覆盖抹掉上下文外的近期改动。 |
 | "再来一轮就收敛" | 过 cap 不收敛 = 结构性失败。裁定并路由。 |
 | "ledger 记账是开销" | ledger 是压缩后唯一幸存物——没有它的控制器重派过整个已完成任务序列。 |
 
@@ -599,43 +596,6 @@ scoped 重审 + 残量裁定（同 §6 breaker）。无第二波——残量承�
    与分隔行（类别 ∈ {计划强制, 执行引入, 其他}；状态 ∈ {open, closed}）。
    关闭 = 状态改 closed 并补关闭理由，不删除原行——处置留痕。
 
-## 与 SDD 对照表（移植依据；底线 = 逐项保留或显式标注处置）
-
-| SDD 机制 | coding-forge | 处置 |
-|---|---|---|
-| fresh subagent per task | §3 dispatch（每任务 fresh 实现者，一次一个） | 保留 |
-| 逐任务审查门（spec + 质量双 verdict） | §5 审查门 | 保留 |
-| 弱实现/强审查 + 显式模型档 | 实现/审查分席由 fresh 独立上下文承载；模板去 model 槽（ZCode Agent 工具无 model 参数，platform-default 记录制，§2 ④） | 泛化 |
-| 四状态契约 | §4（DONE / DONE_WITH_CONCERNS / NEEDS_CONTEXT / BLOCKED，封闭集） | 保留 |
-| fix loop 5 轮 + breaker 裁定 | §6（+ ②同模式复发升级） | 保留 |
-| controller 不亲自实现 | §6（编排者永不亲自修） | 保留 |
-| ledger 断点恢复 + 首行身份 | §Setup（首行 = `# coding-forge ledger — plan: <plan 路径>`） | 保留 |
-| pre-flight 冲突扫描 | §Setup（+ 编码特化：任务文件清单 × 未提交改动比对） | 保留 |
-| never-on-main-without-consent | §Setup | 保留 |
-| BASE 记录、禁 HEAD~1 | §Setup / §5 / §终审 | 保留 |
-| scripts/task-brief（brief 文件化） | §1 awk 内联命令（同源逐字，无脚本依赖） | 泛化 |
-| scripts/review-package（审查包） | §5 编排者生成审查包（merge-base 前置校验 + diff 全量写文件） | 编码特化 |
-| scripts/sdd-workspace（工作区） | §Setup 手工步骤（`.caliber/exec/<plan-stem>/`） | 泛化 |
-| using-git-worktrees（三闸隔离） | §Setup：默认 branch 隔离，worktree 可选模式三闸 | 编码特化 |
-| test-driven-development（Iron Law / watch-it-fail / delete-means-delete） | §inline TDD 骨架（S/MS 级）+ §过程骨架菜单 TDD 直改 + §4 TDD 证据字段 | 编码特化 |
-| verification-before-completion（回归四步 revert→MUST FAIL→restore→PASS） | §验证手段菜单 编码版 回归四步行 | 编码特化 |
-| systematic-debugging（无反馈环不进假设 / seam 判据 / 架构质询） | §过程骨架菜单 调试骨架（与 §6 ②联动） | 编码特化 |
-| finishing-a-development-branch（处置菜单 / typed discard） | §git 语义节（finishing 移交 caliber 阶段 6） | 编码特化 |
-| executing-plans（批量执行 + checkpoint） | §inline TDD 骨架（S/MS 级）MS 级批量段 | 编码特化 |
-| plan/spec 绑定权威 | §输入 + 冲突裁定 | 保留 |
-| 四停止 + rulings not stalls | §四停止契约 | 保留 |
-| 批处理同形 / no-subagents / 不贴史 / 心跳预算 | §批量同形小任务 + §3 纪律 | 保留 |
-| 终审 + ONE fix wave | §终审 | 保留 |
-| 全量套件绿为完成闸 | §4 GREEN 字段 + §7 完成闸 + §inline TDD 骨架 全量验证闸 | 新增 |
-| 审查包区间校验 + merge-base 兜底 | §5 前置校验 + §终审 MERGE_BASE 条款 | 新增 |
-| 同模式失败复发升级 | §6 + §过程日志契约 + §终审 ②核查端 | 新增 |
-| flash 纪律默认注入 | §2 编码特化 + §3 `{INJECT_FLASH}` 槽 + §终审 ③核查端 | 新增 |
-| 过程日志契约（SDD 无，兄弟引擎扩展机制） | §过程日志契约（与 exec-forge 同源） | 保留 |
-| mid-course-review（参照件，非 SDD 本体） | 未进 v1.0.0——重访触发器见 §延期决策 item 1 | 新增（延期） |
-| Waiting on dispatched subagents（bounded wait / reconcile children） | ZCode Agent 同步返回，平台不适用 | 不适用 |
-| Common Rationalizations | §反理性化表 编码版（12 条 ≥ 8 条底线） | 保留 |
-| Narration / Continuous execution | §连续执行与叙述纪律 | 保留 |
-
 ## 调用方关系
 
 caliber ML/L 级阶段 4 是本 skill 的唯一调用方；引擎路由规则单一真源 =
@@ -650,7 +610,7 @@ exec-forge §2 同源，本 skill 不复制决策规则全文）。prompts/ 四�
 五件 / §4 四状态 / §5 双 verdict 门 / §6 fix loop / §7 完成 / §过程
 日志契约 / §终审 / §四停止。**触发条件：改上述任一同源节必须双改
 两侧**（语义对齐，编码特化处显式标注「编码特化」/「编码版」），否则
-本清单与 §与 SDD 对照表 的互引失效。git 重度语义（worktree/commit/
+本清单的互引失效。git 重度语义（worktree/commit/
 branch）的主场在本引擎；exec-forge 侧的 coding 扩展位已关闭
 （1.6.0），其重访触发器移交本 skill §延期决策。
 
@@ -659,15 +619,14 @@ branch）的主场在本引擎；exec-forge 侧的 coding 扩展位已关闭
 ## 延期决策（带重访触发器）
 
 登记处全集 = 本引擎立项 plan 的 §延期决策 节；本节收录其中属本引擎
-主题者（「③flash 规则在 exec-forge 轻量代码任务的适用」属 exec-forge
+主题者（「③编辑纪律规则在 exec-forge 轻量代码任务的适用」属 exec-forge
 主题，不录）：
 
-1. **中程审查机制**（mid-course-review 参照件）：不进 v1.0.0。触发器 =
-   本引擎经 ≥2 个真实 L 级编码任务检验后评估审查门逃逸率。（§与 SDD
-   对照表 的 mid-course-review 注记落此节。）
+1. **中程审查机制**：不进 v1.0.0。触发器 =
+   本引擎经 ≥2 个真实 L 级编码任务检验后评估审查门逃逸率。
 2. **worktree 模式冒烟覆盖**：v1.0.0 只冒烟 branch 默认路径。触发器 =
    首个真实 worktree 需求任务。
-3. **santa-method 双独立审查（AND 门）**：不进 v1.0.0（与现行单
+3. **双独立审查（AND 门）**：不进 v1.0.0（与现行单
    reviewer + 来源标签体系冲突面未评估）。触发器 = v10 冒烟判读时审查
    门逃逸率实证。
 4. **git 重度语义完整支持重访**（exec-forge coding 扩展位关闭后的移交

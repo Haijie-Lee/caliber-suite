@@ -49,7 +49,7 @@ git 命令。不要爬 broader 代码库——只有为评估一个你能具名�
    （判定面 + 失败形态归一化）计数 >1 的任务，必须有对应 Ruling 入
    账；缺 = 终审不通过。
 3. **③核查端（注入保真）**：代码 dispatch 的 implementer prompt 缺
-   编辑纪律块（INJECT_FLASH 槽为空且任务画像未注明降档）= Important 照报。
+   编辑纪律块（INJECT_EDIT_DISCIPLINE 槽为空且任务画像未注明降档）= Important 照报。
 
 ## 来源标签（每条发现必填，含 Minor）
 

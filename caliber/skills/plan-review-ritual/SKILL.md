@@ -2,29 +2,29 @@
 name: plan-review-ritual
 description: "Use when you finish writing any implementation plan, spec, or design doc and are about to hand it to execution — especially when the executor is less capable."
 metadata:
-  version: "2.6.2"
+  version: "2.6.3"
   source: distilled-from-practice
 ---
 
 # Plan Review Ritual v2
 
-把"写完 plan"和"交付实现"之间的 review 固化为仪式。v2 升级（机制借鉴
-autoplan）：对抗升级为**双声部共识**、发现按**三级分类**处置（明显笔误不再
+把"写完 plan"和"交付实现"之间的 review 固化为仪式。v2 升级：对抗升级为
+**双声部共识**、发现按**三级分类**处置（明显笔误不再
 逐条打扰用户）、新增**决策审计追踪**与**门前验证**；声部故障**修复优先、降级须用户裁定**（2026-09-01 用户裁定，废除自动降级）。
 本 skill 是对抗审查**机制**；审查视角清单由调用方注入（plan-forge 工序 3
 注入五视角）。v2.4 升级：新增**轮次化机制**（`ROUND`/`AUDIT_PATH` 入参，
 见 Step 0/Step 2）支撑 L 级收敛循环——本 skill 仍是**单轮引擎**，循环策略
 （轮次编排/收敛判据/重锻出口）由调用方 plan-forge 工序 3 持有
-（2026-09-01 用户裁定）。v2.5 升级（2026-09-14）：声部 A 链化（plan-reviewer 优先、general-purpose 兜底、去前缀匹配、选择留痕）；声部 B 调用前能力预检；污染条款限定 ecc 在场。
+（2026-09-01 用户裁定）。v2.5 升级（2026-09-14）：声部 A 链化（plan-reviewer 优先、general-purpose 兜底、去前缀匹配、选择留痕）；声部 B 调用前能力预检；污染条款限定外部注入插件在场。
 v2.6 升级（2026-09-14，两项用户裁定）：① "换脑子"——轮 3 起声部方法互换，
 同一方法相邻两轮由不同声部执行（R2 A 修复验尸 → R3 B 接棒，R2 B 回填漂移
 → R3 A 接棒），防多轮审查视角固化；声部 B 纯文本边界不变，互换的只是方法
 分配。② 声部 B 通道选择链化——voice-b-reviewer agent 在场为首选（模型分化
-靠用户级 override，见 Step 2 声部 B 节），qwen-cli 降为链式 fallback；"固定
-Qwen"收缩为链②通道固定。
+靠用户级 override，见 Step 2 声部 B 节）；外部通道仅作链式兜底。
 v2.6.1-2.6.2（2026-09-15）：去强弱模型档措辞换词（执行者越弱 ROI 越大 →
 能力越弱 ROI 越大 等 4 处；litmus 验收段改「较弱执行者」）；2.6.2 修
 frontmatter description 英文残留 "weaker model"（独立复核抓取）。
+v2.6.3（2026-09-20）：调用方关系 MS 行改写（MS 退出 ritual 消费）。
 
 ## 为什么有效（不要跳过，理解了才会用对）
 
@@ -53,7 +53,7 @@ frontmatter description 英文残留 "weaker model"（独立复核抓取）。
 - `CHECKLIST`：审查视角清单（可选）：plan-forge 工序 3 注入五视角；
   缺省用 Step 2 的通用模板。
 - `VOICE_B`：第二声部 = **通道选择链**——链① `voice-b-reviewer` agent（在场
-  首选，去前缀匹配）、链② qwen-cli 外部声部（fallback；2026-09-01 固定
+  首选，去前缀匹配）、链② 外部声部通道（fallback；2026-09-01 固定
   通道裁定，2026-09-14 用户修订为链式兜底）；链尽/降级/单声部均为
   **用户裁定停止点**。选择规程与故障修复梯子见 Step 2 声部 B 节。
 - `ROUND`：轮号 + 上轮 DELTA 表（可选，默认 1）。`ROUND=1` 且无 DELTA =
@@ -119,7 +119,7 @@ runtime or make tests fail. No style comments. No task-organization comments.
 **声部 B**（必须；缺席/故障走 Step 2 修复梯子与停止点，**不得单声部续跑**）：同一 PLAN、换模型来源，**分工与声部 A 不同**（2026-09-01 实证改版）：**B = 纯文本内部一致性专责**——只读 PLAN 本体（内部矛盾/回填漂移/字面执行者陷阱），**不做仓库与代码交叉核对**。依据：A（主声部 subagent）上下文预算大，事实核查养得起；B 保持纯文本——外部通道有超时上限，开放式 grep 仓内大文件会把上下文炸到 100K+，纯文本专责让 B 的注意力全在内部一致性上（两链通用）。B 的 CHECKLIST 取 A 清单中不依赖仓库读取的条目（拿不准是否依赖仓库 = 视为依赖，剔除）；共识表机制不变（A 全量覆盖，文本类发现仍可与 B 双命中成 CONFIRMED）。**调用按规程执行，
 禁止凭感觉判断"配没配"**：
 
-0. **通道选择链**（2026-09-14 用户裁定新增，替代"qwen-cli 固定唯一"）：dispatch 前查当前会话 Agent 工具可见列表，按**去前缀名**匹配（`caliber:voice-b-reviewer` 与裸名同效），取链上首个在场者。
+0. **通道选择链**（2026-09-14 用户裁定新增）：dispatch 前查当前会话 Agent 工具可见列表，按**去前缀名**匹配（`caliber:voice-b-reviewer` 与裸名同效），取链上首个在场者。
 1. **链① `voice-b-reviewer` agent 在场** → 用它。其系统提示已内置声部 B 方法论
    （纯文本专责、轮次 stance、上报纪律），dispatch prompt 用**精简形态** =
    PLAN 绝对路径 + 本轮 B 视角 CHECKLIST（纯文本子集）+ `ROUND≥2` 时的
@@ -130,37 +130,38 @@ runtime or make tests fail. No style comments. No task-organization comments.
    配一个与主声部不同家族的模型 override 才保住跨家族对抗价值（配置 = ZCode
    插件 agent 管理界面）。无 override **不阻断**——配置是用户主权，但对抗
    价值稀释必须在审计里看得见。
-2. **链② `voice-b-reviewer` 缺席 → qwen-cli 外部声部**（fallback 通道；
+2. **链② `voice-b-reviewer` 缺席 → 外部声部通道**（fallback 通道；
    2026-09-01 用户裁定其为固定通道，2026-09-14 用户修订为链式兜底——
    "故障先修复、禁止自动降级"纪律继续适用本链②）。链② 留痕：审计行
-   `声部B = qwen-cli (fallback；链① voice-b-reviewer 缺席)`。
-   **调用规程以 qwen-cli skill 为唯一准绳**——预检、调用命令、stdin 重定向
-   纪律、失败模式表全部见 qwen-cli/SKILL.md（前台调用节），此处不再留副本。
+   `声部B = 外部声部通道 (fallback；链① voice-b-reviewer 缺席)`。
+   外部通道的调用规程（预检、调用命令、stdin 重定向纪律、失败模式表）以
+   用户环境内既有外部声部 skill 的说明为唯一准绳，本 skill 不留副本。
    prompt = 对抗审查 prompt + B 视角子集 CHECKLIST（纯文本）+ PLAN 绝对路径；
    返回审查文本 = 成功；任何失败 → 第 3 条修复梯子（**先修复，禁止降级**）。
-   能力预检：调用前先查当前会话 skill 清单有无 `qwen-cli`（备选 `minimax-cli`）
+   能力预检：调用前先查当前会话 skill 清单有无可用的外部声部 skill
    ——无 → 不发起注定失败的调用，直接进第 4 条用户裁定停止点（证据 = 会话
-   清单缺席）。预检只判 skill 在场；skill 在场 ≠ claude CLI 可用——CLI 缺席仍
-   走梯子 ③ 配置类上报，预检不替代 qwen-cli skill 自身的前台预检。
+   清单缺席）。预检只判 skill 在场；skill 在场 ≠ 底层 CLI 可用——CLI 缺席仍
+   走梯子 ③ 配置类上报，预检不替代该 skill 自带的预检（如有）。
 3. **失败 = 先修复（修复梯子，每步留痕），阶梯耗尽前禁止降级**。链① 失败
    （dispatch 报错/超时/产出为空）先按"缩任务域重试 + 强化 prompt 锚"修复
    一轮，再失败 → 落链②（链式兜底是**设计内行为，非降级**，留痕一行即可）；
-   链② 失败按 qwen-cli 失败模式表定性后依次走：
-   ① **转写验尸**（RC=124/零输出/疑似卡死）：读子进程转写 JSONL（方法见
-      qwen-cli skill「外部状态观测」节；ctx = 各 assistant 事件的
-      `usage.input_tokens`）——末事件=孤立 tool_use/tool_result 且 ctx 持续
+   链② 失败按该外部声部 skill 提供的失败模式说明（如有）定性；无说明则按
+   RC 与输出形态定性后依次走：
+   ① **转写验尸**（RC=124/零输出/疑似卡死）：读子进程转写（该 skill 提供
+      观测手段时用其方法，无则按 RC/末事件形态判）；ctx = 各 assistant 事件的
+      `usage.input_tokens`——末事件=孤立 tool_use/tool_result 且 ctx 持续
       递增 = 健康但慢，不是故障；
    ② **健康但慢，或验尸判死（非配置类/非污染）** → 缩任务域重试（纯文本化）/
-      `--resume` 续跑 / 看门狗重跑，按验尸结论选择；（实证 2026-09-01：全量任务单 300s 被杀时子进程健康
+      `--resume` 续跑（该 skill 支持时）/ 看门狗重跑，按验尸结论选择；（实证 2026-09-01：全量任务单 300s 被杀时子进程健康
       跑了 38 个工具调用，缩域重试 109s 成功——同日 8 次调用 7 成功，唯一
       失败即固定封顶误杀健康任务。）
    ③ **配置类**（403/429/CLI 缺失、settings 缺失）→ 报告用户修配置（装
-      CLI、换 API key、核 API_TIMEOUT_MS），修复后重试；
-   ④ **污染** → 确认 `ECC_SESSION_START_CONTEXT=off` 未被剥离（仅 ecc 在场时适用；纯 ZCode 环境无此污染源，跳过本项）+ 强化 prompt
+      CLI、换 API key、核外部 CLI 的超时配置），修复后重试；
+   ④ **污染** → 存在上下文注入类外部插件时，确认其上下文开关类环境变量未被调用链剥离（纯 ZCode 环境无此污染源，跳过本项）+ 强化 prompt
       免疫锚 + 缩 prompt，重试。
 4. **链尽 = 用户裁定停止点**：链①②均不可用，或链②修复梯子 ①-④ 耗尽
    仍失败 → **停**，把验尸证据 + 已尝试修复清单 + 失败定性贴给用户；经用户
-   批准才可用备用外部通道（minimax-cli skill，先 30s ping `--print "Reply: PONG"`）
+   批准才可用备用外部通道（用户环境内的其他外部声部 skill，先 30s ping 验活）
    或第二个独立 subagent（prompt 换框架）。**禁止自动降级、禁止自动
    `[single-voice]`**（旧版「全不可用标记 single-voice 继续不中断」已废除——
    静默降级让第二声部形同虚设）。批准后降级原因 + 用户批准记录写入审计表。
@@ -259,4 +260,4 @@ CONFIRMED = **无条件修**；SINGLE 按置信度进裁定队列；critical 级
   让下次 Step 1.5 的清单变长——这个 skill 的价值随使用增长。
 - 调用方关系：plan-forge 工序 3 调本机制并注入五视角清单
   （plan-forge/checklists.md）；L 级收敛循环由工序 3 传入 `ROUND`/
-  `AUDIT_PATH`；caliber M 级仅用 Step 1 自审。
+  `AUDIT_PATH`；caliber ML 级仅用 Step 1 自审；MS 级不经本 skill（阶段 3 = 快速自查 + plan-reviewer 单派遣，prompt 骨架见 plan-drafting）。

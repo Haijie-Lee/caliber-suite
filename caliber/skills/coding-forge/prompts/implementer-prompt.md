@@ -1,6 +1,6 @@
 # Implementer Prompt 模板（coding-forge）
 
-编排者 dispatch 实现席位时填充本模板。槽位形如 `{N}`，除 `{INJECT_FLASH}`
+编排者 dispatch 实现席位时填充本模板。槽位形如 `{N}`，除 `{INJECT_EDIT_DISCIPLINE}`
 为条件填充槽外全部必填（槽位说明见文末）。
 
 ```
@@ -23,7 +23,7 @@ brief 中任何不清楚处——**现在就问**，在开工前提出。不要�
 
 ## 编辑纪律
 
-{INJECT_FLASH}
+{INJECT_EDIT_DISCIPLINE}
 
 ## 你的工作（六步，次序不可换）
 
@@ -140,7 +140,6 @@ BLOCKED 或 NEEDS_CONTEXT 时，把具体情况直接写进返回消息正文—
   任务审查 parked 项的指针附注也落在这里。
 - `{REPORT_FILE}` — 必填：实现者写完整报告的文件路径。
 - `{WORKDIR}` — 必填：工作目录绝对路径。
-- `{INJECT_FLASH}` — 编辑纪律块，条件填充：默认 = flash-model-code-discipline
-  「注入模板」全量（编排者执行期自
-  `~/.agents/skills/flash-model-code-discipline/SKILL.md` 读取展开，
-  operator 填验证命令）；任务画像注明注入降档时 = 空串。
+- `{INJECT_EDIT_DISCIPLINE}` — 编辑纪律块，条件填充：默认 = 用户环境内
+  编辑纪律 skill 的「注入模板」全量（在场才读取展开，operator 填验证命令）；
+  该 skill 缺席 → 内联最小编辑纪律块；任务画像注明注入降档时 = 空串。

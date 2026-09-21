@@ -2,14 +2,14 @@
 name: plan-forge
 description: "Use when writing a formal implementation plan document for ML/L-level tasks — caliber ML/L 级阶段 2 自动路由；especially when the plan will be executed verbatim by a less-capable executor."
 metadata:
-  version: "1.7.0"
+  version: "1.8.0"
   source: distilled-from-practice
 ---
 
 # Plan Forge — 选材、制坯、锻打、成型
 
 把"写出一份较弱执行者能逐字执行的 plan"固化为四道工序。本 skill 是**锻造工艺**，
-不是审查机制：工序 1-2 产出 plan 初稿（编排 writing-plans），工序 3 调
+不是审查机制：工序 1-2 产出 plan 初稿（编排 plan-drafting），工序 3 调
 plan-review-ritual 做对抗审查（注入五视角清单），工序 4 基线执行者字面验收。
 审查视角细目在 `checklists.md`——用到哪道工序读哪节，不预读。
 v1.2 升级：工序 3 从单轮对抗升级为 **L 级收敛循环**（逐轮锻打至收敛判据
@@ -20,7 +20,7 @@ v1.2 升级：工序 3 从单轮对抗升级为 **L 级收敛循环**（逐轮�
 假设链连贯性），守护**工件收敛**；收敛判据加局限命名句。
 v1.3 升级（2026-09-14）：工序 2 新增第 6 道锻造「执行编排预分配」（非 coding
 主导或无 git 的 ML/L plan 必产预分配表，与 caliber:exec-forge 共有 schema）；
-交接节执行选项改三态（SDD / exec-forge / inline）；画像性质枚举扩为 8 值。
+交接节执行选项改三态（编码引擎 / exec-forge / inline；编码引擎名 v1.7.0 起为 coding-forge）；画像性质枚举扩为 8 值。
 v1.4 升级（2026-09-15，用户裁定去强弱模型档）：工序 2 预分配表 schema 删
 模型档列（9→8，与 exec-forge §输入 逐字一致）；工序 3.5/4 派遣去 model=
 参数（fresh 独立 / 零背景基线 agent）；交接「强弱模型缺省」改「实现/审查
@@ -35,6 +35,11 @@ v1.7.0（2026-09-19，coding-forge 自研）：交接节引擎名切换（option
 caliber:coding-forge，option 3 = coding-forge §inline TDD 骨架）；新增隔离
 模式提醒句（默认 branch / 可选 worktree）；工序 2 checklists 加任务粒度判据
 与 Review Focus 节两条清单。
+v1.8.0（2026-09-20，用户裁定）：工序 2 改调 caliber:plan-drafting——六道
+锻造（契约矩阵/判断前置/验证内建/风险登记/任务画像/执行编排预分配）随
+工序 2 下沉为 plan-drafting 原生结构，本 skill 保留选材/锻打/准出/成型
+四道；checklists.md 工序 2 节移交 plan-drafting 自查清单（本文件留指针）；
+收尾调用方关系 MS 行改写（MS 不经本 skill）。
 
 ## 为什么有效（理解了才会用对）
 
@@ -57,12 +62,12 @@ caliber:coding-forge，option 3 = coding-forge §inline TDD 骨架）；新增�
 
 - **用**：ML/L 级任务出正式 plan 文档（执行者能力较弱时**必须**用）。
   caliber ML/L 级阶段 2 自动路由到这里；ML 级 = 工序 1-2 + 工序 4，L 级 = 工序 1-4。
-- **不用**：S 级任务；产品方向/选型审查（那是 autoplan / plan-eng-review 的对象）。
+- **不用**：S 级任务；产品方向/选型审查（超出本 skill 领域）。
 
 ## 工序 0 — 输入与依赖
 
 - `CONTEXT`：澄清后的需求 + 涉及代码区域。
-- 依赖验证（一行）：writing-plans 在？plan-review-ritual 在？缺一告知用户
+- 依赖验证（一行）：plan-drafting 在？plan-review-ritual 在？缺一告知用户
   并退回 caliber/fallback.md 对应章节（§简plan / §自审），不中断。
 
 ## 工序 1 — 选材（实证备料）
@@ -88,37 +93,15 @@ caliber:coding-forge，option 3 = coding-forge §inline TDD 骨架）；新增�
 
 ## 工序 2 — 制坯（契约先行，判断前置）
 
-调 writing-plans 产出初稿，在其上加两道锻造：
+调 caliber:plan-drafting（LEVEL=ML|L、ENGINE_PATH、CONTEXT+选材产物）产出
+plan；六道锻造为其原生结构（契约矩阵/判断前置/验证内建/风险登记/任务画像/
+执行编排预分配——规则文本见 plan-drafting，此处不复制）。本工序保留编排职责：
 
-1. **契约矩阵先行。** 动笔写任务前先列跨任务契约表：函数签名（参数/返回
-   类型）、dataclass 字段（新增字段带默认值放末尾，否则已有构造全部
-   TypeError）、消息/文件格式、常量名。每个任务的 Interfaces 块
-   （Consumes/Produces）与矩阵逐字一致。
-2. **判断前置扫描。** 初稿完成后全文扫描判断逃逸词：
-   `适当|视情况|必要时|类似|照做|合理|尽量|等等|按需|妥善处理`。
-   每处命中 = 留给执行者的即兴空间，展开成具体指令（做什么、做到什么
-   程度、怎么算做完）；展开不了的转显式问题进风险登记。
-3. **验证内建。** 每个验证步骤给具体期望输出（数字算到个位数、字符串逐
-   字），不是"验证它正确"。
-4. **风险登记。** plan 末尾风险表：每条 = 触发条件 + 爆炸半径 + 可逆性 +
-   处置（修/兜底/接受）；延期决策必带重访触发器。
-5. **任务画像标注。** 逐任务标画像，供 caliber 阶段 4 §动态组合 消费。
-   格式定死：`画像: 性质=…; 难度=…; 领域词=[…]`。性质（新增/修bug/重构/
-   原型/配置/文档/调研/操作）、难度（机械/集成/判断，自设三档，信号源自 SDD 复杂度信号）、
-   领域词（供路由表关键词匹配）。**只标画像、不锁 skill 组合**——工序 2 时执行信息未齐，锁定发生在工序 4 彩排后的预绑定回写（彼时信息最全，见工序 4）。画像缺失 → caliber 按"集成"对待。
-6. **执行编排预分配**（非 coding 主导或无 git 的 ML/L plan 必产；coding 主导
-   plan 免产——coding-forge 自带角色分配）。逐任务填执行编排预分配表，列 = 任务 |
-   性质 | 难度 | 形态(inline/dispatch) | 执行者(主线程/agent_type 链) |
-   审查者(≠执行者上下文) | 注入档(指令化/许可清单/无) |
-   领域组件(路由表命中，候选；工序 4 彩排后经编排者裁定回写为预绑定——预绑定 = 默认消费——dispatch 边界偏离须记 ledger Ruling，终审闭环核查；未经彩排的 plan 保持候选非绑定旧语义)。枚举外行（如 用户协作，用于冒烟/发布决策
-   等人工任务）：引擎不派工、不进审查门，仅在 ledger 记一行。规则：判断类/组合
-   复杂 → inline 主线程 +
-   独立审查；机械 → dispatch + 独立审查；集成 → dispatch +
-   注入。**只预分配、不锁死**——dispatch 边界可据运行时信息微调，微调记
-   ledger Ruling；阶段 4 入口批量确认停止点（caliber）确认的是本表。schema
-   与 caliber:exec-forge §输入节共有，两处逐字一致。
+① 确认 plan-drafting 输入齐备；② 对齐快照节（L 级）/方案确认记录（ML 级）
+已填入；③ 预分配表产出义务按引擎路径核对；④ 画像抽查；⑤ 逃逸词复扫（编排者
+抽查非全扫）；⑥ 自查清单指针见下行。
 
-检查细目：读 `checklists.md` 工序 2 节。
+检查细目：见 plan-drafting 自查清单（工序 2 六道已下沉，checklists.md 留移交指针）。
 
 ## 工序 3 — 锻打（L 级收敛循环）
 
@@ -131,7 +114,8 @@ caliber:coding-forge，option 3 = coding-forge §inline TDD 骨架）；新增�
 - `PLAN` = 工序 2 初稿路径（修复就地回写，各轮同一文件）
 - `CHECKLIST` = `checklists.md` 工序 3 节五视角：**执行者 / 契约 / 环境 /
   风险 / 测试**（轮 ≥2 按 checklists.md 轮换表收窄）
-- `VOICE_B`：**qwen-cli 固定外部声部**（2026-09-01 裁定，非可让渡首选项）；
+- `VOICE_B`：**第二声部席位**（必设、不可让渡；席位解析见 plan-review-ritual
+  Step 2 通道选择链——链① voice-b-reviewer agent 首选、链② 外部声部通道兜底）；
   故障走 ritual Step 2 修复梯子，降级/`[single-voice]` 须经用户批准
 - `ROUND` = 轮号 + 上轮 DELTA 表（从审计文件上一轮行装配：修复位置/摘要/涟漪）
 - `AUDIT_PATH` = `<项目根>/.caliber/review-logs/<plan-stem>.md`
@@ -226,7 +210,7 @@ User Challenge 永不自动定，用户原方向为默认）。各轮 stance 与
 
 **适用级别**（2026-09-16 用户裁定）：ML 与 L 同构全量——ML 级 plan 同样由
 较弱执行者逐字执行，豁免彩排等于把最高价值的验收留给最常吃返工的级别；
-MS 级无 plan 文档，不适用。
+MS 级不适用（轻量 plan 审查归 caliber 阶段 3 两道，非本工序彩排）。
 
 **单派遣两阶段**（2026-09-16 升级）：一次派遣、同一 fresh 零背景基线
 subagent（`Task(subagent_type=general-purpose)`——2026-09-01 写死：Explore
@@ -299,8 +283,7 @@ plan 交付时按引擎路由规则给执行选项（caliber ML/L 级阶段 4 �
    实现/审查分席逐任务把关
 2. **exec-forge**——caliber:exec-forge：非代码主导 / 无 git / 混合 plan；
    执行编排预分配表 + 逐任务审查门 + ledger 断点恢复
-3. **Inline**——coding-forge §inline TDD 骨架 批量执行 + checkpoint（MS 级
-   或用户指定）
+3. **Inline**——coding-forge §inline TDD 骨架 批量执行 + checkpoint（用户指定；MS 级由 caliber 阶段 4 直调本骨架——不经本交接节）
 
 **隔离模式提醒**（C7）：代码主导 plan 交付时，交接文本注明：默认新 branch
 隔离开发，可切换 worktree 模式（coding-forge §Setup）——由用户在阶段 4 入口
@@ -318,5 +301,5 @@ plan 交付时按引擎路由规则给执行选项（caliber ML/L 级阶段 4 �
   清单变长——本 skill 的价值随使用增长。
 - 调用方关系：caliber ML 级 = 工序 1-2（阶段 2）+ 工序 4（阶段 3，ritual Step 1
   自审修复落地后）；L 级 = 工序 1-2（阶段 2）+ 工序 3-4（阶段 3：收敛循环 +
-  准出闸口 + 真实彩排）；MS 级仅工序 1-2（对话内步骤列表，无 plan 文档）。
-  本 skill 不判断产品方向（autoplan / plan-eng-review 的领域）。
+  准出闸口 + 真实彩排）；MS 级不经本 skill（caliber 直调 plan-drafting 轻量档）。
+  本 skill 不判断产品方向（超出本 skill 领域）。
