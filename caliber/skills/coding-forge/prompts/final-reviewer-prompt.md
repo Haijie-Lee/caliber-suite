@@ -43,8 +43,9 @@ git 命令。不要爬 broader 代码库——只有为评估一个你能具名�
 1. **deferred/parked 分类**：ledger 中全部 deferred minor 行与 parked
    行，加上你自己新发现的 Minor，只做分类——Critical/Important 升级
    （进 findings）或进 Minor 处置评估清单（默认全部）。「修不修、怎么
-   处置」不由你独判；逐条给出分类与一句理由。parked 行维持既有裁定
-   语义，不重进评估。
+   处置」不由你独判：处置裁定（当场修复 / TODO / known-issues / 关闭 /
+   核销五档）由编排者的独立评估 dispatch 做出，不经你手——你只分类；
+   逐条给出分类与一句理由。parked 行维持既有裁定语义，不重进评估。
 2. **②核查端（同模式复发升级）**：过程日志/ledger 中同模式签名
    （判定面 + 失败形态归一化）计数 >1 的任务，必须有对应 Ruling 入
    账；缺 = 终审不通过。
@@ -91,6 +92,13 @@ git 命令。不要爬 broader 代码库——只有为评估一个你能具名�
 deferred / parked / 新发现 Minor 逐条：[升级为 Critical/Important（进
 findings）| 进 Minor 处置评估清单] + 一句理由。
 
+### 计数
+
+new-minors: <N>（你新发现且进评估清单的 Minor 条数，0 允许；升级为
+Critical/Important 进 findings 的不计）
+deferred-seen: <M>（ledger 中你逐条分类的 deferred minor 行总条数，
+含升级为 Critical/Important 者）
+
 ### ②③核查结果
 
 逐端一行：查了什么、命中与否、对应 ledger 行号或缺口。
@@ -114,5 +122,5 @@ findings）| 进 Minor 处置评估清单] + 一句理由。
   13 类封闭集、数值断言成对落笔、输出值实跑后写入）。
 
 **final reviewer 返回**：Overall Verdict、Findings（Critical/Important/
-Minor，各带来源标签）、Ledger Classification 逐条分类、②③核查结果、
-Strengths。
+Minor，各带来源标签）、Ledger Classification 逐条分类、计数块
+（new-minors / deferred-seen）、②③核查结果、Strengths。

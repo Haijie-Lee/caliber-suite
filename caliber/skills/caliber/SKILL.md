@@ -2,7 +2,7 @@
 name: caliber
 description: "Use when starting any engineering task — feature, bugfix, refactor, or change request — before touching code. Not for pure Q&A, research, or open-ended discussion."
 metadata:
-  version: "1.16.0"
+  version: "1.17.0"
   source: distilled-from-practice
 ---
 
@@ -37,6 +37,7 @@ v1.16.0（2026-09-20，用户裁定）：体系自研化——MS 级出轻量 pl
 工序全量切换为原生实现（plan-drafting / deep-probe）；
 停止点工艺四条（问必带注/纠正响应协议/前提清单交付/挂起清单配铁律 5）；
 scout 黑名单扩六件。接续中的旧 MS 任务可按旧语义完成；任务台账前置——plan 落盘即开账（.caliber/exec/<plan-stem>/progress.md），新增铁律 8 台账先于记忆
+v1.17.0（2026-09-21，用户裁定）：阶段 1 方案探索双轨化——deep-probe 方案挑战者机制（道层收口后后台派遣、信息隔离独立生成（带思考角度错位纪律）、对照表并入方案确认停止点；ML/L 必派、MS 单轨，M 级子档未定前按 ML 派遣）；2b 映射表加方案独立生成行（席位链 architect → plan-reviewer → general-purpose）。
 
 ## 为什么有效（理解了才会用对）
 
@@ -58,7 +59,7 @@ scout 黑名单扩六件。接续中的旧 MS 任务可按旧语义完成；任�
 | caliber:coding-forge | 所有级实现（S/MS inline TDD 骨架） | 读 fallback.md §TDD |
 | caliber:coding-forge | 所有级验证 | 读 fallback.md §证据 |
 | caliber:coding-forge | bug 类澄清（调试骨架） | 读 fallback.md §根因 |
-| deep-probe | L 级澄清；MS/ML 级方案探索轻量档 | 读 fallback.md §三问 |
+| deep-probe | L 级澄清（含双轨方案探索）；MS/ML 级方案探索轻量档（ML 双轨 / MS 单轨） | 读 fallback.md §三问 |
 | plan-drafting | MS 级阶段 2 轻量 plan；ML/L 级计划（plan-forge 缺时） | 读 fallback.md §简plan |
 | plan-review-ritual | ML 级自审；L 级完整 + plan-forge 工序 3 内部调用 | 读 fallback.md §自审 |
 | plan-forge | ML/L 级阶段 2（plan 锻造；ML 级工序 1-2 + 工序 4 彩排，L 级工序 1-4） | 退回：ML 级阶段 2 调 plan-drafting；L 级阶段 3 调 plan-review-ritual |
@@ -167,7 +168,7 @@ dispatch 派发）；S/MS 无 dispatch 边界，主线程查表纪律实测失�
 
 | # | 阶段 | S 轻量 | MS 标准-轻 | ML 标准-重 | L 完整 |
 |---|---|---|---|---|---|
-| 1 | 澄清 | agent 一句话重述需求（歧义才停，见铁律 7）；bug 类先用调试骨架定位根因 | 调 deep-probe 轻量档（重述+方案探索+押注），列出方案选项，**停**，用户选定（同停止点拍板 MS/ML，见 Step 1 子档段） | 同 MS | 调 deep-probe 全仪式澄清（对齐快照收口，**停**） |
+| 1 | 澄清 | agent 一句话重述需求（歧义才停，见铁律 7）；bug 类先用调试骨架定位根因 | 调 deep-probe 轻量档单轨（重述+方案探索+押注），列出方案选项，**停**，用户选定（同停止点拍板 MS/ML，见 Step 1 子档段） | 调 deep-probe 轻量档双轨（重述+方案挑战者后台派遣+对照表），**停**，用户选定（同停止点拍板 MS/ML，见 Step 1 子档段） | 调 deep-probe 全仪式澄清（含双轨方案探索；对齐快照收口，**停**） |
 | 2 | 计划 | 一句话方案 | 调 plan-drafting 轻量档出 plan 文档落盘 .caliber/plans/（五节：目标/文件+改法/验证/commit/风险） | 调 plan-forge 工序 1-2（选材+制坯）出正式 plan 文档落盘（缺时直调 plan-drafting）——**ML 级必出 plan 文档** | 调 plan-forge 工序 1-2（选材+制坯）出 plan 初稿 |
 | 3 | 审查 | 自问：有没有更简单的做法？ | 快速自查五条 + dispatch plan-reviewer 独立审查（单轮，对象：阶段 2 轻量 plan；Mechanical 静默修、Taste/User Challenge **停**） | 跑 plan-review-ritual Step 1 自审（对象：阶段 2 落盘的 plan 文档）→ plan-forge 工序 4 真实彩排（单派遣两阶段：confusion-hunt + 技能消费映射；映射裁定回写预绑定；自审修复落地后再彩排） | plan-forge 工序 3-4（锻打=**收敛循环**：双声部逐轮对抗至收敛判据，≤3 轮，轮 3 不收敛回工序 2 重锻**停**；准出=**exit gate**：凡经修复的 plan 必经 fresh 独立全局复审；成型=litmus **真实彩排**（单派遣两阶段：fresh 零背景基线 agent confusion-hunt + 技能消费映射，映射裁定回写预绑定）；Taste 裁定**停**可批量，User Challenge 必停） |
 | 4 | 实现 | TDD 直接改，一次一 commit | TDD 逐步，每步跑验证（inline） | 引擎路由（规则见 §动态组合 首节）：代码主导+git → coding-forge；其余 → exec-forge。逐任务按执行编排预分配表派发（机械→裸 dispatch / 集成→dispatch+注入 / 判断类、组合复杂→主线程 inline + 独立审查）；阶段 4 入口批量确认停止点 | 引擎路由（规则见 §动态组合 首节）：代码主导+git → coding-forge；其余 → exec-forge。逐任务按执行编排预分配表派发（机械→裸 dispatch / 集成→dispatch+注入 / 判断类、组合复杂→主线程 inline + 独立审查）；阶段 4 入口批量确认停止点 |
@@ -249,6 +250,7 @@ exec-forge 路径的消费钩子 = caliber:exec-forge §任务环「组合决策
 | plan 对抗审查（ritual 声部 A；MS 级阶段 3 单派遣亦消费） | `plan-reviewer`（详见 ritual Step 2 选择链与双形态 prompt） | general-purpose |
 | 实现（机械/集成 dispatch） | `coder` → `general-purpose` | general-purpose |
 | 计划/拆解/需求分析 | `architect` → `code-architect` | general-purpose |
+| 方案独立生成（deep-probe 双轨挑战轨；硬性要求零参与 fresh 上下文） | `architect` → `plan-reviewer` → `general-purpose` | general-purpose |
 | 疑难 bug 诊断（根因不明类） | `debugger` | general-purpose |
 | 深度调研/选型 | `researcher` | general-purpose |
 | 文档撰写/手册/报告（dispatch 形态时） | `doc-writer` | general-purpose |
@@ -326,7 +328,7 @@ MS 保持 inline 同此渊源。）
 ## 停止点速查
 
 - **S 级**：不可逆操作前、歧义。
-- **MS/ML 级**：+ 方案确认（同停止点拍板 MS/ML 子档）+ MS plan 审查裁定（Taste/User Challenge）。
+- **MS/ML 级**：+ 方案确认（同停止点拍板 MS/ML 子档；ML 级含双轨对照表）+ MS plan 审查裁定（Taste/User Challenge）。
 - **ML/L 级**：+ 路由表确认（Step 1.5 第 5 步）+ 阶段 4 入口执行编排批量确认（exec-forge/coding-forge 预分配表）——两确认均带折叠条件（见 Step 1.5 第 5 步与 exec-forge §阶段 4 入口停止点，2026-09-15 裁定）。
 - **L 级**：+ deep-probe 澄清问答、plan 逐条裁定（可批量）、审查轮 3 不收敛
   重锻、分支收尾。

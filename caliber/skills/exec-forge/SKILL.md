@@ -2,7 +2,7 @@
 name: exec-forge
 description: "Use when executing an ML/L-level implementation plan whose tasks are predominantly non-coding (文档/配置/调研/操作) or the workspace has no git — caliber 阶段 4 非 coding 主场执行引擎（coding 归兄弟引擎 caliber:coding-forge）：plan 期预分配混合执行编排（执行者×审查者×形态）、routing.yaml 驱动注入两档、逐任务审查门、四状态契约、ledger 断点恢复、过程日志契约（动作级留痕）。中文触发：执行 plan、非代码任务派发、混合执行、执行编排、subagent 派工、阶段 4"
 metadata:
-  version: "1.6.1"
+  version: "1.6.2"
   source: distilled-from-practice
 ---
 
@@ -14,6 +14,7 @@ plan-forge 管"做什么"（plan = 绑定权威），本 skill 管"派谁做、�
 caliber:coding-forge——
 两引擎按 §何时使用 路由，不竞争同一触发。
 v1.6.1（2026-09-20）：ledger 节补 plan 期台账续写注 + §输入节两处同源括注改中性（caliber v1.16.0 台账前置联动）。
+v1.6.2（2026-09-22）：终审评估 loop 防静默悬挂回写（与 coding-forge 1.0.2 同源双改；实证：2026-09-22 AeroFold U-M1-02/03/04 三单元终审 31 条 deferred minor 停在 accept-defer 分类即被当终态、静默悬挂，当晚批量补账）——§6 Minor 出口半句改完整指向；§终审加「终审前对账清单」机械闸 + new-minors 声明行与恒等式 + 处置四档扩五档（新增核销档）+ 终审报告计数块与席位分离条款。
 
 ## 为什么有效（理解了才会用对）
 
@@ -295,8 +296,9 @@ reviewer 输入（全走文件路径）：
 
 触发：spec ❌ / 任何 Critical 或 Important / 确认真实的 ⚠️。
 先走三条出口再进环：
-- **Minor** → ledger `Task <N>: minor (deferred): <一行>`，终审时 triage；
-  永不进环。
+- **Minor** → ledger `Task <N>: minor (deferred): <一行>`，终审时按
+  §终审「Minor 处置评估 loop」处置（评估包装配 → 单次评估 dispatch →
+  落盘 → eval 行入账）；永不进环。
 - **报告准确性类**（来源标签=报告准确性，1.5.0）→ 不 defer：当场原位修正
   report（把值改对），并记独立一条 ledger Ruling（启用过程日志时另记
   偏离恢复 类条目）——report 是终审与判读的证据底座，失真承重，修复窗口
@@ -468,14 +470,25 @@ deferred/parked 行让其分类（triage 处置权属见下「Minor 处置评估
 输入含 process-log 路径，抽查动作类型覆盖与失真（§过程日志契约）。
 **②核查端（1.6.0）**：同模式偏离签名计数 >1 的任务必有 Ruling 入账，缺 =
 终审不通过（与 §6 同模式复发升级条联动）。
+**终审前对账清单（1.6.2）**：终审闭环的机械闸，缺任一 = 终审不闭环——
+① 恒等式核对：deferred 行数 vs eval 裁定条数（含 new-minors 声明行，
+口径见下「Minor 处置评估 loop」段）；② 评估包已装配（逐条原文 + 来源
+标签 + plan 概要 + 判据清单 + report/diff 指针）；③ 单次评估 dispatch
+已返回且逐条裁定进 ledger；④ known-issues / TODO 落盘完成（schema 见
+§收尾，重访触发非空）。
 **Minor 处置评估 loop（1.5.0）**：终审 reviewer 对 ledger deferred minor 与
 自身新发现的 Minor 只做分类——Critical/Important 升级（进 findings）或
-进评估（默认全部）；「修不修、怎么处置」不由终审 reviewer 独判。终审报告
-返回后、fix dispatch 派出前，编排者装配评估包（留存逐条原文 + 来源标签 +
+进评估（默认全部）；「修不修、怎么处置」不由终审 reviewer 独判——处置
+裁定（当场修复 / TODO / known-issues / 关闭 / 核销五档）由编排者的独立
+评估 dispatch 做出，不经其手。终审报告须含机器可读计数块
+`new-minors: <N>`（新发现且进评估清单的 Minor 条数，0 允许；升级为
+Critical/Important 进 findings 的不计）与 `deferred-seen: <M>`（逐条
+分类的 deferred minor 行总条数，含升级者）——编排者声明行 N 从此照抄。
+终审报告返回后、fix dispatch 派出前，编排者装配评估包（留存逐条原文 + 来源标签 +
 plan 概要 + 任务依赖关系 + 判据清单 + 上下文指针 report/diff 路径；来源
 标签漏标/误标时编排者可补标——评估包内留痕原标签 + 补标理由，v9 M2 实证），
 **单次 dispatch `caliber:code-reviewer`**（缺席退 general-purpose，2b 链）
-按判据逐条裁定四档：
+按判据逐条裁定五档：
 - **当场修复**：满足任一——① 修复工作量小且价值高（单点文件级改动可清零、
   收益用户可感知）；② 全局重要性高于单次 review 呈现（跨任务承重 / 阻塞
   验收 / 证据链部件）。两判据必须引用具体证据（行号/调用链/验收条目），
@@ -495,13 +508,24 @@ plan 概要 + 任务依赖关系 + 判据清单 + 上下文指针 report/diff �
   当作发现本身的属性。来源标签=`计划强制` 且发现为真 → 默认
   known-issues（修复 = 偏离绑定权威，登记即处置；例外仅可升档
   （当场修复/TODO）、不得入关闭，并须 Ruling 说明）；一次性场景的
-  重访触发写「该工件复用或同类问题再现时」即合法。本条与四档定义
+  重访触发写「该工件复用或同类问题再现时」即合法。本条与五档定义
   同随评估包。
+- **核销**：发现曾真但已被后序工作消解（曾成立、现已不成立）→ Ruling
+  一行，须引用消解证据（commit / 载体行；无 git 环境用快照或文件行号）。
+  与关闭档的区分：关闭 = 发现不成立或无信息价值；核销 = 发现曾成立、
+  现已不成立——当前仍成立的发现禁入核销档。
 时序：「当场修复」档并入终审既有 **ONE** fix dispatch（全清单，不一发现
 一派）+ exactly one scoped 重审——Minor 的唯一修复窗口在此；任务环内
 Minor 永不进环的现纪律不变（1.5.0）。parked 行维持既有裁定语义，不重进
 评估。评估逐条裁定进 ledger（`final review: eval <ID>=<档> — <一行理由>`，
-可一行多条）。
+可一行多条）。终审报告返回后、评估包装配前，编排者先写机器可读声明行
+`final review: new-minors <N>`（N = 终审报告计数块照抄值，N=0 允许）。
+恒等式（「终审前对账清单」① 的核对对象）：eval 裁定条数（按 `<ID>=`
+出现计数，eval 行允许一行多条）== Σ `minor (deferred)` 行条数 + N −
+deferred 行中升级为 Critical/Important 的条数（new minor 升级者本就
+不计入 N，不再扣；升级项经 fix dispatch 处置、不占评估额度；无升级时
+右侧即 Σ + N）。等式不成立 = 有 deferred minor
+漏进评估，终审不闭环。
 
 有 findings → **ONE** fix dispatch（全清单，
 不一发现一派）+ exactly one scoped 重审 + 残量裁定（同 breaker）。
@@ -545,8 +569,10 @@ Minor 永不进环的现纪律不变（1.5.0）。parked 行维持既有裁定�
 1. **Rulings 全量收集**：ledger 里每条 `Ruling:` 行进最终简报
    （"Rulings I made"，逐条带"错了的代价"）——清单必须穷举，这是用户
    唯一看到代决的地方。**评估 loop 裁定（1.5.0）同责穷举**：每条 `<ID>=<档> — <理由>` 进简报（当场修复档附修复落点一行）。
-2. **ledger 保留**：无 git 环境 ledger + snapshots 是执行证据，保留至
-   plan 验收（caliber 阶段 5-6）后由收尾决策处置。
+2. **ledger 保留与终态**：终审留痕含机器可读声明行
+   `final review: new-minors <N>` 与逐条 eval 裁定行，恒等式成立（口径
+   见 §终审「Minor 处置评估 loop」段）；无 git 环境 ledger + snapshots
+   是执行证据，保留至 plan 验收（caliber 阶段 5-6）后由收尾决策处置。
 3. **经验固化**：执行中抓到的新型陷阱 → 项目 learnings / 平台清单回写
    （出处一行：哪次任务、什么现象）。
 4. **过程日志（启用时）**：复盘文档与收尾简报以 process-log 为唯一

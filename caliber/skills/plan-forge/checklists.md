@@ -17,6 +17,7 @@
 - 有没有步骤完成判据模糊？（"处理一下边界情况"——什么算处理完？）
 - 任务间顺序依赖是否显式？（Task N+3 用了 Task N 的产物，说了吗？）
 - 每个文件路径是否精确到存在/将存在的具体位置？
+- **单元 plan 的终审任务必须显式列评估四步**（评估包装配 → 单次评估 dispatch → known-issues/TODO 落盘 → eval 行入账；实证：2026-09-22 AeroFold U-M1-02/03/04 三单元终审连续跳过 coding-forge §终审 deferred minor 评估 loop，31 条 deferred minor 停在终审 reviewer 的 accept-defer 分类即被当终态、静默悬挂，当晚批量补账）——终审任务只写「做终审」= 较弱执行者把评估 loop 当隐含步骤跳过；四步显式列出，终审组合行核查才有物可咬
 
 ### 视角 2 — 契约（跨任务一致性）
 - Task N 定义的签名 vs Task N+M 的调用：逐字对
