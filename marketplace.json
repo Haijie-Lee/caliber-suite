@@ -3,7 +3,7 @@
   "plugins": [
     {
       "name": "caliber",
-      "version": "1.5.3",
+      "version": "1.5.4",
       "description": "长程任务执行套件：caliber 定级路由 + plan-forge + plan-review-ritual + init-docs + update-docs + exec-forge + coding-forge + plan-drafting + deep-probe 九件套 + 11 个 subagent 班底 + 自动注入 hooks——以状态连续、质量防复利、决策可审计优化长程执行的可靠度与完备性",
       "source": "./caliber"
     }

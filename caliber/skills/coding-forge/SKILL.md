@@ -2,7 +2,7 @@
 name: coding-forge
 description: "Use when executing an ML/L-level implementation plan whose tasks are predominantly coding (new features, bug fixes, refactors) with git — caliber 阶段 4 编码执行引擎（非 coding 归兄弟引擎 caliber:exec-forge）：brief 文件化、双 verdict 审查门、TDD 证据强制、编辑纪律注入、ledger 断点恢复。中文触发：编码执行、代码派发、TDD 驱动、编码 forge"
 metadata:
-  version: "1.0.2"
+  version: "1.0.3"
   source: distilled-from-practice
 ---
 
@@ -17,6 +17,7 @@ dispatch 纪律 / 四状态 / 双 verdict 审查门 / fix loop / 过程日志契
 独立工作流：定级、plan 锻造、阶段路由均在 caliber 侧完成。
 v1.0.1（2026-09-20）：MS 交接注改 caliber 直调并补轻量 plan 输入语义（caliber v1.16.0 体系自研化联动）。
 v1.0.2（2026-09-22）：终审评估 loop 防静默悬挂回写（与 exec-forge 1.6.2 同源双改；实证：2026-09-22 AeroFold U-M1-02/03/04 三单元终审 31 条 deferred minor 静默悬挂，当晚补账 ef86219+d2e5366）——§6 Minor 出口半句改完整指向；§终审加「终审前对账清单」+ new-minors 声明行与恒等式 + 处置四档扩五档（新增核销档）；final-reviewer prompt 加计数块与席位分离；plan-forge checklists 视角 1 加终审任务显式四步条。
+v1.0.3（2026-09-24，trans-forge L1 复盘回写同源补齐）：§3 dispatch 纪律加「禁反向泛化句」、§4 report 加「证据回填」、§5 审查门加「叙事性断言事实性核对」——与 exec-forge 1.7.1 三条同源映射；§6 报告准确性补「防线」条款（exec-forge 1.6.3 同源补齐：写「已提交 X」前 X 必须已发生且有可指档案）。
 
 ## 为什么有效（理解了才会用对）
 
@@ -213,6 +214,11 @@ dispatch prompt 构成（五件，同源）：
   （不从零重派）。
 - **不贴会话史**：dispatch 描述一个任务，不是会话历史；前序摘要史禁止
   粘进 prompt。
+- **禁反向泛化句**（2026-09-24，trans-forge L1 T2-F1 实证，与 exec-forge
+  1.7.1 同源）：brief/plan 已写明提交义务（C10 类）的任务，dispatch prompt
+  禁写「不要 git commit」类反向泛化句——worker 据此跳过 brief 明令的提交。
+  提交纪律唯一权威 = brief/编排侧；worker 的边界是「不替编排者决定何时
+  提交」，不是被泛化句豁免既有义务。
 - **记录 agentId**：dispatch 结果里的 agent 身份——fix 轮 1-3 要 resume。
 - **无 model 槽**：模板已去 model 槽位——ZCode Agent 工具无 model 参数，
   模型统一 platform-default（见 §2 ④）。
@@ -234,6 +240,12 @@ context——工件走文件。）
   修复后该测试转绿 + 全量套件输出 = GREEN 等价；
 - **commits 列表** `<base7>..<head7>`（本任务全部提交的短 sha 区间，编码特化——
   exec-forge 记文件清单，本引擎以 git 提交区间替代）。
+
+**证据回填**（2026-09-24，与 exec-forge 1.7.1 同源）：变更清单/文件计数/
+commits 区间断言一律以实时命令输出支撑（`git status --short` /
+`git diff --stat <base7>..<head7>` / `git log --oneline`），禁凭记忆填清单
+或区间——计划时态的动作不是完成时态的事实。与 §6 报告准确性 防线同源
+分工：防线管动作陈述的时态，本条管断言的证据形态。
 
 四状态（封闭集，不造新通道；与 exec-forge §4 逐字对齐）：
 - **DONE** → 进 §5 审查门。
@@ -274,6 +286,14 @@ context——工件走文件。）
   里裁定。
 - 不让 reviewer 重跑实现者已跑的验证（report 带证据）；疑点聚焦测试
   可以，package-wide 重跑禁止。
+- **叙事性断言事实性核对**（2026-09-24，与 exec-forge 1.7.1 落盘声明
+  存在性核对同源）：审查包 = git 区间 diff，只覆盖代码变更，不覆盖
+  report 的叙事性断言（「全量套件零失败」声明、commits 区间、变更清单
+  文件集）——reviewer 对每条叙事性断言做低成本实测核对（commits 区间
+  对 `git log <range>` 核存在性、变更清单对 `git diff --stat` 核同名集、
+  落盘工件 `test -f`），与上条「不重跑验证」不冲突：验的是 report 的
+  事实性，不是产物功能。断言无实物 = 报告准确性类，按 §6 当场原位修正
+  + 独立 Ruling。
 - 不加无具体理由的开放指令（"检查所有用法"类）。
 - ⚠️ **cannot-verify 项**（reviewer 报"从变更包无法验证"）：不阻塞审查，
   但编排者必须逐条自解后才许标完成——编排者持有 reviewer 没有的跨任务
@@ -305,7 +325,11 @@ context——工件走文件。）
 - **报告准确性类**（来源标签 = 报告准确性）→ 不 defer：当场原位修正
   report（把值改对），并记独立一条 ledger Ruling（启用过程日志时另记
   偏离恢复 类条目）——report 是终审与判读的证据底座，失真承重，修复
-  窗口不过夜；产物本体不动，无需 scoped 重审。
+  窗口不过夜；产物本体不动，无需 scoped 重审。**防线**（exec-forge
+  1.6.3 同源补齐）：写「已提交/已推送/已写入 X」类陈述前，X 动作必须
+  **已发生**且有可指档案（commit hash / grep 锚 / 文件实文）；动作未做的
+  先做再写——「先写后做」在报告里与虚称不可区分（实证 2026-09-23
+  AeroFold U-M1-06 报告虚称 runbook 已同步，独立审查 Major 抓获）。
 - **plan-mandated / 与 plan 文本冲突的发现** → 编排者裁定（Spec 为绑定
   权威、plan 是其论证），ruling 记 ledger 后才行动；不许因 plan 要求而
   静默驳回，也不许派与 plan 矛盾的修复而无 ruling 记录。

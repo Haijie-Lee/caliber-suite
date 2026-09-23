@@ -2,7 +2,7 @@
 name: exec-forge
 description: "Use when executing an ML/L-level implementation plan whose tasks are predominantly non-coding (文档/配置/调研/操作) or the workspace has no git — caliber 阶段 4 非 coding 主场执行引擎（coding 归兄弟引擎 caliber:coding-forge）：plan 期预分配混合执行编排（执行者×审查者×形态）、routing.yaml 驱动注入两档、逐任务审查门、四状态契约、ledger 断点恢复、过程日志契约（动作级留痕）。中文触发：执行 plan、非代码任务派发、混合执行、执行编排、subagent 派工、阶段 4"
 metadata:
-  version: "1.7.0"
+  version: "1.7.1"
   source: distilled-from-practice
 ---
 
@@ -16,6 +16,7 @@ caliber:coding-forge——
 v1.6.1（2026-09-20）：ledger 节补 plan 期台账续写注 + §输入节两处同源括注改中性（caliber v1.16.0 台账前置联动）。
 v1.6.2（2026-09-22）：终审评估 loop 防静默悬挂回写（与 coding-forge 1.0.2 同源双改；实证：2026-09-22 AeroFold U-M1-02/03/04 三单元终审 31 条 deferred minor 停在 accept-defer 分类即被当终态、静默悬挂，当晚批量补账）——§6 Minor 出口半句改完整指向；§终审加「终审前对账清单」机械闸 + new-minors 声明行与恒等式 + 处置四档扩五档（新增核销档）+ 终审报告计数块与席位分离条款。
 v1.7.0（2026-09-23）：reviewer 席位链点名 exec-reviewer（§输入 schema/§5 审查门/§终审及其评估席）——班底 exec-reviewer 进包（caliber 1.18.0）联动，code-reviewer 退出本引擎审查席（编码域归 coding-forge）。
+v1.7.1（2026-09-24，trans-forge L1 复盘回写）：§3 dispatch 纪律加「禁反向泛化句」（实证：2026-09-23 trans-forge T2-F1——dispatch prompt 写「不要 git commit」与 brief C10 提交纪律矛盾，worker 跳过提交）；§4 report 契约加「产物断言证据回填」、§5 审查门加「落盘声明存在性核对」（实证：2026-09-23 金样终审 F-A——M15 报告断言双产物落盘、文件系统无实物，验证锚全绿未报警）。
 
 ## 为什么有效（理解了才会用对）
 
@@ -209,6 +210,11 @@ dispatch prompt 构成（五件 + 注入）：
   从心跳续派（不从零重派）。
 - **不贴会话史**：dispatch 描述一个任务，不是会话历史；前序摘要史禁止
   粘进 prompt。
+- **禁反向泛化句**（2026-09-24，trans-forge L1 T2-F1 实证）：brief/plan 已
+  写明提交义务（C10 类）的任务，dispatch prompt 禁写「不要 git commit」类
+  反向泛化句——worker 据此跳过 brief 明令的提交。提交纪律唯一权威 =
+  brief/编排侧；worker 的边界是「不替编排者决定何时提交」，不是被泛化句
+  豁免既有义务。
 - **记录 agentId**：dispatch 结果里的 agent 身份——fix 轮 1-3 要 resume。
 
 **注入两档**：决策与操作细则在 §任务环 step 2 ③（指令化/许可清单/
@@ -228,6 +234,10 @@ visible:false 处置/不可得 Ruling/fix 轮权限行重带），本块不复�
 许可清单任务 report 加「组件使用」字段：调用了什么 + 一处证据锚点
 （节标题/条款原文）——reviewer 独立复核锚点；未调用且无正当理由
 = spec ❌。
+产物表/路径/计数断言一律证据回填：撰写时以实时命令输出（`ls` / `test -f`
+/ `wc -l` / 计数命令）支撑每格，禁凭 brief 计划或记忆填路径——计划时态的
+动作不是完成时态的事实（2026-09-24，金样终审 F-A 实证；与 §6 防线 1.6.3
+同源分工：1.6.3 管动作陈述的时态，本条管断言的证据形态）。
 
 - **DONE** → 进 §5 审查门。
 - **DONE_WITH_CONCERNS** → 先读 concerns：涉正确性/范围 → 处理后再审；
@@ -270,6 +280,11 @@ reviewer 席位 = `caliber:exec-reviewer`（缺席退 general-purpose，caliber 
   "至多 Minor" / "plan 选了" → 停，重写 prompt。误报让它报，fix loop
   里裁定。
 - 不让 reviewer 重跑实现者已跑的验证（report 带证据）。
+- **落盘声明存在性核对**（2026-09-24，trans-forge 金样终审 F-A 实证）：report
+  产物表/「已落盘 X」类叙事断言不在审查包 diff 覆盖范围（diff 只核变更清单
+  文件）——reviewer 对每条叙事性路径/计数断言做存在性核对（`test -f` /
+  `wc -l`），与上条「不重跑验证」不冲突：验的是 report 的事实性，不是产物
+  功能。断言无实物 = 报告准确性类，按 §6 当场原位修正 + 独立 Ruling。
 - 不加无具体理由的开放指令（"检查所有用法"类）。
 - ⚠️ **cannot-verify 项**（reviewer 报"从变更包无法验证"）：不阻塞审查，
   但 controller 必须逐条自解后才许标完成——你持有 reviewer 没有的

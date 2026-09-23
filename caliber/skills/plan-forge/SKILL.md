@@ -2,7 +2,7 @@
 name: plan-forge
 description: "Use when writing a formal implementation plan document for ML/L-level tasks — caliber ML/L 级阶段 2 自动路由；especially when the plan will be executed verbatim by a less-capable executor."
 metadata:
-  version: "1.8.0"
+  version: "1.8.1"
   source: distilled-from-practice
 ---
 
@@ -40,6 +40,11 @@ v1.8.0（2026-09-20，用户裁定）：工序 2 改调 caliber:plan-drafting—
 工序 2 下沉为 plan-drafting 原生结构，本 skill 保留选材/锻打/准出/成型
 四道；checklists.md 工序 2 节移交 plan-drafting 自查清单（本文件留指针）；
 收尾调用方关系 MS 行改写（MS 不经本 skill）。
+v1.8.1（2026-09-24，trans-forge L1 复盘回写）：工序 3.5 加显式放行判据——
+fresh 闸口发现数不收敛于零是机制属性，判据 = 无结构级新发现（替代「零
+发现」默认预期）；checklists 视角 5 加验证锚两查（写入清单↔验证锚一一
+对应、条件-动作对动作分支独立验证；实证：2026-09-23 金样终审 F-A，双
+产物未落盘而四锚全绿）。
 
 ## 为什么有效（理解了才会用对）
 
@@ -196,6 +201,13 @@ User Challenge 永不自动定，用户原方向为默认）。各轮 stance 与
 **发现处理**：闸口发现 = **P2 级起步**（影响面天然全局）→ 回工序 2 修补 →
 重过闸口一次；再失败 = 结构性问题，**停**，用户裁定（贴两轮闸口报告作
 证据——与轮 3 不收敛同出口语义）。
+
+**放行判据**（2026-09-24，trans-forge L1 实证）：fresh 闸口发现数不收敛于
+零是机制属性，非质量缺陷——每次新 fresh 视角都可能照出新 P2，为「零发现」
+空转轮次无收益。放行判据 = **无结构级新发现**：发现均落在三问既有类别内、
+属可修补的落点/事实级 → 修复后直通工序 4；新缺陷类别、前提级断裂、承诺
+变更（WHAT 级）= 结构级 → 回工序 2。（实证：2026-09-23 trans-forge L1
+两轮闸口后重跑仍获 2 项 P2，用户裁定放行——写成显式判据，省一轮裁定。）
 
 **审计**：闸口报告追加进 `AUDIT_PATH` 独立节（不占轮次行）；plan 末尾
 总结行的发现数标注闸口来源。
