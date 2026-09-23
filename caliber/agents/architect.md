@@ -68,7 +68,7 @@ injectAgentsMd: true
 
 ### 步骤 6: 移交执行
 
-报告末尾给出移交建议：哪些步骤适合委派给 coder、哪些需要 ops-operator、是否有必须先回答的待确认问题。
+报告末尾给出移交建议：哪些步骤适合委派给 coder、哪些需要 executor、是否有必须先回答的待确认问题。
 
 ## 硬约束
 
@@ -137,5 +137,5 @@ injectAgentsMd: true
 - 回滚策略：[如有]
 
 ## 移交建议
-- [步骤 X~Y → 建议委派给 coder / ops-operator / ...]
+- [步骤 X~Y → 建议委派给 coder / executor / ...]
 ```

@@ -2,7 +2,7 @@
 name: exec-forge
 description: "Use when executing an ML/L-level implementation plan whose tasks are predominantly non-coding (文档/配置/调研/操作) or the workspace has no git — caliber 阶段 4 非 coding 主场执行引擎（coding 归兄弟引擎 caliber:coding-forge）：plan 期预分配混合执行编排（执行者×审查者×形态）、routing.yaml 驱动注入两档、逐任务审查门、四状态契约、ledger 断点恢复、过程日志契约（动作级留痕）。中文触发：执行 plan、非代码任务派发、混合执行、执行编排、subagent 派工、阶段 4"
 metadata:
-  version: "1.6.2"
+  version: "1.7.0"
   source: distilled-from-practice
 ---
 
@@ -15,6 +15,7 @@ caliber:coding-forge——
 两引擎按 §何时使用 路由，不竞争同一触发。
 v1.6.1（2026-09-20）：ledger 节补 plan 期台账续写注 + §输入节两处同源括注改中性（caliber v1.16.0 台账前置联动）。
 v1.6.2（2026-09-22）：终审评估 loop 防静默悬挂回写（与 coding-forge 1.0.2 同源双改；实证：2026-09-22 AeroFold U-M1-02/03/04 三单元终审 31 条 deferred minor 停在 accept-defer 分类即被当终态、静默悬挂，当晚批量补账）——§6 Minor 出口半句改完整指向；§终审加「终审前对账清单」机械闸 + new-minors 声明行与恒等式 + 处置四档扩五档（新增核销档）+ 终审报告计数块与席位分离条款。
+v1.7.0（2026-09-23）：reviewer 席位链点名 exec-reviewer（§输入 schema/§5 审查门/§终审及其评估席）——班底 exec-reviewer 进包（caliber 1.18.0）联动，code-reviewer 退出本引擎审查席（编码域归 coding-forge）。
 
 ## 为什么有效（理解了才会用对）
 
@@ -68,7 +69,7 @@ ML/L 级阶段 4 入口，按 plan 任务性质画像分布选引擎：
 - **执行者**：dispatch 时 = agent_type 链（caliber §动态组合 2b 映射表，
   去前缀匹配取首个在场者，全缺席退 general-purpose）；inline 时 = 主线程。
 - **审查者**：任何形态都 **≠ 执行者上下文**；inline 任务完成后必派独立
-  reviewer（制度化补审门，防 controller 自审跳过）。
+  reviewer（制度化补审门，防 controller 自审跳过）；席位 = `caliber:exec-reviewer`（缺席退 general-purpose，2b 链）。
 - **注入档**：`指令化` / `许可清单` / `无`（决策见 §任务环 step 2 ③；
   ledger 组合行对 inline 任务记 N/A——主线程无需注入档）。
 - **领域组件**：路由表命中（候选）；plan-forge ≥1.5.0 工序 4 彩排后经编排者
@@ -240,7 +241,7 @@ visible:false 处置/不可得 Ruling/fix 轮权限行重带），本块不复�
 
 ### 5. 审查门（每任务，不可跳过）
 
-reviewer 输入（全走文件路径）：
+reviewer 席位 = `caliber:exec-reviewer`（缺席退 general-purpose，caliber §动态组合 2b 链；fresh 独立上下文 ≠ 执行者）。reviewer 输入（全走文件路径）：
 1. brief（同一份）；
 2. report 文件；
 3. **审查包** `<ws>/task-<N>-review.md`：
@@ -302,7 +303,11 @@ reviewer 输入（全走文件路径）：
 - **报告准确性类**（来源标签=报告准确性，1.5.0）→ 不 defer：当场原位修正
   report（把值改对），并记独立一条 ledger Ruling（启用过程日志时另记
   偏离恢复 类条目）——report 是终审与判读的证据底座，失真承重，修复窗口
-  不过夜；产物本体不动，无需 scoped 重审。
+  不过夜；产物本体不动，无需 scoped 重审。防线（1.6.3）：写「已写入/已
+  同步/已提交 X」类陈述前，X 动作必须**已发生**且有可指档案（commit
+  hash / grep 锚 / 文件实文）；动作未做的先做再写——「先写后做」在报告里
+  与虚称不可区分（实证 2026-09-23 AeroFold U-M1-06 T3 报告虚称 runbook
+  已同步，独立审查 Major 抓获，实体补做后复审放行）。
 - **plan-mandated / 与 plan 文本冲突的发现** → controller 裁定（Spec 为
   绑定权威、plan 是其论证），ruling 记 ledger 后才行动；不许因 plan
   要求而静默驳回，也不许派与 plan 矛盾的修复而无 ruling 记录。
@@ -462,7 +467,7 @@ deferred triage 均归 终审 类，不归 审查门（v5 实证：终审误归 
 
 ## 终审（final review）
 
-全任务完成后：fresh 独立 agent 全产物终审（审查包 = 全变更合并；reviewer
+全任务完成后：fresh 独立 agent 全产物终审（席位 = `caliber:exec-reviewer`，缺席退 general-purpose，2b 链；审查包 = 全变更合并；reviewer
 prompt 同含 §5 来源标签条与内容级检测许可条）+ 指向 ledger
 deferred/parked 行让其分类（triage 处置权属见下「Minor 处置评估 loop」段）；另核 ledger 组合行逐任务存在性（缺席 =
 组合决策步被跳过）与时序（补记/迟记 = 时序漂移，§任务环 step 2 ④
@@ -487,7 +492,7 @@ Critical/Important 进 findings 的不计）与 `deferred-seen: <M>`（逐条
 终审报告返回后、fix dispatch 派出前，编排者装配评估包（留存逐条原文 + 来源标签 +
 plan 概要 + 任务依赖关系 + 判据清单 + 上下文指针 report/diff 路径；来源
 标签漏标/误标时编排者可补标——评估包内留痕原标签 + 补标理由，v9 M2 实证），
-**单次 dispatch `caliber:code-reviewer`**（缺席退 general-purpose，2b 链）
+**单次 dispatch `caliber:exec-reviewer`**（缺席退 general-purpose，2b 链）
 按判据逐条裁定五档：
 - **当场修复**：满足任一——① 修复工作量小且价值高（单点文件级改动可清零、
   收益用户可感知）；② 全局重要性高于单次 review 呈现（跨任务承重 / 阻塞

@@ -2,7 +2,7 @@
 name: plan-drafting
 description: "Use when drafting a plan document at MS/ML/L level — caliber 阶段 2（MS）与 plan-forge 工序 2（ML/L）自动路由；契约矩阵先行、判断前置、验证内建，六道锻造原生结构。中文触发：写 plan、起草计划、制坯、计划文档"
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
   source: distilled-from-practice
 ---
 
@@ -11,6 +11,7 @@ metadata:
 全级 plan 起草引擎。调用点 = caliber MS 级阶段 2 直调（轻量档）与 plan-forge
 工序 2（ML/L 完整档）；MS 级输入 = 阶段 1 方案确认记录，ML/L 级输入 = CONTEXT
 + plan-forge 工序 1 选材产物。
+v1.1.0（2026-09-23）：预分配表 schema 审查者行加席位链注记（exec-reviewer 优先）——与 exec-forge 1.7.0 §输入同源双改。
 
 ## 为什么有效
 
@@ -117,7 +118,7 @@ Review Focus（≤5 条，空节 = 「查过且没有」）
 - **执行者**：dispatch 时 = agent_type 链（caliber §动态组合 2b 映射表，
   去前缀匹配取首个在场者，全缺席退 general-purpose）；inline 时 = 主线程。
 - **审查者**：任何形态都 **≠ 执行者上下文**；inline 任务完成后必派独立
-  reviewer（制度化补审门，防 controller 自审跳过）。
+  reviewer（制度化补审门，防 controller 自审跳过）；席位 = `caliber:exec-reviewer`（缺席退 general-purpose，2b 链）。
 - **注入档**：`指令化` / `许可清单` / `无`（决策见 §任务环 step 2 ③；
   ledger 组合行对 inline 任务记 N/A——主线程无需注入档）。
 - **领域组件**：路由表命中（候选）；plan-forge ≥1.5.0 工序 4 彩排后经编排者

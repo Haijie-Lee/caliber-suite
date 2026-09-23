@@ -1,8 +1,8 @@
 # caliber — ZCode 工程纪律插件
 
-> 最后更新：2026-09-22
+> 最后更新：2026-09-23
 
-caliber 是一个 ZCode 插件（以 git 仓库形态作为 marketplace 源分发），把"工程纪律"打包为 **9 个 skills + 4 个工作流 hooks + 10 个 agents**：skills 让流程严谨度随任务复杂度缩放，hooks 在关键时刻把纪律自动递到 agent 眼前。
+caliber 是一个 ZCode 插件（以 git 仓库形态作为 marketplace 源分发），把"工程纪律"打包为 **9 个 skills + 4 个工作流 hooks + 11 个 agents**：skills 让流程严谨度随任务复杂度缩放，hooks 在关键时刻把纪律自动递到 agent 眼前。
 
 ## 它解决什么问题
 
@@ -30,20 +30,21 @@ caliber 的思路：前两类靠 hooks 在事件点上**自动注入**（不依�
 | `plan-drafting` | 全级 plan 起草引擎，MS 轻量/ML 标准/L 完整三档模板，契约矩阵先行 |
 | `deep-probe` | 澄清对齐引擎，L 级全仪式/MS·ML 轻量档（ML 双轨：方案挑战者独立生成 + 对照表），收口对齐快照 |
 
-### Agents（10 个）
+### Agents（11 个）
 
 | Agent | 一句话职责 |
 |---|---|
 | `plan-reviewer` | plan/spec 对抗性审查，ritual 声部 A 首选 |
 | `voice-b-reviewer` | plan 对抗审查声部 B 专责：纯文本内部一致性 / 回填漂移 / 修复验尸 + pre-mortem |
-| `code-reviewer` | 代码 diff 审查，引擎 reviewer 槽首选 |
+| `code-reviewer` | 代码 diff 审查，coding-forge 引擎 reviewer 槽首选 |
+| `exec-reviewer` | 非代码任务审查，exec-forge 引擎 reviewer 槽首选 |
 | `coder` | 编码实现，引擎实现槽首选 |
 | `debugger` | 疑难 bug 系统化诊断 |
 | `architect` | 需求分析与任务分解 |
 | `researcher` | 深度调研与选型 |
 | `doc-writer` | 技术文档编写 |
 | `complex-purpose` | 复杂问题分析与多步任务执行，高于 general-purpose 一档 |
-| `ops-operator` | 系统操作与安装配置 |
+| `executor` | 非代码执行（文档/配置/操作/调研），引擎实现槽首选 |
 
 agents 不绑定模型（frontmatter 无 model 键），继承 dispatch 指定模型或会话默认模型。voice-b-reviewer 的对抗价值依赖模型分化：建议在 agent 设置中为它配置与会话默认不同家族的模型 override——配好后它即成为 plan-review-ritual 声部 B 首选，无需任何外部 CLI。
 

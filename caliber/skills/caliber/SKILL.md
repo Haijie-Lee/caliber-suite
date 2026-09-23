@@ -2,7 +2,7 @@
 name: caliber
 description: "Use when starting any engineering task — feature, bugfix, refactor, or change request — before touching code. Not for pure Q&A, research, or open-ended discussion."
 metadata:
-  version: "1.17.0"
+  version: "1.18.0"
   source: distilled-from-practice
 ---
 
@@ -38,6 +38,7 @@ v1.16.0（2026-09-20，用户裁定）：体系自研化——MS 级出轻量 pl
 停止点工艺四条（问必带注/纠正响应协议/前提清单交付/挂起清单配铁律 5）；
 scout 黑名单扩六件。接续中的旧 MS 任务可按旧语义完成；任务台账前置——plan 落盘即开账（.caliber/exec/<plan-stem>/progress.md），新增铁律 8 台账先于记忆
 v1.17.0（2026-09-21，用户裁定）：阶段 1 方案探索双轨化——deep-probe 方案挑战者机制（道层收口后后台派遣、信息隔离独立生成（带思考角度错位纪律）、对照表并入方案确认停止点；ML/L 必派、MS 单轨，M 级子档未定前按 ML 派遣）；2b 映射表加方案独立生成行（席位链 architect → plan-reviewer → general-purpose）。
+v1.18.0（2026-09-23，用户裁定）：班底扩 11——新增 exec-reviewer（exec-forge reviewer 槽/终审评估席首选）、ops-operator 改名扩责 executor（非代码实现席，与 coder 对应）；2b 表审查行拆 coding/非代码两行、实现行拆 coding/非代码两行、系统操作行并入 executor 行。
 
 ## 为什么有效（理解了才会用对）
 
@@ -246,18 +247,19 @@ exec-forge 路径的消费钩子 = caliber:exec-forge §任务环「组合决策
 | 画像/任务信号 | 优先链（取首个在场者，去前缀匹配） | 兜底 |
 |---|---|---|
 | 只读搜索/定位（fan-out 扫文件，结论导向） | `Explore` | general-purpose |
-| 代码 diff 审查（引擎 reviewer 槽） | `code-reviewer` | general-purpose |
+| 代码 diff 审查（coding-forge reviewer 槽/代码任务） | `code-reviewer` | general-purpose |
+| 非代码任务审查（exec-forge reviewer 槽/终审评估席） | `exec-reviewer` | general-purpose |
 | plan 对抗审查（ritual 声部 A；MS 级阶段 3 单派遣亦消费） | `plan-reviewer`（详见 ritual Step 2 选择链与双形态 prompt） | general-purpose |
-| 实现（机械/集成 dispatch） | `coder` → `general-purpose` | general-purpose |
+| 编码实现（机械/集成 dispatch） | `coder` → `general-purpose` | general-purpose |
+| 非代码实现（exec-forge 实现席：文档/配置/操作/调研，机械/集成 dispatch） | `executor` → `general-purpose` | general-purpose |
 | 计划/拆解/需求分析 | `architect` → `code-architect` | general-purpose |
 | 方案独立生成（deep-probe 双轨挑战轨；硬性要求零参与 fresh 上下文） | `architect` → `plan-reviewer` → `general-purpose` | general-purpose |
 | 疑难 bug 诊断（根因不明类） | `debugger` | general-purpose |
 | 深度调研/选型 | `researcher` | general-purpose |
 | 文档撰写/手册/报告（dispatch 形态时） | `doc-writer` | general-purpose |
-| 系统操作/安装配置/进程服务（dispatch 形态时） | `ops-operator` | general-purpose |
 | 无信号 / 拿不准 | `general-purpose` | — |
 
-注：文档/系统操作类任务缺省收回主线程 inline（§动态组合 骨架：配置、文档→TDD轻验证）；上两行在编排层决定 dispatch 时生效。
+注：文档类任务缺省收回主线程 inline（§动态组合 骨架：配置、文档→TDD轻验证）；executor 行限 exec-forge 实现席，非引擎场景的文档撰写 dispatch 仍用 doc-writer 行；doc-writer 行在编排层决定 dispatch 时生效。
 
 纪律：
 - **只读信号不明确 → 一律给全工具 type**：权限错配（只读 agent 干写活）比选择保守更危险。
