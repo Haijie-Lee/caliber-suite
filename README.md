@@ -1,6 +1,6 @@
 # caliber — ZCode 工程纪律插件
 
-> 最后更新：2026-09-23
+> 最后更新：2026-09-24
 
 caliber 是一个 ZCode 插件（以 git 仓库形态作为 marketplace 源分发），把"工程纪律"打包为 **9 个 skills + 4 个工作流 hooks + 11 个 agents**：skills 让流程严谨度随任务复杂度缩放，hooks 在关键时刻把纪律自动递到 agent 眼前。
 
@@ -28,7 +28,7 @@ caliber 的思路：前两类靠 hooks 在事件点上**自动注入**（不依�
 | `exec-forge` | ML/L 阶段 4 非 coding 执行引擎：plan 期预分配混合执行编排、routing.yaml 驱动注入两档、逐任务审查门、ledger 断点恢复 |
 | `coding-forge` | ML/L 阶段 4 编码执行引擎：brief 文件化、双 verdict 审查门、TDD 证据强制、编辑纪律注入、ledger 断点恢复（兄弟双引擎：coding + git 场景归本引擎） |
 | `plan-drafting` | 全级 plan 起草引擎，MS 轻量/ML 标准/L 完整三档模板，契约矩阵先行 |
-| `deep-probe` | 澄清对齐引擎，L 级全仪式/MS·ML 轻量档（ML 双轨：方案挑战者独立生成 + 对照表），收口对齐快照 |
+| `deep-probe` | 澄清对齐引擎，L 级全仪式/MS·ML 轻量档（ML 双轨：方案挑战者独立生成 + 对照表），收口对齐快照；开创性档方案空间勘探（v1.2.0 起） |
 
 ### Agents（11 个）
 

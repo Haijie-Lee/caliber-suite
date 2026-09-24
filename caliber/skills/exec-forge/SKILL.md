@@ -2,7 +2,7 @@
 name: exec-forge
 description: "Use when executing an ML/L-level implementation plan whose tasks are predominantly non-coding (文档/配置/调研/操作) or the workspace has no git — caliber 阶段 4 非 coding 主场执行引擎（coding 归兄弟引擎 caliber:coding-forge）：plan 期预分配混合执行编排（执行者×审查者×形态）、routing.yaml 驱动注入两档、逐任务审查门、四状态契约、ledger 断点恢复、过程日志契约（动作级留痕）。中文触发：执行 plan、非代码任务派发、混合执行、执行编排、subagent 派工、阶段 4"
 metadata:
-  version: "1.7.1"
+  version: "1.7.2"
   source: distilled-from-practice
 ---
 
@@ -17,6 +17,7 @@ v1.6.1（2026-09-20）：ledger 节补 plan 期台账续写注 + §输入节两�
 v1.6.2（2026-09-22）：终审评估 loop 防静默悬挂回写（与 coding-forge 1.0.2 同源双改；实证：2026-09-22 AeroFold U-M1-02/03/04 三单元终审 31 条 deferred minor 停在 accept-defer 分类即被当终态、静默悬挂，当晚批量补账）——§6 Minor 出口半句改完整指向；§终审加「终审前对账清单」机械闸 + new-minors 声明行与恒等式 + 处置四档扩五档（新增核销档）+ 终审报告计数块与席位分离条款。
 v1.7.0（2026-09-23）：reviewer 席位链点名 exec-reviewer（§输入 schema/§5 审查门/§终审及其评估席）——班底 exec-reviewer 进包（caliber 1.18.0）联动，code-reviewer 退出本引擎审查席（编码域归 coding-forge）。
 v1.7.1（2026-09-24，trans-forge L1 复盘回写）：§3 dispatch 纪律加「禁反向泛化句」（实证：2026-09-23 trans-forge T2-F1——dispatch prompt 写「不要 git commit」与 brief C10 提交纪律矛盾，worker 跳过提交）；§4 report 契约加「产物断言证据回填」、§5 审查门加「落盘声明存在性核对」（实证：2026-09-23 金样终审 F-A——M15 报告断言双产物落盘、文件系统无实物，验证锚全绿未报警）。
+v1.7.2（2026-09-24；源自 2026-09-21 first-l-grade §4.1 grep 定界纪律）：§6 fix loop 加「修复预案落点现盘定界」纪律（禁凭 plan/记忆枚举；实证：2026-09-20 T1-F1 预案「四处同改」实为五处，第五处靠修复后残留 grep 抓回）。
 
 ## 为什么有效（理解了才会用对）
 
@@ -338,6 +339,7 @@ reviewer 席位 = `caliber:exec-reviewer`（缺席退 general-purpose，caliber 
   路径、未决 findings 与框架句："前一个实现者尝试了 <N> 次；现在归你。
   读 report 文件了解已试过的。"三轮 resume 不收敛 = 实现者看不见自己
   的问题，换眼一步到位。
+- **修复预案落点现盘定界**：修复涉及多处同改时，落点清单必须**现盘 grep 生成**（禁凭 plan/记忆枚举——实证 2026-09-20 T1-F1「四处同改」实为五处，第 5 处靠修复后残留 grep 抓回）；修复后跑残留 grep 与清单互证，残留命中 = 漏改。
 - **每轮必过 scoped 重审**：只判每条 finding ADDRESSED / NOT ADDRESSED +
   修复变更内的新破坏（新 Critical/Important 进未决清单；范围外观察记
   deferred minor，不延长循环）。重审包 = 上轮所见之后的变更（新快照

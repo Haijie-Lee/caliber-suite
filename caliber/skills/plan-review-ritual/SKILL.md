@@ -2,7 +2,7 @@
 name: plan-review-ritual
 description: "Use when you finish writing any implementation plan, spec, or design doc and are about to hand it to execution — especially when the executor is less capable."
 metadata:
-  version: "2.6.3"
+  version: "2.6.4"
   source: distilled-from-practice
 ---
 
@@ -25,6 +25,7 @@ v2.6.1-2.6.2（2026-09-15）：去强弱模型档措辞换词（执行者越弱 
 能力越弱 ROI 越大 等 4 处；litmus 验收段改「较弱执行者」）；2.6.2 修
 frontmatter description 英文残留 "weaker model"（独立复核抓取）。
 v2.6.3（2026-09-20）：调用方关系 MS 行改写（MS 退出 ritual 消费）。
+v2.6.4（2026-09-24）：Step 4 修复纪律加落点现盘定界指针（canonical = exec-forge §6 fix loop「修复预案落点现盘定界」；first-l-grade §4.1 grep 定界纪律）。
 
 ## 为什么有效（不要跳过，理解了才会用对）
 
@@ -236,7 +237,7 @@ CONFIRMED = **无条件修**；SINGLE 按置信度进裁定队列；critical 级
 
 ## Step 4 — 落修复 + 门前验证 + 较弱执行者验收
 
-1. 修复全部改进 **plan 文件本身**（不是另写新文档）。
+1. 修复全部改进 **plan 文件本身**（不是另写新文档）。多处同改的落点清单**现盘 grep 生成**，禁凭记忆/plan 枚举（canonical 条款 = exec-forge §6 fix loop「修复预案落点现盘定界」）。
 2. **门前验证**（验收前逐项核对，缺一补一，最多 2 轮）：
    - [ ] 审计表行数 = 发现总数（无静默丢弃）
    - [ ] Mechanical 修复已回写 plan（抽查 diff）
