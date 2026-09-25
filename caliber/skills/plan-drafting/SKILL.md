@@ -11,8 +11,7 @@ metadata:
 全级 plan 起草引擎。调用点 = caliber MS 级阶段 2 直调（轻量档）与 plan-forge
 工序 2（ML/L 完整档）；MS 级输入 = 阶段 1 方案确认记录，ML/L 级输入 = CONTEXT
 + plan-forge 工序 1 选材产物。
-v1.1.0（2026-09-23）：预分配表 schema 审查者行加席位链注记（exec-reviewer 优先）——与 exec-forge 1.7.0 §输入同源双改。
-v1.1.1（2026-09-24，trans-forge L1 复盘回写）：自查清单「验证内建」加两条——写入清单↔验证锚一一对应、条件-动作对动作分支独立验证（实证：2026-09-23 金样终审 F-A，双产物未落盘而验证锚全绿）。
+> 变更日志归工作仓 `docs/skills-changelog.md`（skill 文件不携带 changelog——2026-09-25 用户裁定：log 只记工作仓，不进发布仓）。
 
 ## 为什么有效
 

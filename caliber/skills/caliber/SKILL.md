@@ -2,7 +2,7 @@
 name: caliber
 description: "Use when starting any engineering task — feature, bugfix, refactor, or change request — before touching code. Not for pure Q&A, research, or open-ended discussion."
 metadata:
-  version: "1.19.0"
+  version: "1.20.0"
   source: distilled-from-practice
 ---
 
@@ -12,34 +12,7 @@ metadata:
 复杂任务全剂量。编排自研套件（coding-forge + exec-forge + plan-forge + plan-drafting + deep-probe）与
 plan-review-ritual；
 依赖缺失时读 `fallback.md` 对应章节兜住底线纪律。
-v1.11（2026-09-14）：阶段 4 引擎路由（代码主导+git → coding-forge，其余 →
-caliber:exec-forge）+ 阶段 4 入口执行编排批量确认停止点；画像性质枚举扩 8 值。
-v1.11.2（2026-09-15）：组合决策消费钩子指针（→ exec-forge §任务环组合
-决策步，P1）+ 接续任务路由新鲜度检查（P2）+ routing.yaml `visible_count`
-（P3）+ scout 空表举证（P4）+ 组合行格式扩 注入档/命中 字段（P5 注记随
-exec-forge §模型轴）。
-v1.12.0（2026-09-15，用户裁定去 Claude 遗产词汇）：「实现/审查分席缺省」
-替代强弱模型档（分席价值=上下文隔离承载，Claude 侧档位映射注记保留其
-功能）；注入档=策略选择（指令化=默认、许可清单须显式授予）；dispatch
-三轴改选择轴 agent_type×prompt；scout/彩排派遣去 model= 参数。
-（1.11.3 并入：接续条款补无 visible_count 字段跳过。）
-v1.12.1（2026-09-15，独立复核修复）：组合行占位符对齐 exec-forge §组合行
-（model=<平台基底>）。
-v1.13.0（2026-09-16，用户裁定）：ML 级阶段 3 接入 plan-forge 工序 4 真实彩排（与 L 同构全量；单派遣两阶段 = confusion-hunt + 技能消费映射）；skill 消费从「候选非绑定、dispatch 边界现决」升级为「预绑定+偏离留痕」（彩排映射经编排者裁定回写 plan 为默认消费，dispatch 边界偏离记 ledger Ruling，终审闭环核查——执行期遗忘 = 实证失败模式 A2）。
-v1.14.0（2026-09-16，用户裁定）：阶段 6 通用注——docs/known-issues.md
-重访触发命中项的显式处置义务（exec-forge 1.5.0 登记端的消费闭环；与
-plan-forge 1.6.0 工序 1 选材第 5 条同为登记表消费侧）。
-v1.15.0（2026-09-19，coding-forge 自研）：编码主线切换自研 coding-forge——
-外部 subagent 编码引擎引用全量替换为 caliber:coding-forge（依赖表/阶段表/引擎路由/形态名/四状态注/
-预分配表注全量联动；fallback.md 节标题同步改写指针）。
-v1.16.0（2026-09-20，用户裁定）：体系自研化——MS 级出轻量 plan 文档
-（.caliber/plans/）+ 快速自查与 plan-reviewer 独立审查两道；计划起草与澄清
-工序全量切换为原生实现（plan-drafting / deep-probe）；
-停止点工艺四条（问必带注/纠正响应协议/前提清单交付/挂起清单配铁律 5）；
-scout 黑名单扩六件。接续中的旧 MS 任务可按旧语义完成；任务台账前置——plan 落盘即开账（.caliber/exec/<plan-stem>/progress.md），新增铁律 8 台账先于记忆
-v1.17.0（2026-09-21，用户裁定）：阶段 1 方案探索双轨化——deep-probe 方案挑战者机制（道层收口后后台派遣、信息隔离独立生成（带思考角度错位纪律）、对照表并入方案确认停止点；ML/L 必派、MS 单轨，M 级子档未定前按 ML 派遣）；2b 映射表加方案独立生成行（席位链 architect → plan-reviewer → general-purpose）。
-v1.18.0（2026-09-23，用户裁定）：班底扩 11——新增 exec-reviewer（exec-forge reviewer 槽/终审评估席首选）、ops-operator 改名扩责 executor（非代码实现席，与 coder 对应）；2b 表审查行拆 coding/非代码两行、实现行拆 coding/非代码两行、系统操作行并入 executor 行。
-v1.19.0（2026-09-24，用户裁定）：Step 1 方案维加开创性信号子判据（明示原创/一跳无先例/常规路线被约束排除——判据附证据；agent 自动判定 + 用户前置声明覆盖；命中 → deep-probe 开创性档）；2b 映射表加证据口径审计行（evidence-auditor → exec-reviewer → general-purpose）、方案独立生成行扩注（空间映射与深入展开复用）；Step 0 deep-probe 行用途补开创性档。
+> 变更日志归工作仓 `docs/skills-changelog.md`（skill 文件不携带 changelog——2026-09-25 用户裁定：log 只记工作仓，不进发布仓）。
 
 ## 为什么有效（理解了才会用对）
 
@@ -133,6 +106,7 @@ dispatch 派发）；S/MS 无 dispatch 边界，主线程查表纪律实测失�
 2. **预提取**（主线程执行，侦察 agent 不读大文件）：
    - 可见组件清单：**主源 = 当前会话可用 skill 清单**（系统提示注入的 name + 文件路径，即"可加载"全集；注意注入清单**不含 description**，2026-09-14 实证）——以清单路径为输入跑 `python` 批量预提取（逐路径读 SKILL.md frontmatter 取 name+description 首行）；**补充源 = 磁盘扫描** `~/.zcode/skills/`、`~/.agents/skills/`、`~/.claude/skills/`（存在才扫，发现未加载组件供 visible:false 注入式激活，磁盘扫描实际获得的真实路径是合法 path 来源）；预提取输出**分两区**：主源区（会话清单条目：名称+简述）与补充源区（磁盘扫描条目：每条带 `[磁盘扫描]` 前缀 + 实得文件路径），填入 `{VISIBLE_COMPONENTS}` 槽时保持分区与标注原样——前缀是 scout 步骤 4 的 visible 判定依据，**不得丢弃**（2026-09-14 轮 3 pre-mortem 实证：无标注则磁盘组件被误标 visible:true 丢路径，注入式激活静默失效）；
      **剔除体系黑名单**（caliber 骨架无条件编排组件，与 scout prompt 排除清单同源）：`caliber`、`plan-forge`、`plan-review-ritual`、`plan-drafting`、`deep-probe`、`coding-forge`、`exec-forge`、`init-docs`、`update-docs`、经验固化组件（名称/简述含 learnings、经验固化、skill 固化 类字样的任一组件）——入表纯冗余且挤占路由名额；
+     UI 信号注记（2026-09-25）：UI 信号判定句见 plan-forge 工序 1 第 6 条（单一真源，本节不复制）。
    - 遥测 top-30：`~/.claude.json` 存在才执行下列命令；不存在（纯 ZCode 环境无对应物，2026-09-14 实证）槽位填 `EMPTY`：
      `python -c "import json,os; d=json.load(open(os.path.expanduser('~/.claude.json'),encoding='utf-8'))['skillUsage']; [print(k+': '+str(v.get('usageCount',0))) for k,v in sorted(d.items(), key=lambda x: -x[1].get('usageCount',0))[:30]]"`；
    - 隐藏索引：槽位只填文件路径 `~/.claude/hidden-components-index.yaml`（外部注入插件产物；实测 ~37K tokens，2026-08-25），由侦察 agent 自行 Read；文件不存在则槽位填 `EMPTY` 并继续（提示可跑该插件脚本生成）。
@@ -252,6 +226,7 @@ exec-forge 路径的消费钩子 = caliber:exec-forge §任务环「组合决策
 | 只读搜索/定位（fan-out 扫文件，结论导向） | `Explore` | general-purpose |
 | 代码 diff 审查（coding-forge reviewer 槽/代码任务） | `code-reviewer` | general-purpose |
 | 非代码任务审查（exec-forge reviewer 槽/终审评估席） | `exec-reviewer` | general-purpose |
+| UI 视觉审查（基线审查/对拍判定/残余维度） | `visual-reviewer` → `exec-reviewer` → `general-purpose` | general-purpose |
 | plan 对抗审查（ritual 声部 A；MS 级阶段 3 单派遣亦消费） | `plan-reviewer`（详见 ritual Step 2 选择链与双形态 prompt） | general-purpose |
 | 编码实现（机械/集成 dispatch） | `coder` → `general-purpose` | general-purpose |
 | 非代码实现（exec-forge 实现席：文档/配置/操作/调研，机械/集成 dispatch） | `executor` → `general-purpose` | general-purpose |

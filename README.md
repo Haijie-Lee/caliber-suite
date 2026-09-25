@@ -1,8 +1,8 @@
 # caliber — ZCode 工程纪律插件
 
-> 最后更新：2026-09-24
+> 最后更新：2026-09-25
 
-caliber 是一个 ZCode 插件（以 git 仓库形态作为 marketplace 源分发），把"工程纪律"打包为 **9 个 skills + 4 个工作流 hooks + 11 个 agents**：skills 让流程严谨度随任务复杂度缩放，hooks 在关键时刻把纪律自动递到 agent 眼前。
+caliber 是一个 ZCode 插件（以 git 仓库形态作为 marketplace 源分发），把"工程纪律"打包为 **10 个 skills + 4 个工作流 hooks + 12 个 agents**：skills 让流程严谨度随任务复杂度缩放，hooks 在关键时刻把纪律自动递到 agent 眼前。
 
 ## 它解决什么问题
 
@@ -16,7 +16,7 @@ caliber 的思路：前两类靠 hooks 在事件点上**自动注入**（不依�
 
 ## 组件
 
-### Skills（9 个）
+### Skills（10 个）
 
 | 组件 | 一句话职责 |
 |---|---|
@@ -29,8 +29,9 @@ caliber 的思路：前两类靠 hooks 在事件点上**自动注入**（不依�
 | `coding-forge` | ML/L 阶段 4 编码执行引擎：brief 文件化、双 verdict 审查门、TDD 证据强制、编辑纪律注入、ledger 断点恢复（兄弟双引擎：coding + git 场景归本引擎） |
 | `plan-drafting` | 全级 plan 起草引擎，MS 轻量/ML 标准/L 完整三档模板，契约矩阵先行 |
 | `deep-probe` | 澄清对齐引擎，L 级全仪式/MS·ML 轻量档（ML 双轨：方案挑战者独立生成 + 对照表），收口对齐快照；开创性档方案空间勘探（v1.2.0 起） |
+| `ui-forge` | UI 视觉正确性装备库：视觉基线提取 → 阈值对拍门 → 豁免两段式 → 视觉审查席位，设计稿与实现的一致性机器判定（v1.6.0 起） |
 
-### Agents（11 个）
+### Agents（12 个）
 
 | Agent | 一句话职责 |
 |---|---|
@@ -38,6 +39,7 @@ caliber 的思路：前两类靠 hooks 在事件点上**自动注入**（不依�
 | `voice-b-reviewer` | plan 对抗审查声部 B 专责：纯文本内部一致性 / 回填漂移 / 修复验尸 + pre-mortem |
 | `code-reviewer` | 代码 diff 审查，coding-forge 引擎 reviewer 槽首选 |
 | `exec-reviewer` | 非代码任务审查，exec-forge 引擎 reviewer 槽首选 |
+| `visual-reviewer` | UI 渲染产物与设计稿的一致性视觉审查：基线审查 / 对拍判定 / 残余维度，不读实现代码 |
 | `coder` | 编码实现，引擎实现槽首选 |
 | `debugger` | 疑难 bug 系统化诊断 |
 | `architect` | 需求分析与任务分解 |
@@ -79,7 +81,7 @@ caliber 的 dispatch 选择链按任务信号自动选用；同名用户级 agen
 
 - **hooks 全自动生效**，无需任何调用。
 - **订阅机制 = 声明即数据**：工程根存在 `CONTEXT.md`，开工即自动注入；存在 `docs/learnings/INDEX.md`，learnings 相关 hooks 自动订阅。没有这些文件的工程**零打扰**——不需要任何配置开关。新工程可用 `init-docs` 一键建立种子文件；已有文档积累的工程可用 `update-docs` 回填索引与 CONTEXT。ML/L 级非 coding 任务的阶段 4 执行由 `exec-forge` 接管（执行编排预分配 + 逐任务审查门）。
-- **skills 按需调用**：`caliber:caliber` / `caliber:plan-forge` / `caliber:plan-review-ritual` / `caliber:init-docs` / `caliber:update-docs` / `caliber:exec-forge` / `caliber:coding-forge` / `caliber:plan-drafting` / `caliber:deep-probe`，或用裸名 `caliber` / `plan-forge` / `plan-review-ritual` / `init-docs` / `update-docs` / `exec-forge` / `coding-forge` / `plan-drafting` / `deep-probe`。
+- **skills 按需调用**：`caliber:caliber` / `caliber:plan-forge` / `caliber:plan-review-ritual` / `caliber:init-docs` / `caliber:update-docs` / `caliber:exec-forge` / `caliber:coding-forge` / `caliber:plan-drafting` / `caliber:deep-probe` / `caliber:ui-forge`，或用裸名 `caliber` / `plan-forge` / `plan-review-ritual` / `init-docs` / `update-docs` / `exec-forge` / `coding-forge` / `plan-drafting` / `deep-probe` / `ui-forge`。
 
 ## 更新
 

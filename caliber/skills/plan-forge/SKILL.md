@@ -2,7 +2,7 @@
 name: plan-forge
 description: "Use when writing a formal implementation plan document for ML/L-level tasks — caliber ML/L 级阶段 2 自动路由；especially when the plan will be executed verbatim by a less-capable executor."
 metadata:
-  version: "1.9.0"
+  version: "1.9.1"
   source: distilled-from-practice
 ---
 
@@ -12,41 +12,7 @@ metadata:
 不是审查机制：工序 1-2 产出 plan 初稿（编排 plan-drafting），工序 3 调
 plan-review-ritual 做对抗审查（注入五视角清单），工序 4 基线执行者字面验收。
 审查视角细目在 `checklists.md`——用到哪道工序读哪节，不预读。
-v1.2 升级：工序 3 从单轮对抗升级为 **L 级收敛循环**（逐轮锻打至收敛判据
-达标，≤3 轮，不收敛回工序 2 重锻）；工序 4 从作者脑内模拟升级为**真实彩排**
-（fresh 零背景基线 agent confusion-hunt）（2026-09-01 用户裁定）。
-2026-09-08 并入（不升版）：新增**工序 3.5 准出闸口**——收敛后、彩排前，
-凡经修复的 plan 派 fresh 独立 agent 做全量复审（goal drift / 事实再核查 /
-假设链连贯性），守护**工件收敛**；收敛判据加局限命名句。
-v1.3 升级（2026-09-14）：工序 2 新增第 6 道锻造「执行编排预分配」（非 coding
-主导或无 git 的 ML/L plan 必产预分配表，与 caliber:exec-forge 共有 schema）；
-交接节执行选项改三态（编码引擎 / exec-forge / inline；编码引擎名 v1.7.0 起为 coding-forge）；画像性质枚举扩为 8 值。
-v1.4 升级（2026-09-15，用户裁定去强弱模型档）：工序 2 预分配表 schema 删
-模型档列（9→8，与 exec-forge §输入 逐字一致）；工序 3.5/4 派遣去 model=
-参数（fresh 独立 / 零背景基线 agent）；交接「强弱模型缺省」改「实现/审查
-分席缺省」（Claude 侧档位映射注记保留其功能）。
-v1.4.1（2026-09-15，独立复核修复）：frontmatter description 英文残留
-"weaker model" 换词；补 v1.4 注记。
-v1.5.0（2026-09-16，用户裁定）：工序 4 扩展至 ML 级（ML = 工序 1-2 + 工序 4）——彩排是执行前信息最全点，ML 级 plan 同样由较弱执行者逐字执行，豁免彩排等于把最高价值的验收留给最常吃返工的级别。工序 4 升级为单派遣两阶段（Phase 1 confusion-hunt + Phase 2 技能消费映射），映射经编排者裁定以预绑定形态回写 plan（默认消费、偏离记 ledger Ruling、终审闭环核查）——执行期遗忘是实证失败模式（A2 前期编排丢失），软约束不足。
-v1.6.0（2026-09-16，用户裁定）：工序 1 选材加第 5 条「查执行期登记表」——
-docs/known-issues.md 与 docs/TODO.md 的 open/待触发项中与本 plan 同域者进
-选材输入（与 exec-forge 1.5.0 Minor 处置评估 loop 的产出端闭环）。
-v1.7.0（2026-09-19，coding-forge 自研）：交接节引擎名切换（option 1 =
-caliber:coding-forge，option 3 = coding-forge §inline TDD 骨架）；新增隔离
-模式提醒句（默认 branch / 可选 worktree）；工序 2 checklists 加任务粒度判据
-与 Review Focus 节两条清单。
-v1.8.0（2026-09-20，用户裁定）：工序 2 改调 caliber:plan-drafting——六道
-锻造（契约矩阵/判断前置/验证内建/风险登记/任务画像/执行编排预分配）随
-工序 2 下沉为 plan-drafting 原生结构，本 skill 保留选材/锻打/准出/成型
-四道；checklists.md 工序 2 节移交 plan-drafting 自查清单（本文件留指针）；
-收尾调用方关系 MS 行改写（MS 不经本 skill）。
-v1.8.1（2026-09-24，trans-forge L1 复盘回写）：工序 3.5 加显式放行判据——
-fresh 闸口发现数不收敛于零是机制属性，判据 = 无结构级新发现（替代「零
-发现」默认预期）；checklists 视角 5 加验证锚两查（写入清单↔验证锚一一
-对应、条件-动作对动作分支独立验证；实证：2026-09-23 金样终审 F-A，双
-产物未落盘而四锚全绿）。
-
-v1.9.0（2026-09-24，用户裁定；源自 2026-09-21 first-l-grade 复盘提议 1/2）：工序 3 收敛判据**涟漪分层**——生产文本层涟漪触发下一轮（保持严格）、账目层涟漪（plan 内部账目对齐，零生产文本变更）不阻断收敛、裁定表留痕；不收敛出口改**三级阶梯**（①追加一轮全量基线重审 → ②回工序 2 重锻 → ③上用户裁定降级/缩范围；实证：2026-09-20 L 级任务 G2 裁定门 + 轮 4）。
+> 变更日志归工作仓 `docs/skills-changelog.md`（skill 文件不携带 changelog——2026-09-25 用户裁定：log 只记工作仓，不进发布仓）。
 
 ## 为什么有效（理解了才会用对）
 
@@ -95,6 +61,9 @@ v1.9.0（2026-09-24，用户裁定；源自 2026-09-21 first-l-grade 复盘提�
    者进选材输入——裁定「本 plan 消化」的项在对应任务落点显式处理或转风险
    登记一行（不静默带过）；两文件均不存在 → 跳过，选材留一行「登记表缺席，
    本项跳过」。
+6. **UI 信号选材**（2026-09-25；下行与 `caliber/skills/ui-forge/SKILL.md` §消费点契约 双写逐字一致——单侧漂移即失效，维护义务见该件 §版本刻度，cmp 验证）：
+
+UI 信号命中（`docs/designs/` 视觉稿交付物存在 + 任务含页面/组件/视觉还原实现动词）时：选材加跑 ui-forge 视觉基线协议（`caliber/skills/ui-forge/references/visual-baseline-protocol.md`），baseline.json 与 token 差集映射表进选材产物。
 
 零出处的值禁止进 plan；实在拿不到 → 进工序 2 风险登记，不许写成正文常量。
 

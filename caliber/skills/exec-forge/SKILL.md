@@ -2,7 +2,7 @@
 name: exec-forge
 description: "Use when executing an ML/L-level implementation plan whose tasks are predominantly non-coding (文档/配置/调研/操作) or the workspace has no git — caliber 阶段 4 非 coding 主场执行引擎（coding 归兄弟引擎 caliber:coding-forge）：plan 期预分配混合执行编排（执行者×审查者×形态）、routing.yaml 驱动注入两档、逐任务审查门、四状态契约、ledger 断点恢复、过程日志契约（动作级留痕）。中文触发：执行 plan、非代码任务派发、混合执行、执行编排、subagent 派工、阶段 4"
 metadata:
-  version: "1.7.2"
+  version: "1.7.3"
   source: distilled-from-practice
 ---
 
@@ -13,11 +13,7 @@ plan-forge 管"做什么"（plan = 绑定权威），本 skill 管"派谁做、�
 怎么验"。coding + git 场景归兄弟引擎
 caliber:coding-forge——
 两引擎按 §何时使用 路由，不竞争同一触发。
-v1.6.1（2026-09-20）：ledger 节补 plan 期台账续写注 + §输入节两处同源括注改中性（caliber v1.16.0 台账前置联动）。
-v1.6.2（2026-09-22）：终审评估 loop 防静默悬挂回写（与 coding-forge 1.0.2 同源双改；实证：2026-09-22 AeroFold U-M1-02/03/04 三单元终审 31 条 deferred minor 停在 accept-defer 分类即被当终态、静默悬挂，当晚批量补账）——§6 Minor 出口半句改完整指向；§终审加「终审前对账清单」机械闸 + new-minors 声明行与恒等式 + 处置四档扩五档（新增核销档）+ 终审报告计数块与席位分离条款。
-v1.7.0（2026-09-23）：reviewer 席位链点名 exec-reviewer（§输入 schema/§5 审查门/§终审及其评估席）——班底 exec-reviewer 进包（caliber 1.18.0）联动，code-reviewer 退出本引擎审查席（编码域归 coding-forge）。
-v1.7.1（2026-09-24，trans-forge L1 复盘回写）：§3 dispatch 纪律加「禁反向泛化句」（实证：2026-09-23 trans-forge T2-F1——dispatch prompt 写「不要 git commit」与 brief C10 提交纪律矛盾，worker 跳过提交）；§4 report 契约加「产物断言证据回填」、§5 审查门加「落盘声明存在性核对」（实证：2026-09-23 金样终审 F-A——M15 报告断言双产物落盘、文件系统无实物，验证锚全绿未报警）。
-v1.7.2（2026-09-24；源自 2026-09-21 first-l-grade §4.1 grep 定界纪律）：§6 fix loop 加「修复预案落点现盘定界」纪律（禁凭 plan/记忆枚举；实证：2026-09-20 T1-F1 预案「四处同改」实为五处，第五处靠修复后残留 grep 抓回）。
+> 变更日志归工作仓 `docs/skills-changelog.md`（skill 文件不携带 changelog——2026-09-25 用户裁定：log 只记工作仓，不进发布仓）。
 
 ## 为什么有效（理解了才会用对）
 
@@ -209,6 +205,15 @@ dispatch prompt 构成（五件 + 注入）：
 - **长任务心跳**：预期 >10 分钟的任务，dispatch 里要求"每完成一个子任务
   向 report 文件追加一行"——文件 mtime = 确定性心跳；判活不靠猜，卡死
   从心跳续派（不从零重派）。
+- **派发后存活确认**（2026-09-25，flow-builder 波次二 T10 实证——
+  doc-writer 席三连秒败 ~600ms × harness「launched successfully」表象 ×
+  provider 账户级订阅错误；根因=该席唯一 `thoughtLevel: enabled` 路由至
+  过期订阅模型）：background 派发后必须 TaskOutput block 15-20s 确认
+  agent 越过秒败窗才登记「在飞」——「launched successfully」只是进程拉起
+  表象，agent 内首个模型调用可能即死。秒败签名（秒级返回+订阅/账户级
+  报错）定位链：金丝雀探针法（一行 PROBE prompt 派同家族他席，区分家族
+  特有 vs 全面封锁）→ frontmatter 对照法（逐席对比 agent 定义，定位唯一
+  差异字段）。
 - **不贴会话史**：dispatch 描述一个任务，不是会话历史；前序摘要史禁止
   粘进 prompt。
 - **禁反向泛化句**（2026-09-24，trans-forge L1 T2-F1 实证）：brief/plan 已
@@ -239,6 +244,11 @@ visible:false 处置/不可得 Ruling/fix 轮权限行重带），本块不复�
 / `wc -l` / 计数命令）支撑每格，禁凭 brief 计划或记忆填路径——计划时态的
 动作不是完成时态的事实（2026-09-24，金样终审 F-A 实证；与 §6 防线 1.6.3
 同源分工：1.6.3 管动作陈述的时态，本条管断言的证据形态）。
+清单式长文档（runbook/核对表/编号清单）Write 后必须核对末项完整性
+（编号连续/项数与底单对账）；发现截断用 Edit 补齐+复验，禁整文件重写
+——「Write 成功」不等于内容完整（2026-09-25，flow-builder 波次二 T10
+实证——runbook 首写被工具命令长度截断于核对项 25，Edit 补齐+复验
+32/32/32）。
 
 - **DONE** → 进 §5 审查门。
 - **DONE_WITH_CONCERNS** → 先读 concerns：涉正确性/范围 → 处理后再审；
@@ -607,6 +617,12 @@ deferred 行中升级为 Critical/Important 的条数（new minor 升级者本�
    `| ID | 日期 | 来源(plan/任务) | 发现 | 类别 | 重访触发 | 状态 |`
    与分隔行（类别 ∈ {计划强制, 执行引入, 其他}；状态 ∈ {open, closed}）。
    关闭 = 状态改 closed 并补关闭理由，不删除原行——处置留痕。
+6. **收口点后新浮出观察的处置出口**（2026-09-25，flow-builder 波次二
+   Ruling-39/40 实证）：终审+评估 loop 闭环后的 fix 席 concerns 与
+   scoped 重审 Out-of-Scope Observations 不再进评估通道——处置出口 =
+   known-issues 追加登记（重访触发必填），编排者以 Ruling 落账。修复
+   执行本身是新的检测面（实证：fix 席 concern 挖出镜像内维护页路径恒
+   失配，触发面比评估裁定更宽）——concerns 是检测输出，不是噪声。
 
 ## 调用方关系
 

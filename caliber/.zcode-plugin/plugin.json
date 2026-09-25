@@ -1,5 +1,5 @@
 {
   "name": "caliber",
-  "version": "1.5.5",
-  "description": "Long-horizon task execution suite: caliber/plan-forge/plan-review-ritual/init-docs/update-docs/exec-forge/coding-forge/plan-drafting/deep-probe skills + 11 agents + auto-inject hooks — state continuity, error-compounding prevention, decision auditability"
+  "version": "1.6.1",
+  "description": "Long-horizon task execution suite: caliber/plan-forge/plan-review-ritual/init-docs/update-docs/exec-forge/coding-forge/plan-drafting/deep-probe/ui-forge skills + 12 agents + auto-inject hooks — state continuity, error-compounding prevention, decision auditability"
 }
