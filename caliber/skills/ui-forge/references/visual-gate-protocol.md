@@ -1,6 +1,8 @@
 # 视觉对拍门协议（visual-gate-protocol）
 
-消费方：visual-gate.mjs（对拍判定，产出报告）、visual-reviewer（消费报告做残余维度审查）。本文件是 ui-forge 视觉对拍门（gate）的判定阈值与报告协议主件，契约定义见 plan 契约矩阵 C3/C9。
+> 定位注：research-ui-fidelity.md = 2026-09-25 ui-forge plan 调研工件（工作仓 .caliber/exec/2026-09-25-ui-forge-plan/，不随包分发）；本文件内对其节编号引用仅供仓内溯源。
+
+消费方：visual-gate.mjs（对拍判定，产出报告）、visual-reviewer（消费报告做残余维度审查）。本文件是 ui-forge 视觉对拍门（gate）的判定阈值与报告协议主件，契约定义见 plan 契约矩阵（仓内账本，不随包） C3/C9。
 
 ## 1. CLI 契约（C3 逐字）与运行纪律
 

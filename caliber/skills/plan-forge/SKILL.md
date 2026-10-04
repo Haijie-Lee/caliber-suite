@@ -2,7 +2,7 @@
 name: plan-forge
 description: "Use when writing a formal implementation plan document for ML/L-level tasks — caliber ML/L 级阶段 2 自动路由；especially when the plan will be executed verbatim by a less-capable executor."
 metadata:
-  version: "1.9.1"
+  version: "1.10.1"
   source: distilled-from-practice
 ---
 
@@ -126,7 +126,7 @@ plan；六道锻造为其原生结构（契约矩阵/判断前置/验证内建/�
   （签名/字段/消息格式/常量）——有涟漪的 Mechanical 视同 P2 触发下一轮（保持
   严格）；**账目层** = plan 内部账目对齐（契约矩阵消费列/注记/交叉引用同步，
   零生产文本变更）——不阻断收敛，裁定表留痕即可（实证：2026-09-20 L 级任务
-  ——docs/plans/2026-09-20-plan-drafting-deep-probe-plan.md 契约 C10 第三触
+  ——docs/plans/YYYY-MM-DD-<主题>-plan.md（仓内账本，不随包） 契约 C10 第三触
   账目层涟漪误判不收敛，实耗其裁定门 G2 + 追加轮 4）。无涟漪局部修复不触发
   下一轮（工序 3.5 闸口 + 工序 4 彩排兜底）。
 - **轮换启发式**（轮 2 深挖谁，看数据不看感觉）：轮 1 命中过 P1/P2 的视角
@@ -137,7 +137,7 @@ plan；六道锻造为其原生结构（契约矩阵/判断前置/验证内建/�
 - **封顶与出口（三级阶梯，1.9.0）**：最多 3 轮；轮 3 仍有 P1/P2 时按阶梯
   处置：**①追加一轮全量基线重审**（重审不重锻——轮 3 发现多为 delta 视角
   残留，全量视角常可收敛；实证：2026-09-20 L 级任务裁定门 G2 用户临场选此
-  路径——出处 docs/plans/2026-09-20-plan-drafting-deep-probe-plan.md）→
+  路径——出处 docs/plans/YYYY-MM-DD-<主题>-plan.md（仓内账本，不随包））→
   仍不收敛 **②回工序 2 重锻**（评审修不了结构问题）→ 重锻后仍不收敛
   **③上用户裁定降级/缩范围**（贴全部审计趋势作证据）。①②③逐级上行，
   每级一次用户裁定记录。
@@ -197,7 +197,10 @@ User Challenge 永不自动定，用户原方向为默认）。各轮 stance 与
 （plan vs 原始目标 / vs 仓库现实 / 内部假设链；独立全局视角、看 CONTEXT），
 **工序 4 = 字面可执行性**（plan vs 较弱执行者理解力；零背景基线、只看 plan）。
 先 3.5 后 4——先确认"做对的事"，再确认"事能被做对"。ML 级无工序 3/3.5，
-工序 2 初稿经调用方审查（caliber 阶段 3 自审）修复落地后直接进本工序。
+工序 2 初稿经调用方审查（caliber 阶段 3 自审）修复落地后进本工序；ML 级本
+工序与 architect 席（方案挑战者/方案 review 二选一，编排者裁定——prompt 骨架
+见 plan-drafting ML 审查对接节）同版本并行派遣，合流裁定与修复分级归编排者
+（caliber 阶段 3）。
 
 **适用级别**（2026-09-16 用户裁定）：ML 与 L 同构全量——ML 级 plan 同样由
 较弱执行者逐字执行，豁免彩排等于把最高价值的验收留给最常吃返工的级别；
@@ -276,7 +279,7 @@ plan 交付时按引擎路由规则给执行选项（caliber ML/L 级阶段 4 �
    执行编排预分配表 + 逐任务审查门 + ledger 断点恢复
 3. **Inline**——coding-forge §inline TDD 骨架 批量执行 + checkpoint（用户指定；MS 级由 caliber 阶段 4 直调本骨架——不经本交接节）
 
-**隔离模式提醒**（C7）：代码主导 plan 交付时，交接文本注明：默认新 branch
+**隔离模式提醒**：代码主导 plan 交付时，交接文本注明：默认新 branch
 隔离开发，可切换 worktree 模式（coding-forge §Setup）——由用户在阶段 4 入口
 停止点裁定。
 
@@ -288,9 +291,9 @@ plan 交付时按引擎路由规则给执行选项（caliber ML/L 级阶段 4 �
 
 ## 收尾
 
-- 工序 3 抓到的新型陷阱（平台级、可复用）→ 写入项目陷阱档案，下次工序 1.4
+- 工序 3 抓到的新型陷阱（平台级、可复用）→ 写入项目陷阱档案，下次工序 1 选材的陷阱
   清单变长——本 skill 的价值随使用增长。
 - 调用方关系：caliber ML 级 = 工序 1-2（阶段 2）+ 工序 4（阶段 3，ritual Step 1
-  自审修复落地后）；L 级 = 工序 1-2（阶段 2）+ 工序 3-4（阶段 3：收敛循环 +
+  自审修复落地后，与 architect 席并行）；L 级 = 工序 1-2（阶段 2）+ 工序 3-4（阶段 3：收敛循环 +
   准出闸口 + 真实彩排）；MS 级不经本 skill（caliber 直调 plan-drafting 轻量档）。
   本 skill 不判断产品方向（超出本 skill 领域）。

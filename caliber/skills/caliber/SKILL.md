@@ -2,7 +2,7 @@
 name: caliber
 description: "Use when starting any engineering task — feature, bugfix, refactor, or change request — before touching code. Not for pure Q&A, research, or open-ended discussion."
 metadata:
-  version: "1.20.0"
+  version: "1.22.0"
   source: distilled-from-practice
 ---
 
@@ -64,14 +64,14 @@ plan-review-ritual；
 | 验证 | 单测可覆盖 | 需真机 / 部署 / 多环境 |
 | 跨度 | 当会话完成 | 跨会话 / 需交接 |
 
-- 判级顺序：先查 L 条件（可逆性 / 方案 / 跨度任一重 → **L**）；再查 M 条件
+- 判级顺序：先查 L 条件（可逆性 / 方案 / 跨度任一重 → **L**——唯一例外：开创性-only 命中按开创性信号段判 M、子档钉 ML，1.22.0）；再查 M 条件
   （影响面 / 验证重 → **M**）；全轻 → **S**
 - 拿不准 → 升级（保守原则）
 - 宣布：`定级 X，理由：<命中的维度>`。用户可一句话改级，此后不再问。
 
-**开创性信号（1.19.0）**：需求明示原创/突破、一跳先例检查无已知解、常规路线被约束排除——任一命中即「方案」维判重。判定默认 agent 自动裁定（判据附证据：查过哪些已知路线、为何排除），用户可在任务开始时前置声明覆盖，声明优先。命中后阶段 1 转 deep-probe 开创性档（ML/L 级；机制见 deep-probe references/frontier-protocol.md）。
+**开创性信号（1.19.0；1.22.0 修订）**：需求明示原创/突破、一跳先例检查无已知解、常规路线被约束排除——任一命中即「方案」维判重，**但开创性不直判 L**（2026-10-04 用户裁定）：开创性-only 命中（可逆性/跨度皆轻）判 **M、子档钉 ML**，阶段 1 转 deep-probe 开创性档；其他 L 条件任一重 → 仍判 L。判定默认 agent 自动裁定（判据附证据：查过哪些已知路线、为何排除），用户可在任务开始时前置声明覆盖，声明优先。机制见 deep-probe references/frontier-protocol.md。
 
-**M 级子档（MS / ML）**：入口定级只判到 M，子档不在入口划分。在阶段 1 方案
+**M 级子档（MS / ML）**：入口定级只判到 M，子档不在入口划分（唯一例外：开创性-only 命中钉 ML，见开创性信号段）。在阶段 1 方案
 确认停止点，agent 基于前期调查结果（真实代码、方案改动清单），从涉及范围、
 改动难度、重要程度、验证可达性（改动区有无测试覆盖——无覆盖区 inline 实现
 缺自证手段，偏 ML 让 coding-forge 审查兜底）等维度综合评估，给出 MS/ML 推荐 + 理由，
@@ -148,7 +148,7 @@ dispatch 派发）；S/MS 无 dispatch 边界，主线程查表纪律实测失�
 |---|---|---|---|---|---|
 | 1 | 澄清 | agent 一句话重述需求（歧义才停，见铁律 7）；bug 类先用调试骨架定位根因 | 调 deep-probe 轻量档单轨（重述+方案探索+押注），列出方案选项，**停**，用户选定（同停止点拍板 MS/ML，见 Step 1 子档段） | 调 deep-probe 轻量档双轨（重述+方案挑战者后台派遣+对照表），**停**，用户选定（同停止点拍板 MS/ML，见 Step 1 子档段） | 调 deep-probe 全仪式澄清（含双轨方案探索；对齐快照收口，**停**） |
 | 2 | 计划 | 一句话方案 | 调 plan-drafting 轻量档出 plan 文档落盘 .caliber/plans/（五节：目标/文件+改法/验证/commit/风险） | 调 plan-forge 工序 1-2（选材+制坯）出正式 plan 文档落盘（缺时直调 plan-drafting）——**ML 级必出 plan 文档** | 调 plan-forge 工序 1-2（选材+制坯）出 plan 初稿 |
-| 3 | 审查 | 自问：有没有更简单的做法？ | 快速自查五条 + dispatch plan-reviewer 独立审查（单轮，对象：阶段 2 轻量 plan；Mechanical 静默修、Taste/User Challenge **停**） | 跑 plan-review-ritual Step 1 自审（对象：阶段 2 落盘的 plan 文档）→ plan-forge 工序 4 真实彩排（单派遣两阶段：confusion-hunt + 技能消费映射；映射裁定回写预绑定；自审修复落地后再彩排） | plan-forge 工序 3-4（锻打=**收敛循环**：双声部逐轮对抗至收敛判据，≤3 轮，轮 3 不收敛按三级阶梯**停**（①全量基线重审→②回工序 2 重锻→③用户裁定降级/缩范围）；准出=**exit gate**：凡经修复的 plan 必经 fresh 独立全局复审；成型=litmus **真实彩排**（单派遣两阶段：fresh 零背景基线 agent confusion-hunt + 技能消费映射，映射裁定回写预绑定）；Taste 裁定**停**可批量，User Challenge 必停） |
+| 3 | 审查 | 自问：有没有更简单的做法？ | 快速自查五条 + dispatch plan-reviewer 独立审查（单轮，对象：阶段 2 轻量 plan；Mechanical 主线程静默修、Taste/User Challenge **停**） | 跑 plan-review-ritual Step 1 自审（对象：阶段 2 落盘的 plan 文档）→ 自审修复落地后冻结 plan 版本，同发两派遣：architect 席（编排者按任务需要二选一：方案挑战者 / 方案 review，模式裁定记 ledger Ruling，被派遣者不自选；prompt 骨架见 plan-drafting ML 审查对接节）‖ plan-forge 工序 4 真实彩排（单派遣两阶段：confusion-hunt + 技能消费映射；映射裁定回写预绑定）→ 编排者汇总裁定（双命中强信号；三级裁定照旧；修复分级：结构级改动局部补测） | plan-forge 工序 3-4（锻打=**收敛循环**：双声部逐轮对抗至收敛判据，≤3 轮，轮 3 不收敛按三级阶梯**停**（①全量基线重审→②回工序 2 重锻→③用户裁定降级/缩范围）；准出=**exit gate**：凡经修复的 plan 必经 fresh 独立全局复审；成型=litmus **真实彩排**（单派遣两阶段：fresh 零背景基线 agent confusion-hunt + 技能消费映射，映射裁定回写预绑定）；Taste 裁定**停**可批量，User Challenge 必停） |
 | 4 | 实现 | TDD 直接改，一次一 commit | TDD 逐步，每步跑验证（inline） | 引擎路由（规则见 §动态组合 首节）：代码主导+git → coding-forge；其余 → exec-forge。逐任务按执行编排预分配表派发（机械→裸 dispatch / 集成→dispatch+注入 / 判断类、组合复杂→主线程 inline + 独立审查）；阶段 4 入口批量确认停止点 | 引擎路由（规则见 §动态组合 首节）：代码主导+git → coding-forge；其余 → exec-forge。逐任务按执行编排预分配表派发（机械→裸 dispatch / 集成→dispatch+注入 / 判断类、组合复杂→主线程 inline + 独立审查）；阶段 4 入口批量确认停止点 |
 | 5 | 验证 | 跑验证命令，输出即证据 | 单测 + 相关集成测试 | 单测 + 相关集成测试 | 分层验证 + 真机最小验证（先离线模拟核心路径）+ 全分支 review |
 | 6 | 收尾 | 规范 commit message | commit + 三行简报（改动/验证/遗留） | commit + 三行简报（改动/验证/遗留） | ledger 收尾 + 调 learnings 固化新经验 + 分支收尾决策（**停**） |
@@ -228,6 +228,7 @@ exec-forge 路径的消费钩子 = caliber:exec-forge §任务环「组合决策
 | 非代码任务审查（exec-forge reviewer 槽/终审评估席） | `exec-reviewer` | general-purpose |
 | UI 视觉审查（基线审查/对拍判定/残余维度） | `visual-reviewer` → `exec-reviewer` → `general-purpose` | general-purpose |
 | plan 对抗审查（ritual 声部 A；MS 级阶段 3 单派遣亦消费） | `plan-reviewer`（详见 ritual Step 2 选择链与双形态 prompt） | general-purpose |
+| ML 阶段 3 第二双眼（architect 席；方案挑战者/方案 review 二选一由编排者裁定） | `architect` → `plan-reviewer` → `general-purpose` | general-purpose |
 | 编码实现（机械/集成 dispatch） | `coder` → `general-purpose` | general-purpose |
 | 非代码实现（exec-forge 实现席：文档/配置/操作/调研，机械/集成 dispatch） | `executor` → `general-purpose` | general-purpose |
 | 计划/拆解/需求分析 | `architect` → `code-architect` | general-purpose |
@@ -238,7 +239,7 @@ exec-forge 路径的消费钩子 = caliber:exec-forge §任务环「组合决策
 | 文档撰写/手册/报告（dispatch 形态时） | `doc-writer` | general-purpose |
 | 无信号 / 拿不准 | `general-purpose` | — |
 
-注：文档类任务缺省收回主线程 inline（§动态组合 骨架：配置、文档→TDD轻验证）；executor 行限 exec-forge 实现席，非引擎场景的文档撰写 dispatch 仍用 doc-writer 行；doc-writer 行在编排层决定 dispatch 时生效。
+注：文档类任务缺省收回主线程 inline（§动态组合 骨架：配置、文档→TDD轻验证）；executor 行限 exec-forge 实现席，非引擎场景的文档撰写 dispatch 仍用 doc-writer 行；doc-writer 行在编排层决定 dispatch 时生效。evidence-auditor 由 campaign-suite 插件随附——未装 campaign-suite 时该链首席恒缺席，按 2b 链式语义自然退 exec-reviewer，无需特殊处理。
 
 纪律：
 - **只读信号不明确 → 一律给全工具 type**：权限错配（只读 agent 干写活）比选择保守更危险。
@@ -309,7 +310,7 @@ MS 保持 inline 同此渊源。）
 ## 停止点速查
 
 - **S 级**：不可逆操作前、歧义。
-- **MS/ML 级**：+ 方案确认（同停止点拍板 MS/ML 子档；ML 级含双轨对照表）+ MS plan 审查裁定（Taste/User Challenge）。
+- **MS/ML 级**：+ 方案确认（同停止点拍板 MS/ML 子档；ML 级含双轨对照表）+ plan 审查裁定（Taste/User Challenge；MS=plan-reviewer 席、ML=architect 席）。
 - **ML/L 级**：+ 路由表确认（Step 1.5 第 5 步）+ 阶段 4 入口执行编排批量确认（exec-forge/coding-forge 预分配表）——两确认均带折叠条件（见 Step 1.5 第 5 步与 exec-forge §阶段 4 入口停止点，2026-09-15 裁定）。
 - **L 级**：+ deep-probe 澄清问答、plan 逐条裁定（可批量）、审查轮 3 不收敛
   重锻、分支收尾。

@@ -1,8 +1,8 @@
 #!/usr/bin/env node
-// visual-gate.mjs — ui-forge C3 CLI：impl 实现对拍 baseline（C2），产出 T6 报告并按豁免过滤给退出码。
-// 契约出处：docs/plans/2026-09-25-ui-forge-plan.md 契约矩阵 C3；
-// 判定规格出处：references/visual-gate-protocol.md（T6 阈值表/报告 schema/豁免两段式/噪音纪律）。
-// 提取内核复用 T7 命名导出（C4 复用点）；playwright 探测链与 T7 同纪律（两域四级）。
+// visual-gate.mjs — ui-forge C3 CLI：impl 实现对拍 baseline（C2），产出 fidelity 报告并按豁免过滤给退出码。
+// 契约出处：docs/plans/YYYY-MM-DD-<主题>-plan.md（仓内账本，不随包）契约矩阵 C3；
+// 判定规格出处：references/visual-gate-protocol.md（§2 阈值表/报告 schema/豁免两段式/噪音纪律）。
+// 提取内核复用 extract-baseline.mjs 命名导出（C4 复用点）；playwright 探测链与 extract-baseline 同纪律（两域四级）。
 
 import { parseArgs } from 'node:util';
 import { createRequire } from 'node:module';

@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 // extract-baseline.mjs — ui-forge C4 CLI：对设计稿 URL 提取 C2 baseline.json。
-// 契约出处：docs/plans/2026-09-25-ui-forge-plan.md 契约矩阵 C2/C4；
+// 契约出处：docs/plans/YYYY-MM-DD-<主题>-plan.md（仓内账本，不随包）契约矩阵 C2/C4；
 // 内置映射表数据源：references/visual-baseline-protocol.md §3（逐字照搬，禁在此重定义）。
 // 零 npm 依赖（仅 node: 内置模块）；playwright 为可选运行时，缺失时退出码 2 并给补救提示。
-// 本模块顶层零副作用：T8 经 `import { extractElements } from './extract-baseline.mjs'`
+// 本模块顶层零副作用：visual-gate.mjs 经 `import { extractElements } from './extract-baseline.mjs'`
 // 复用提取内核时不得触发 playwright 解析或进程退出，探测只在 CLI main 内进行。
 
 import { parseArgs } from 'node:util';

@@ -51,6 +51,9 @@ git 命令。不要爬 broader 代码库——只有为评估一个你能具名�
    账；缺 = 终审不通过。
 3. **③核查端（注入保真）**：代码 dispatch 的 implementer prompt 缺
    编辑纪律块（INJECT_EDIT_DISCIPLINE 槽为空且任务画像未注明降档）= Important 照报。
+4. **④核查端（过程日志抽查，仅启用时）**：{PROCESS_LOG_PATH} 填「未启用」
+   时本端跳过（报告行记「未启用」）；启用时抽查动作类型覆盖与失真——
+   条目序号连续、13 类封闭集、数值断言成对落笔、输出值实跑后写入。
 
 ## 来源标签（每条发现必填，含 Minor）
 
@@ -99,7 +102,7 @@ Critical/Important 进 findings 的不计）
 deferred-seen: <M>（ledger 中你逐条分类的 deferred minor 行总条数，
 含升级为 Critical/Important 者）
 
-### ②③核查结果
+### ②③④核查结果
 
 逐端一行：查了什么、命中与否、对应 ledger 行号或缺口。
 
@@ -123,4 +126,4 @@ deferred-seen: <M>（ledger 中你逐条分类的 deferred minor 行总条数，
 
 **final reviewer 返回**：Overall Verdict、Findings（Critical/Important/
 Minor，各带来源标签）、Ledger Classification 逐条分类、计数块
-（new-minors / deferred-seen）、②③核查结果、Strengths。
+（new-minors / deferred-seen）、②③④核查结果、Strengths。

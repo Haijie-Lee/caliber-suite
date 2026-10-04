@@ -2,7 +2,7 @@
 name: exec-forge
 description: "Use when executing an ML/L-level implementation plan whose tasks are predominantly non-coding (文档/配置/调研/操作) or the workspace has no git — caliber 阶段 4 非 coding 主场执行引擎（coding 归兄弟引擎 caliber:coding-forge）：plan 期预分配混合执行编排（执行者×审查者×形态）、routing.yaml 驱动注入两档、逐任务审查门、四状态契约、ledger 断点恢复、过程日志契约（动作级留痕）。中文触发：执行 plan、非代码任务派发、混合执行、执行编排、subagent 派工、阶段 4"
 metadata:
-  version: "1.7.3"
+  version: "1.7.4"
   source: distilled-from-practice
 ---
 
@@ -57,7 +57,7 @@ ML/L 级阶段 4 入口，按 plan 任务性质画像分布选引擎：
   注入）"后继续，不阻塞。
 - 全局约束：plan 的 Global Constraints 节（逐字复制给每个 reviewer）。
 
-### 执行编排预分配表（schema——caliber 引擎契约，plan-drafting 与 exec-forge 两处逐字一致）
+### 执行编排预分配表（schema——caliber 引擎契约，plan-drafting 与 exec-forge 两处语义一致——互指子句与块尾注各指本方）
 
 | 任务 | 性质 | 难度 | 形态 | 执行者 | 审查者 | 注入档 | 领域组件 |
 |---|---|---|---|---|---|---|---|

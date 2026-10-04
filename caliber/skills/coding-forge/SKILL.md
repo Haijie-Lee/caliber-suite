@@ -2,7 +2,7 @@
 name: coding-forge
 description: "Use when executing an ML/L-level implementation plan whose tasks are predominantly coding (new features, bug fixes, refactors) with git — caliber 阶段 4 编码执行引擎（非 coding 归兄弟引擎 caliber:exec-forge）：brief 文件化、双 verdict 审查门、TDD 证据强制、编辑纪律注入、ledger 断点恢复。中文触发：编码执行、代码派发、TDD 驱动、编码 forge"
 metadata:
-  version: "1.0.4"
+  version: "1.0.5"
   source: distilled-from-practice
 ---
 
@@ -82,13 +82,15 @@ dispatch 纪律 / 四状态 / 双 verdict 审查门 / fix loop / 过程日志契
    - 工作区 `.caliber/` 不入 git——仓 `.gitignore` 缺 `.caliber/` 行则开工前
      追加（否则运行工件卷入 commits 污染审查包）。
 3. **ledger**：`<ws>/progress.md`，首行逐字 =
-   `# coding-forge ledger — plan: <plan 路径>`（身份行常量）。恢复语义
+   `# coding-forge ledger — plan: <plan 路径>`（身份行常量；v1.16.0 起亦接受
+   任务台账表头首行——见本条末追加注）。恢复语义
    （同源 exec-forge §Setup）：首行对不上 = 别人的进度，原样保留、另起新
    ledger；已有 `Task <N>: complete` 行的任务不重派，从首个无完成行的任务
    续；末行是 fix round = 中途，从下一轮续。续跑以 ledger 既有留痕为准——
    阶段 4 入口停止点不重复停等、pre-flight 不重复扫描；有新增调整另记
    Ruling。压缩后信 ledger 与 `git log`，不信记忆。启用过程日志
    （§过程日志契约）时同建 `<ws>/process-log.md`。
+   plan 期台账：caliber 阶段 2 出口已开账（v1.16.0 起，.caliber/exec/<plan-stem>/progress.md，首行 = 任务台账表头形态）——引擎启动续写同一文件，plan 期流水行保留，不重建不覆盖；首行为任务台账表头（含同一 plan 路径）时视同本 plan 账目直接续写，「首行对不上另起新 ledger」仅适用于其他 plan 占用。
 4. **读 plan 一遍**，建逐任务 todo；plan 指名 Spec 则同读（冲突以 Spec 为
    绑定权威；无 Spec → ledger 记一笔，其后 ruling 均为临时裁定）。
 5. **pre-flight 冲突扫描**（派 Task 1 前；同源 + 编码特化）：逐对共享

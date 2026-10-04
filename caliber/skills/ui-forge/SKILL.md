@@ -2,7 +2,7 @@
 name: ui-forge
 description: "Use when a task involves implementing or modifying UI from a visual design artifact (mockup/hifi/tokens) — provides visual baseline extraction, token-gap audit, fidelity checklists, rehearsal pitfalls, and the visual-gate acceptance harness. Not for design creation, code review, or non-visual tasks. 中文触发：UI 还原、视觉稿实现、保真对拍、设计稿验收"
 metadata:
-  version: "0.2.0"
+  version: "0.3.1"
   source: distilled-from-practice
 ---
 
@@ -60,7 +60,7 @@ UI 信号命中（`docs/designs/` 视觉稿交付物存在 + 任务含页面/组
 | caliber 阶段 5 验证 | `scripts/visual-gate.mjs` 对拍门 |
 | campaign gate | fidelity-report 消费点（定义见下） |
 
-campaign gate 消费点定义：campaign 单元 gate 两判据 = ①`fidelity-report.md` 文件存在且非空 ②单元 lint_cmd 复跑串联 visual-gate.mjs，退出码 1 = gate 红。
+campaign gate 消费点定义：campaign 单元 gate 两判据 = ①`fidelity-report.md` 文件存在且非空（由 caliber 仓 campaign-bridge.json 的 ui-forge 条目经 program.py gate 机械合并承载，信号 = docs/designs 存在 ∧ 单元文本命中 UI 关键词）②单元 lint_cmd 复跑串联 visual-gate.mjs，退出码 1 = gate 红（程序作者通道：lint_cmd wrapper 串联，参数契约见 scripts/visual-gate.mjs 的 USAGE）。
 
 ## 注入节（阶段 4 样式纪律）
 
@@ -94,7 +94,7 @@ campaign gate 消费点定义：campaign 单元 gate 两判据 = ①`fidelity-re
 | plan-forge | plan 写作主：工序 1 选材第 6 条 = §消费点契约 双写句；工序 4 彩排经 checklists.md 指针读 rehearsal-pitfalls |
 | plan-drafting | MS 级 plan 起草主；MS 档剂量（+baseline 单屏抽检）随其轻量 plan 落地 |
 | coding-forge | 代码实现主：编码任务归它；本 skill 只供 §注入节 样式纪律与验收锚 |
-| campaign | 单元 gate 消费 fidelity-report（两判据见 §消费点契约）；本 skill 不进 campaign 编排 |
+| campaign | 单元 gate 消费 fidelity-report（两判据见 §消费点契约；判据①经 campaign-bridge.json 机械合并，本 skill 条目为桥首个金样）；本 skill 不进 campaign 编排 |
 | visual-reviewer | 班底席位：三形态与零背景纪律定义在 `caliber/agents/visual-reviewer.md`；席位定义权归本 skill（管四件④） |
 
 ## 版本刻度

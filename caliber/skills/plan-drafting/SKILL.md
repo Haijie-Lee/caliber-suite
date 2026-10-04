@@ -2,7 +2,7 @@
 name: plan-drafting
 description: "Use when drafting a plan document at MS/ML/L level — caliber 阶段 2（MS）与 plan-forge 工序 2（ML/L）自动路由；契约矩阵先行、判断前置、验证内建，六道锻造原生结构。中文触发：写 plan、起草计划、制坯、计划文档"
 metadata:
-  version: "1.1.1"
+  version: "1.2.1"
   source: distilled-from-practice
 ---
 
@@ -43,8 +43,6 @@ metadata:
   `docs/plans/YYYY-MM-DD-<主题>-plan.md`。
 
 ## 模板分档
-
-道层条款「MS/ML/L 三档模板」据此实现。
 
 ### MS 轻量档
 
@@ -100,15 +98,16 @@ Review Focus（≤5 条，空节 = 「查过且没有」）
    原型/配置/文档/调研/操作）、难度（机械/集成/判断）、领域词（供路由表
    关键词匹配）。**只标画像、不锁 skill 组合**——起草时执行信息未齐，锁定
    发生在工序 4 彩排后的预绑定回写。画像缺失 → caliber 按"集成"对待。
-6. **执行编排预分配**（非 coding 主导或无 git 的 ML/L plan 必产；coding 主导
-   plan 免产——coding-forge 自带角色分配）。逐任务填执行编排预分配表。
+6. **执行编排预分配**（引擎路径核对：exec-forge 路径必产——非 coding 主导或
+   无 git 的 ML/L plan；coding-forge 路径免产——coding 主导且有 git，coding-forge
+   自带角色分配）。逐任务填执行编排预分配表。
    **只预分配、不锁死**——dispatch 边界可据运行时信息微调，微调记
    ledger Ruling；阶段 4 入口批量确认停止点（caliber）确认的是本表。
    默认规则（plan 未预分配时）：判断类/组合复杂 → inline + 独立审查；
    机械 → dispatch + 独立审查；集成 → dispatch + 注入。
    schema 块：
 
-### 执行编排预分配表（schema——caliber 引擎契约，plan-drafting 与 exec-forge 两处逐字一致）
+### 执行编排预分配表（schema——caliber 引擎契约，plan-drafting 与 exec-forge 两处语义一致——互指子句与块尾注各指本方）
 
 | 任务 | 性质 | 难度 | 形态 | 执行者 | 审查者 | 注入档 | 领域组件 |
 |---|---|---|---|---|---|---|---|
@@ -128,7 +127,7 @@ Review Focus（≤5 条，空节 = 「查过且没有」）
   做出）。
 
 注：本块内 `§任务环` 等无限定节名指 exec-forge/SKILL.md 内部节（schema 与
-exec-forge §输入节逐字一致，两处同步为引擎契约）。
+exec-forge §输入节语义一致，两处同步为引擎契约；互指子句各指本方）。
 
 ## 自查清单
 
@@ -192,7 +191,7 @@ MS 级 plan 的审查 = 两道：快速自查五条 + plan-reviewer 单派遣独
 
 ### plan-reviewer 单派遣 prompt 骨架
 
-输入 = MS plan 文件路径；单轮、无收敛循环；发现回写 plan 本文件。
+输入 = MS plan 文件路径；单轮、无收敛循环；发现逐条上报（含建议修法），回写由主线程执行——plan-reviewer 为只读席位。
 
 ```
 你是对抗性 plan 审查员。审查对象 = {MS_PLAN_PATH}（MS 级轻量 plan）。
@@ -202,8 +201,8 @@ MS 级 plan 的审查 = 两道：快速自查五条 + plan-reviewer 单派遣独
 2. 仓库交叉核对：plan 引用的路径/版本/计数/原文片段与仓库实文对照。
 3. 验证期望具体性：每条期望具体到可机械判定（exact count / exact
    string）吗？
-裁定纪律（三级）：Mechanical（事实性错误）→ 直接修复并留痕；
-Taste / User Challenge → **停**，上报用户裁定，不自动定。
+裁定纪律（三级）：Mechanical（事实性错误）→ 逐条上报 + 建议修法，主线程
+静默修并留痕；Taste / User Challenge → **停**，上报用户裁定，不自动定。
 只报运行时会炸或产物会错的问题；零发现是合法结论（逐项留「查了什么」
 一句）。
 ```
@@ -211,8 +210,59 @@ Taste / User Challenge → **停**，上报用户裁定，不自动定。
 派遣 `Task(subagent_type=plan-reviewer)`，缺席退 general-purpose（本 prompt
 全文作注入清单）。
 
+## ML 审查对接节（architect 席二选一）
+
+ML 级阶段 3 的第二双眼 = architect 席单派遣，与 plan-forge 工序 4 彩排
+**同版本并行**（两席互不知晓对方产出；合流裁定与修复分级归编排者，见
+caliber 阶段表 ML 列）。分工：文本级机械问题归自审与彩排，本席只管设计层
++ 仓库实证对照（彩排零背景只读 plan、不碰仓库，锚定串/计数实测只能在本席）。
+
+**模式二选一由编排者按任务需要裁定**（不设机械阈值，同 MS/ML 子档拍板
+哲学）：一行记 ledger `Ruling: ML architect 席 = <方案挑战者|方案 review>，
+理由=…`；用户可一句话改。**被派遣者只执行选定模式，不自选**——审查者
+自选模式 = 变相挑软柿子。
+
+模式信号参考：
+- 选**方案挑战者**：阶段 1 双轨对照表胜出方优势不明显 / 用户临场选了
+  非推荐项 / 选材产物与方案前提有摩擦 / 定级时方案维曾判重。
+- 选**方案 review**：方案已拍板无疑义，但 plan 跨模块 / 契约矩阵密集 /
+  验证可达性弱（改动区无测试覆盖）。
+
+派遣链（caliber §动态组合 2b，去前缀取首个在场者）：`architect` →
+`plan-reviewer` → `general-purpose`。降级须留痕：退到 plan-reviewer =
+只剩 review 模式文本向子集，**方案挑战者需求不得静默降级**——记 ledger
+并告知用户。
+
+prompt 骨架（单轮、无收敛循环；两席互不知晓）：
+
+```
+你是 ML 级 plan 的第二双眼，模式 = <方案挑战者 | 方案 review>。审查对象 =
+{ML_PLAN_PATH}（已经作者自审修复）。
+共同纪律：只报运行时会炸或会让产物做错方向的问题；每条发现引用 plan 原文
+行 + 证据，引不到原文的不报；零发现是合法结论（逐项留「查了什么、为什么
+没有」）。裁定三级：Mechanical（事实性错误）→ 直接修复留痕；Taste /
+User Challenge → 停，上报用户，不自动定。
+
+【方案挑战者】对照 CONTEXT（阶段 1 方案确认记录 / 对齐快照节）与选材产物：
+1. 选材实证有没有动摇方案前提（条件/约束/接口假设不成立）？
+2. plan 是否忠实于已确认方案（任务分解有没有扭曲 WHAT）？
+3. 被略过的路线里有没有明显更好的（只评有新证据的）？
+硬约束：阶段 1 已否决项不得重开（铁律 5）——合法挑战依据只有「选材/制坯
+暴露的新证据」或「plan 忠实性」，二者都拿不出就不挑战，零发现收工。
+
+【方案 review】设计层复核 + 仓库实证对照（文本级判读归自审与彩排，不重复）：
+1. 任务分解是否覆盖目标与 Review Focus（有无漏掉的行为单元）？
+2. 契约矩阵 soundness（跨模块契约会不会锁死错误形状）？
+3. 验证是否真能证明完成（写入清单 ↔ 验证锚对应；假绿风险）？
+4. 仓库实证对照（路径/锚定串实存唯一、计数/版本实测）。
+```
+
+派遣 `Task(subagent_type=architect)`，链式兜底同上。
+
 ## 交接节
 
 - MS 级：产出 → caliber 阶段 3（= 本文件「MS 审查对接节」两道：快速自查五条
   + plan-reviewer 单派遣）。
-- ML/L 级：产出 → plan-forge 工序 3-4（对抗审查 + 基线彩排）。
+- ML 级：产出 → caliber 阶段 3（ritual Step 1 自审 → 本文件「ML 审查对接节」
+  architect 席 ‖ plan-forge 工序 4 彩排）。
+- L 级：产出 → plan-forge 工序 3-4（对抗审查收敛循环 + 准出闸口 + 基线彩排）。

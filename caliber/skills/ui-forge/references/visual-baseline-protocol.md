@@ -1,6 +1,8 @@
 # 视觉基线协议（visual-baseline-protocol）
 
-消费方：选材者（生产 baseline.json 与 token 差集映射表，二者进选材产物）、extract-baseline.mjs（§3 为 `--elements` 缺省值的数据源）、visual-gate 与 visual-reviewer（消费 baseline）。本文件是 ui-forge 视觉基线生产的协议主件，契约定义见 plan 契约矩阵 C2/C4。
+> 定位注：research-ui-fidelity.md = 2026-09-25 ui-forge plan 调研工件（工作仓 .caliber/exec/2026-09-25-ui-forge-plan/，不随包分发）；本文件内对其节编号引用仅供仓内溯源。
+
+消费方：选材者（生产 baseline.json 与 token 差集映射表，二者进选材产物）、extract-baseline.mjs（§3 为 `--elements` 缺省值的数据源）、visual-gate 与 visual-reviewer（消费 baseline）。本文件是 ui-forge 视觉基线生产的协议主件，契约定义见 plan 契约矩阵（仓内账本，不随包） C2/C4。
 
 ## 1. baseline.json schema（C2 逐字）
 
@@ -68,7 +70,7 @@
 
 `node extract-baseline.mjs --url <url> --out <path> --viewport <WxH> [--elements <json-file>] [--prepare <js-file>]`
 
-C4 契约全文见 plan 契约矩阵 C4；`--elements` 缺省 = 内置锚点元素最小集（§3），传入时与内置集合并覆盖。
+C4 契约全文见 plan 契约矩阵（仓内账本，不随包） C4；`--elements` 缺省 = 内置锚点元素最小集（§3），传入时与内置集合并覆盖。
 
 `--prepare` = 提取前对页面 `page.evaluate` 该 JS 文件（设计稿切屏预备，2026-09-25 起）；逐屏基线工作流 = 每屏一次 `--prepare` 提取 + 一次 gate 对拍（实战模式见 visual-gate-protocol §7 末段）。
 

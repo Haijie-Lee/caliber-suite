@@ -16,7 +16,7 @@ try:
 except Exception:
     print(''); raise SystemExit
 print('1' if (d.get('stopHookActive') or d.get('stop_hook_active')) else '')
-" 2>/dev/null)
+" 2>/dev/null | tr -d '\r')
 [ -n "$ACTIVE" ] && exit 0
 
 SID=$(printf '%s' "$INPUT" | "$PY" -c "

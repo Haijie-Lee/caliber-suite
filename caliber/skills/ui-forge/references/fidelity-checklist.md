@@ -1,6 +1,6 @@
 # 保真检查清单（fidelity-checklist）
 
-消费方：fidelity 验收与 visual-reviewer 对拍判定。每条一行「查什么 + 怎么判」；「怎么判」出处 = baseline 键名（`props.*` 14 属性集 / `_rect`）或 T6 阈值表档位（零容差 / ±1px / 逐字等值 / 栏比例 ±2%）。
+消费方：fidelity 验收与 visual-reviewer 对拍判定。每条一行「查什么 + 怎么判」；「怎么判」出处 = baseline 键名（`props.*` 14 属性集 / `_rect`）或 visual-gate-protocol.md §2 阈值表档位（零容差 / ±1px / 逐字等值 / 栏比例 ±2%）。
 
 ## 排版族
 

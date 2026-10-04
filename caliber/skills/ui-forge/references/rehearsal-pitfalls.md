@@ -1,5 +1,7 @@
 # 彩排雷点与判例回流（rehearsal-pitfalls）
 
+> 定位注：research-ui-fidelity.md = 2026-09-25 ui-forge plan 调研工件（工作仓 .caliber/exec/2026-09-25-ui-forge-plan/，不随包分发）；本文件内对其节编号引用仅供仓内溯源。
+
 消费方：caliber 阶段 3 彩排（plan-forge 工序 4 Phase 1 confusion-hunt 注入本文件增节）、plan 写作期（雷点 12 条逐条对 plan）、UI 保真判例回流登记（判例回流五步）。本文件不评价设计优劣——设计取舍归用户与设计交付物，这里只写字面执行者逐字执行会踩的机械陷阱。
 
 ## 彩排雷点 12 条

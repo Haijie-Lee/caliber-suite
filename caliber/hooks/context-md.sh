@@ -12,5 +12,5 @@ import json,sys
 body=open(sys.argv[1],encoding='utf-8').read()
 header='工程 CONTEXT.md 自动注入（caliber 插件 SessionStart hook）：\n\n'
 print(json.dumps({'hookSpecificOutput':{'hookEventName':'SessionStart','additionalContext':header+body}}))
-" "$CTX"
+" "$CTX" 2>/dev/null
 exit 0

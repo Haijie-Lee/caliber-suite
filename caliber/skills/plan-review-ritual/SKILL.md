@@ -2,7 +2,7 @@
 name: plan-review-ritual
 description: "Use when you finish writing any implementation plan, spec, or design doc and are about to hand it to execution — especially when the executor is less capable."
 metadata:
-  version: "2.6.4"
+  version: "2.6.5"
   source: distilled-from-practice
 ---
 
@@ -213,7 +213,7 @@ CONFIRMED = **无条件修**；SINGLE 按置信度进裁定队列；critical 级
 
 ```
 <!-- REVIEW DECISION LOG -->
-## 审查决策审计（plan-review-ritual v2.5）
+## 审查决策审计（plan-review-ritual v<当前版本>）
 | ID | 来源 | 发现 | 分类 | 裁定 | 理由 | 修复位置 | 涟漪 |
 ```
 
@@ -223,6 +223,8 @@ CONFIRMED = **无条件修**；SINGLE 按置信度进裁定队列；critical 级
   引用——是/否。调用方据此判定是否触发下一轮；
 - **跨轮复现**：同一位置在不同轮次被不同 stance 命中 → 标记"复现"，视作
   跨轮共识，强度不低于同轮 CONFIRMED。
+- **版本占位**：模板头 `v<当前版本>` 为占位符——生成审计表时填本 skill
+  frontmatter metadata.version 的当前值；模板本体保留占位字面量，不回填。
 
 零发现的检查项/视角必须在审计表或正文里留"查了什么"记录，不许静默跳过。
 
@@ -249,7 +251,7 @@ CONFIRMED = **无条件修**；SINGLE 按置信度进裁定队列；critical 级
 ## 收尾
 
 - 抓到的新型陷阱（平台级、可复用的）写入项目陷阱文档或 learnings，
-  让下次 Step 1.5 的清单变长——这个 skill 的价值随使用增长。
+  让下次 Step 1 自审的清单变长——这个 skill 的价值随使用增长。
 - 调用方关系：plan-forge 工序 3 调本机制并注入五视角清单
   （plan-forge/checklists.md）；L 级收敛循环由工序 3 传入 `ROUND`/
   `AUDIT_PATH`；caliber ML 级仅用 Step 1 自审；MS 级不经本 skill（阶段 3 = 快速自查 + plan-reviewer 单派遣，prompt 骨架见 plan-drafting）。
