@@ -12,7 +12,7 @@
   不抢占既有路由、冲突交用户裁定）。
 
 ```markdown
-<!-- caliber:global:entry v1.7.3 -->
+<!-- caliber:global:entry v1.7.5 -->
 ## 工程任务入口（caliber）
 
 **改动类请求（feature / bugfix / refactor / 迁移 / 多文件操作等）先经 skill `caliber` 定级再执行**——定级决定流程剂量（S/MS 轻、ML 标准、L 全剂量），让流程严谨度随任务复杂度缩放。以下不必绕行：纯问答与查询、用户已给出明确具体指令的小改动、用户明示跳过。
@@ -31,7 +31,7 @@
 - 用途：plan/spec 写完后必过对抗审查的例行纪律。
 
 ```markdown
-<!-- caliber:global:plan-review v1.7.3 -->
+<!-- caliber:global:plan-review v1.7.5 -->
 ## Plan review 例行流程（caliber）
 
 **写完任何 plan / spec / 实现计划后，先做多视角 review 再交付实现**——plan 的执行者是逐字执行的执行者，plan 里的 bug 会原样变成产物 bug。流程走 skill `plan-review-ritual`：多视角分节（架构→代码质量→测试→性能），每节零发现也要明说「查了什么、为什么没有」。验收标准：不看其他文档的逐字执行者能否照做到底——不行则补全（完整代码、确切期望输出、不留「显然」步骤）。
@@ -44,7 +44,7 @@
 - 用途：三件套流水线要点与稳定裁定（防级别×机制错配）。
 
 ```markdown
-<!-- caliber:global:pipeline v1.7.3 -->
+<!-- caliber:global:pipeline v1.7.5 -->
 ## caliber 流水线要点
 
 - 三件套：`caliber`（定级路由）→ `plan-forge`（ML/L 级 plan 锻造）→ `plan-review-ritual`（对抗审查）；各级剂量、工序、声部通道以各 skill 原文为准。
@@ -59,7 +59,7 @@
 - 用途：专业 sub-agent 优先的调度偏好（caliber 班底的消费侧纪律）。
 
 ```markdown
-<!-- caliber:global:subagent v1.7.3 -->
+<!-- caliber:global:subagent v1.7.5 -->
 ## Sub-agent 调度偏好
 
 **派发工作给 sub-agent 前，先看可用列表里有没有匹配任务性质的专业化 agent**（代码审查、调试、调研、文档等专用席位）——有合适的优先专业化，general-purpose 只作兜底。专业化 agent 带领域定制的工具集与行为约束（只读不改、置信度门槛、证据引用格式），产出纪律性强于通用 agent。

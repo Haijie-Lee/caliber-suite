@@ -2,7 +2,7 @@
 name: plan-drafting
 description: "Use when drafting a plan document at MS/ML/L level — caliber 阶段 2（MS）与 plan-forge 工序 2（ML/L）自动路由；契约矩阵先行、判断前置、验证内建，六道锻造原生结构。中文触发：写 plan、起草计划、制坯、计划文档"
 metadata:
-  version: "1.2.1"
+  version: "1.3.0"
   source: distilled-from-practice
 ---
 
@@ -181,6 +181,9 @@ MS 级 plan 的审查 = 两道：快速自查五条 + plan-reviewer 单派遣独
 
 ### 快速自查五条（作者本人，ritual Step 1 五条 MS 版）
 
+注（1.3.0）：ritual Step 1 第 6 条（单步 lookahead 首败预测）不落 MS 自查——
+MS 的前瞻问由下方 plan-reviewer 派遣问 4 承载（fresh 眼预测，防作者自答自验）。
+
 1. **心算断言**：把每条验证期望的输入代入实现心算一遍，与断言一致。
 2. **模块级语句**：regex、常量等模块级语句 import 时就执行——它会炸吗。
 3. **跨任务签名一致性**：任务间引用的签名/字段/命名逐字对。
@@ -201,6 +204,12 @@ MS 级 plan 的审查 = 两道：快速自查五条 + plan-reviewer 单派遣独
 2. 仓库交叉核对：plan 引用的路径/版本/计数/原文片段与仓库实文对照。
 3. 验证期望具体性：每条期望具体到可机械判定（exact count / exact
    string）吗？
+4. 全局首败预测（单步 lookahead 固定问；与发现清单表逐缺陷的「失败场景」
+   列区分——那列逐条发现配场景，本问全 plan 只挑一步）：通读全 plan 后
+   只挑执行时最可能首先失败的一步，并给出该步的验证信号（什么可观察
+   现象表明它正在失败）。答案独立成节置于报告末尾（「首败步」与「验证
+   信号」各一行，首败步引用 plan 原文定位），不进发现清单——预测不是
+   缺陷上报，不适用三级裁定。
 裁定纪律（三级）：Mechanical（事实性错误）→ 逐条上报 + 建议修法，主线程
 静默修并留痕；Taste / User Challenge → **停**，上报用户裁定，不自动定。
 只报运行时会炸或产物会错的问题；零发现是合法结论（逐项留「查了什么」
@@ -209,6 +218,10 @@ MS 级 plan 的审查 = 两道：快速自查五条 + plan-reviewer 单派遣独
 
 派遣 `Task(subagent_type=plan-reviewer)`，缺席退 general-purpose（本 prompt
 全文作注入清单）。
+
+回收义务（1.3.0）：问 4 答案由主线程回收，一行「首败步 + 验证信号」记入
+任务台账（落点与阶段 4 盯梢义务 = caliber 阶段 2 出口通用段，单一真源，
+此处不复制）。
 
 ## ML 审查对接节（architect 席二选一）
 

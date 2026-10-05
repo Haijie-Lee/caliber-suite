@@ -2,7 +2,7 @@
 name: caliber
 description: "Use when starting any engineering task — feature, bugfix, refactor, or change request — before touching code. Not for pure Q&A, research, or open-ended discussion."
 metadata:
-  version: "1.22.0"
+  version: "1.25.0"
   source: distilled-from-practice
 ---
 
@@ -67,7 +67,26 @@ plan-review-ritual；
 - 判级顺序：先查 L 条件（可逆性 / 方案 / 跨度任一重 → **L**——唯一例外：开创性-only 命中按开创性信号段判 M、子档钉 ML，1.22.0）；再查 M 条件
   （影响面 / 验证重 → **M**）；全轻 → **S**
 - 拿不准 → 升级（保守原则）
-- 宣布：`定级 X，理由：<命中的维度>`。用户可一句话改级，此后不再问。
+- 宣布：`定级 X，理由：<命中的维度>；最大未知=<一句话>，消解步=<阶段 N 某机制>`。
+  用户可一句话改级，此后不再问。
+
+**不确定性因子（1.24.0）**：宣布格式的「最大未知 / 消解步」两问 = 定级落定后
+加问一句「本任务最大的未知是什么？哪一步消解它最便宜？」——答案**不改级**，
+只在级内决定流程税的倾斜方向：高未知 → 重前期（阶段 1 澄清/调研 + 彩排）；
+低未知高 stakes → 重后期（阶段 3 审查 / 阶段 5 验证）。理论地位：D4 剂量公式
+（stakes × 频率 × 残差）的第四因子候选——未验证假说（meta-protocol D11
+假说地位），措辞与执行不得当作已证实机制。三条护栏 + S 级口径：
+- **a) 不是第六维**：不参与判轻重、不改变级别，只在级内分配剂量（防级通胀；
+  理论依据 = D4 失效条件：stakes 不可评估域退回保守默认剂量）。五维表保持
+  五维，本问不入表。
+- **b) 倾斜映射（最小版，两条）**：高未知 → 阶段 1 不省（MS 保 deep-probe
+  轻量档、ML 保双轨不折叠）+ 彩排优先；低未知高 stakes → 阶段 3 审查 /
+  阶段 5 验证加量。
+- **c) 答不出=高未知**：答不出「最大未知」即未知本身是最大未知，按高未知处理
+  （保守原则，与「拿不准 → 升级」同构）。
+- **S 级**：本问同样一句话照问（成本≈零），但不产生任何倾斜动作——S 无前期
+  可加量，答案仅供记录（S 常态无 plan 落盘即无台账，定级宣布行即记录；MS+
+  落账介质 = 台账表头「最大未知 / 消解步」两字段，见阶段 2 出口通用段）。
 
 **开创性信号（1.19.0；1.22.0 修订）**：需求明示原创/突破、一跳先例检查无已知解、常规路线被约束排除——任一命中即「方案」维判重，**但开创性不直判 L**（2026-10-04 用户裁定）：开创性-only 命中（可逆性/跨度皆轻）判 **M、子档钉 ML**，阶段 1 转 deep-probe 开创性档；其他 L 条件任一重 → 仍判 L。判定默认 agent 自动裁定（判据附证据：查过哪些已知路线、为何排除），用户可在任务开始时前置声明覆盖，声明优先。机制见 deep-probe references/frontier-protocol.md。
 
@@ -155,9 +174,18 @@ dispatch 派发）；S/MS 无 dispatch 边界，主线程查表纪律实测失�
 
 **阶段 2 出口通用（1.16.0）**：凡 plan 落盘（MS=`.caliber/plans/`、ML/L=`docs/plans/`），
 编排者即建任务台账 `.caliber/exec/<plan-stem>/progress.md`——表头（定级/引擎路由/
-plan 路径/开账时间）+ 流水行 `| 时间 | 阶段 | 事件 | 产出/指针 |`；此后审查轮、
+plan 路径/开账时间/最大未知/消解步——后两字段 = Step 1 定级宣布同名字段转录
+（1.24.0），与前瞻台账行「首败步 + 验证信号」分工并存：表头记开账时未知，
+流水行记阶段 3 后首败预测）+ 流水行 `| 时间 | 阶段 | 事件 | 产出/指针 |`；此后审查轮、
 裁定门、闸口、彩排、dispatch、停止点逐项追加；阶段 4 引擎启动后续写同一文件，
 不重建、不覆盖。
+
+**前瞻台账行（单步 lookahead 固定问，1.23.0）**：阶段 3「单步 lookahead 固定问」
+（首败预测）产出答案后——MS = plan-drafting MS 审查对接节 plan-reviewer 派遣问 4；
+ML/L = plan-review-ritual Step 1 第 6 条；L 级 exit gate 另设 pre-mortem 固定段
+（plan-forge 工序 3.5），其发现按放行判据处置、不替代本行——编排者向台账追加
+一行「首败步 + 验证信号」。阶段 4 执行时盯该信号；若真在该步遇挫，按擦边信号
+记入台账。
 
 **阶段 6 通用（1.14.0）**：`docs/known-issues.md` 存在时做**触发核查**——
 重访触发命中本任务的 open 项必须显式处置（关闭记理由 / 带新触发再延 /
@@ -232,7 +260,7 @@ exec-forge 路径的消费钩子 = caliber:exec-forge §任务环「组合决策
 | 编码实现（机械/集成 dispatch） | `coder` → `general-purpose` | general-purpose |
 | 非代码实现（exec-forge 实现席：文档/配置/操作/调研，机械/集成 dispatch） | `executor` → `general-purpose` | general-purpose |
 | 计划/拆解/需求分析 | `architect` → `code-architect` | general-purpose |
-| 方案独立生成（deep-probe 双轨挑战轨 / 开创性档空间映射与深入展开；硬性要求零参与 fresh 上下文） | `architect` → `plan-reviewer` → `general-purpose` | general-purpose |
+| 方案独立生成（deep-probe 双轨挑战轨 / 开创性档空间映射与深入展开；硬性要求零参与 fresh 上下文；按任务域分叉——产物为概念结构〔理论框架/方法论/分类体系/立场文件〕→ 理论域链，工程制品或拿不准 → 工程域链；判定细则单一真源 = deep-probe §方案探索协议「挑战者派遣 prompt 骨架」节） | 工程域：`architect` → `plan-reviewer` → `general-purpose`；理论域：`plan-reviewer` → `general-purpose` | general-purpose |
 | 证据口径审计（frontier 调研断言四要素核对：来源/日期/测量条件/口径） | `evidence-auditor` → `exec-reviewer` → `general-purpose` | general-purpose |
 | 疑难 bug 诊断（根因不明类） | `debugger` | general-purpose |
 | 深度调研/选型 | `researcher` | general-purpose |
@@ -314,5 +342,7 @@ MS 保持 inline 同此渊源。）
 - **ML/L 级**：+ 路由表确认（Step 1.5 第 5 步）+ 阶段 4 入口执行编排批量确认（exec-forge/coding-forge 预分配表）——两确认均带折叠条件（见 Step 1.5 第 5 步与 exec-forge §阶段 4 入口停止点，2026-09-15 裁定）。
 - **L 级**：+ deep-probe 澄清问答、plan 逐条裁定（可批量）、审查轮 3 不收敛
   重锻、分支收尾。
+- **多歧义排序（1.24.0，与 Step 1 不确定性因子同源）**：多歧义并存须上报时，
+  按「哪个答案最大改变后续路径」（value of information）排序，不按遇到顺序。
 
 其余一律自动推进——该走的流程不打断，该停的决策不抢跑。

@@ -2,7 +2,7 @@
 name: plan-review-ritual
 description: "Use when you finish writing any implementation plan, spec, or design doc and are about to hand it to execution — especially when the executor is less capable."
 metadata:
-  version: "2.6.5"
+  version: "2.7.1"
   source: distilled-from-practice
 ---
 
@@ -31,6 +31,10 @@ metadata:
    越弱，review 的 ROI 越大。
 5. **不是所有发现都值得打扰用户。** 明显笔误静默修；只有真分歧才上裁定门；
    模型认为用户方向该改时，**用户原方向是默认——模型必须举证**。
+6. **双声部 = 同一 plan 的两次独立 rollout（浅搜索）。** 分歧 = 搜索发现的
+   决策边界；第 2 条「双命中 = 强信号」的统计意义由此来——两次独立采样同点
+   命中，该点为真缺陷的后验远高于单次。（理论出处：campaign-suite 仓
+   docs/plugin-meta-protocol/04-lineage.md 开放分支 5。）
 
 ## 何时使用 / 不使用
 
@@ -72,6 +76,14 @@ metadata:
 5. **平台/语言事实核查**：目标平台的真实行为，不是想象的行为。
    （PS5.1 `powershell -File` 把 Write-Warning 送进 stdout 破坏 NDJSON；
    外层超时必须 > 内层超时之和。）
+6. **单步 lookahead（首败预测，2.7.0）**：通读全 plan 后只挑执行时最可能
+   首先失败的**一步**，并给出该步的验证信号（什么可观察现象表明它正在
+   失败）。与逐缺陷的失败场景区分——本条是全局预测，全 plan 只挑一步；
+   必有答案，「无预测」不是合法输出。与轮 3 pre-mortem 互补：彼者仅不收敛
+   出口触发，本条恒执行——收敛的 plan 也要有首败预测。答案随 plan 冻结
+   一并落盘：一行「首败步 + 验证信号」进任务台账（落点与阶段 4 盯梢义务
+   见 caliber 阶段 2 出口通用段，单一真源；本 skill 脱离 caliber 单独使用时，
+   同款行记入 AUDIT_PATH）。
 
 **全深就是全深**：每个检查项，"没发现问题"必须附"查了什么、为什么没有"
 （1-2 句）。一行带过 = 没查。

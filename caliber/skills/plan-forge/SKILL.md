@@ -2,7 +2,7 @@
 name: plan-forge
 description: "Use when writing a formal implementation plan document for ML/L-level tasks — caliber ML/L 级阶段 2 自动路由；especially when the plan will be executed verbatim by a less-capable executor."
 metadata:
-  version: "1.10.1"
+  version: "1.11.1"
   source: distilled-from-practice
 ---
 
@@ -167,13 +167,17 @@ User Challenge 永不自动定，用户原方向为默认）。各轮 stance 与
 - **给**：原始 CONTEXT（阶段 1 澄清产物）+ 当前 plan 全文 + 仓库访问权；
 - **刻意不给**：DELTA 表、任何轮次的审计文件、五视角 checklist——它不知道
   "修了什么"，没有验尸冲动，只能做全量对照；
-- **任务三问**：
+- **任务三问 + pre-mortem 固定段**（固定段 2026-10-05 解禁：复制自轮 3
+  声部 B pre-mortem，轮 3 原位保留；fresh 全局复审固定追加，口径沿用
+  「只报风险登记未覆盖者」）：
   1. **goal drift**——CONTEXT 每个需求点 ↔ plan 落点逐条对照；反向查镀金
      （plan 承诺了 CONTEXT 没要求的东西）；
   2. **fact re-verification**——带出处标注的事实断言（文件/签名/版本/数值）
      现在还成立吗？修复触碰段必查，未触碰段抽样；
   3. **假设链连贯性**——Task N 的前提在 Task M（M<N）的**当前文本**里还
-     成立吗？（比回填漂移高一层：不是文本矛盾，是**前提消失**）。
+     成立吗？（比回填漂移高一层：不是文本矛盾，是**前提消失**）；
+  4. **pre-mortem**——两周后实现失败，哪行 plan 被逐字执行导致了它？
+     只报风险登记未覆盖的失败模式。
 
 检查细目与派遣 prompt 骨架：读 `checklists.md` 工序 3.5 节。
 
@@ -183,7 +187,7 @@ User Challenge 永不自动定，用户原方向为默认）。各轮 stance 与
 
 **放行判据**（2026-09-24，trans-forge L1 实证）：fresh 闸口发现数不收敛于
 零是机制属性，非质量缺陷——每次新 fresh 视角都可能照出新 P2，为「零发现」
-空转轮次无收益。放行判据 = **无结构级新发现**：发现均落在三问既有类别内、
+空转轮次无收益。放行判据 = **无结构级新发现**：发现均落在三问与 pre-mortem 固定段既有类别内、
 属可修补的落点/事实级 → 修复后直通工序 4；新缺陷类别、前提级断裂、承诺
 变更（WHAT 级）= 结构级 → 回工序 2。（实证：2026-09-23 trans-forge L1
 两轮闸口后重跑仍获 2 项 P2，用户裁定放行——写成显式判据，省一轮裁定。）

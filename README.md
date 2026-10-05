@@ -1,6 +1,6 @@
 # caliber — ZCode 工程纪律插件
 
-> 最后更新：2026-10-04
+> 最后更新：2026-10-05
 
 caliber 是一个 ZCode 插件（以 git 仓库形态作为 marketplace 源分发），把"工程纪律"打包为 **11 个 skills + 4 个工作流 hooks + 12 个 agents**：skills 让流程严谨度随任务复杂度缩放，hooks 在关键时刻把纪律自动递到 agent 眼前。
 

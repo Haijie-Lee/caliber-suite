@@ -58,6 +58,7 @@
 - **验证锚两查——写入清单 ↔ 验证锚一一对应、条件-动作对动作分支有独立验证**（实证：2026-09-23 trans-forge plan T9 终审 F-A——M10 四件落盘清单只有建图一件有验证锚，双产物从未落盘而四锚全绿；锚全部由草稿/隐藏件即可满足）：每件「写入/落盘」类交付物必配「路径存在 + 关键属性实测」锚，且验证锚不得能由中间产物满足；「X 过 → 做 Y」型停点/门，动作分支 Y 必须有自身验证命令——只验条件 X 时，Y 的缺失在全部锚绿下不可见
 - **凡自环/冒烟用例含预算或配额语义：预算型用例天然只覆盖「触顶收口」路径，「预算打不满走正常收口」的路径零覆盖——plan 须显式补一个大预算短窗用例**（实证：2026-09-24 AeroFold U-M2-01 T3——自环四例+补测全绿，但全部走预算 cap 路径或无数据泵；真实测速必然 timer 收口 + 发送方阻塞在写，该路径假报 midstream_cut，审查分席抓出 P0，真实 ul runs 部署即全红）
 - **计数类断言命令的五族伪影纪律**（实证：2026-09-25 ui-forge 批 G6/T11 扫描五连发——`^version:` 漏算 frontmatter 两格缩进致假漏报、`\.md（` 漏算中间反引号致假绿、`grep|grep -v|head` 取 head 退出码掩真状态、`node … | tail` 致 EXIT-B=0 假象、`&&` 链短路让后续计数断言静默不跑）：①`grep -c` 数的是命中行数不是命中次数，含 `\|` 交替的模式必须注明计数语义（一行多命中只计 1）；②禁管道吞 exit code——计数断言独立调用或 `;` 分隔，禁 `&&` 链、禁 `| tail/head` 收尾；③零命中先校准仪器——模式对一个「已知在场」的锚串试跑，锚都不命中 = 模式伪影而非产品事实；④行数留痕（「恰 N 行」类白名单）必须实测落账，禁凭记忆或设计预期写数；⑤断言命令格附可复跑形态，复核者逐字重跑必得同数
+- **验证清单的计数预期必须与给定逐字改写文本机械对账**（实证：2026-10-05 挑战者先验按域换装批——验证清单写「`grep -n 理论域` 预期 ≥5 处」，而给定逐字改写文本只产 4 处，「审计条目」类不含该字面串；执行者被夹在「逐字执行」与「凑够计数」之间，只能报偏差、不得补字）：写验证清单的计数预期前，先对给定文本跑 `grep -o <串> | wc -l` 机械计数，预期值 = 实测值再落笔；列举命中位置类别时逐类核对该类文字真含目标串
 
 ### 轮次化 stance 与 prompt 骨架（轮 ≥2 由 forge 工序 3 装配注入）
 
@@ -155,6 +156,10 @@ escalate as P2 immediately; do NOT silently classify as Mechanical.
       修复改掉）
 - [ ] 预分配表席位（含审查槽）存在性对会话清单抽核——引用不存在的 agent 席位 = 预绑定空转（实证：2026-09-20 彩排预绑定 skill-reviewer，用户纠正为 plan-reviewer）
 
+### pre-mortem 固定段（问 4，2026-10-05 解禁；复制自轮 3 声部 B pre-mortem，轮 3 原位保留）
+- [ ] 两周后实现失败——哪行 plan 被逐字执行导致了它？只报风险登记未覆盖的
+      失败模式（登记已覆盖者不报，防与风险登记重复计账）
+
 ### 派遣 prompt 骨架（forge 工序 3.5 注入，填槽 {CONTEXT} {PLAN_PATH}）
 
 ```
@@ -168,7 +173,7 @@ INPUTS:
 2. CURRENT PLAN (artifact under gate review): {PLAN_PATH} — read it in full.
 3. Repository access: re-verify any factual claim against reality.
 
-Answer THREE questions, every finding with verbatim citations (plan line +
+Answer FOUR questions, every finding with verbatim citations (plan line +
 CONTEXT line or repo evidence):
 Q1 GOAL DRIFT — does the plan still deliver exactly what CONTEXT asks?
    Every CONTEXT requirement must have a plan landing point; and the plan
@@ -180,6 +185,11 @@ Q2 FACT RE-VERIFICATION — do factual claims (files, signatures, versions,
 Q3 ASSUMPTION CHAIN — for each task, do its stated/implied prerequisites
    still hold in the CURRENT text of earlier tasks? Hunt vanished premises,
    not text contradictions.
+Q4 PRE-MORTEM (fixed lookahead segment, added 2026-10-05 — copied from the
+   round-3 voice-B pre-mortem stance, which stays in place): two weeks from
+   now the implementation has failed. Which plan line, executed verbatim,
+   caused it? Report ONLY failure modes NOT covered by the plan's risk
+   register.
 
 Report: PASS, or FINDINGS table (location | question | claim | evidence).
 Any FINDING is P2 minimum. Fix nothing. No style comments.
