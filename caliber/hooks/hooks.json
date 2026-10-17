@@ -13,6 +13,18 @@
             "timeoutMs": 5000
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "process",
+            "command": "C:/Program Files/Git/bin/bash.exe",
+            "args": [
+              "${ZCODE_PLUGIN_ROOT}/hooks/sessionstart-probe.sh"
+            ],
+            "timeoutMs": 3000
+          }
+        ]
       }
     ],
     "PreToolUse": [

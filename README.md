@@ -1,8 +1,8 @@
 # caliber — ZCode 工程纪律插件
 
-> 最后更新：2026-10-05
+> 最后更新：2026-10-17
 
-caliber 是一个 ZCode 插件（以 git 仓库形态作为 marketplace 源分发），把"工程纪律"打包为 **11 个 skills + 4 个工作流 hooks + 12 个 agents**：skills 让流程严谨度随任务复杂度缩放，hooks 在关键时刻把纪律自动递到 agent 眼前。
+caliber 是一个 ZCode 插件（以 git 仓库形态作为 marketplace 源分发），把"工程纪律"打包为 **11 个 skills + 4 个工作流 hooks + 13 个 agents**：skills 让流程严谨度随任务复杂度缩放，hooks 在关键时刻把纪律自动递到 agent 眼前。
 
 ## 它解决什么问题
 
@@ -32,7 +32,7 @@ caliber 的思路：前两类靠 hooks 在事件点上**自动注入**（不依�
 | `ui-forge` | UI 视觉正确性装备库：视觉基线提取 → 阈值对拍门 → 豁免两段式 → 视觉审查席位，设计稿与实现的一致性机器判定（v1.6.0 起） |
 | `caliber-onboard` | 全局 AGENTS.md 智能融合接入：安装/升级后把 caliber 定级入口以版本化托管块融入用户级指令文件——现场侦察既有路由、不覆盖、幂等、冲突交用户裁定（v1.7.1 起） |
 
-### Agents（12 个）
+### Agents（13 个）
 
 | Agent | 一句话职责 |
 |---|---|
@@ -41,6 +41,7 @@ caliber 的思路：前两类靠 hooks 在事件点上**自动注入**（不依�
 | `code-reviewer` | 代码 diff 审查，coding-forge 引擎 reviewer 槽首选 |
 | `exec-reviewer` | 非代码任务审查，exec-forge 引擎 reviewer 槽首选 |
 | `visual-reviewer` | UI 渲染产物与设计稿的一致性视觉审查：基线审查 / 对拍判定 / 残余维度，不读实现代码 |
+| `temporal-reviewer` | plan 冻结后全时间线透镜（ML/L 级）：同形簇席位推导 / 稀缺窗口聚类 / 时序假设断裂 / 前瞻义务链对照，只建议不裁定 |
 | `coder` | 编码实现，引擎实现槽首选 |
 | `debugger` | 疑难 bug 系统化诊断 |
 | `architect` | 需求分析与任务分解 |

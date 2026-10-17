@@ -1,16 +1,16 @@
 # 视觉对拍门协议（visual-gate-protocol）
 
-> 定位注：research-ui-fidelity.md = 2026-09-25 ui-forge plan 调研工件（工作仓 .caliber/exec/2026-09-25-ui-forge-plan/，不随包分发）；本文件内对其节编号引用仅供仓内溯源。
+> 定位注：research-ui-fidelity.md = ui-forge plan 调研工件（工作仓 .caliber/exec/2026-09-25-ui-forge-plan/，不随包分发）；本文件内对其节编号引用仅供仓内溯源。
 
 消费方：visual-gate.mjs（对拍判定，产出报告）、visual-reviewer（消费报告做残余维度审查）。本文件是 ui-forge 视觉对拍门（gate）的判定阈值与报告协议主件，契约定义见 plan 契约矩阵（仓内账本，不随包） C3/C9。
 
 ## 1. CLI 契约（C3 逐字）与运行纪律
 
-`node visual-gate.mjs --design-url <url> --impl-url <url> --baseline <path> --elements <json-file> --viewport <WxH> --out <path> [--prepare <js-file>] [--prepare-design <js-file>]`；`--prepare` = 提取前对 impl 页面 `page.evaluate` 该 JS 文件（SPA 切屏等预备动作），缺省无；`--prepare-design` = 截 shot-design 前对 design 页面同法预备（2026-09-25 起，金样 deferred ①），缺省无；退出码：0=无未豁免 diff，1=有未豁免 diff，2=运行错误；`--out` 缺省 `fidelity-report.md`
+`node visual-gate.mjs --design-url <url> --impl-url <url> --baseline <path> --elements <json-file> --viewport <WxH> --out <path> [--prepare <js-file>] [--prepare-design <js-file>]`；`--prepare` = 提取前对 impl 页面 `page.evaluate` 该 JS 文件（SPA 切屏等预备动作），缺省无；`--prepare-design` = 截 shot-design 前对 design 页面同法预备（金样 deferred ①），缺省无；退出码：0=无未豁免 diff，1=有未豁免 diff，2=运行错误；`--out` 缺省 `fidelity-report.md`
 
 ### 双引擎纪律
 
-对拍统一用 Chromium 打开实现 URL，不用 Tauri WebView2 窗口——computed style 双引擎一致，字体光栅化差异不进 diff，2026-09-25 实测环境注记。
+对拍统一用 Chromium 打开实现 URL，不用 Tauri WebView2 窗口——computed style 双引擎一致，字体光栅化差异不进 diff。
 
 ### 基线取向（写死）
 
@@ -38,7 +38,7 @@
 
 他处引用本表档位一律用「阈值表」指针。
 
-注（2026-09-25 实战 F-a）：border 判定前先作零宽归一——双侧 computed 串首个 px 分量
+注（实战 F-a）：border 判定前先作零宽归一——双侧 computed 串首个 px 分量
 （宽度）均为 0 即视为等值，不再逐字比对（preflight `*{border:0 solid}` 得 `0px solid …`
 vs UA 初始 `0px none …`，视觉零差异；AeroFold 首轮 65 条 diff 中 30+ 条属此族）。
 归一只改判定、不改阈值档位。
@@ -69,7 +69,7 @@ vs UA 初始 `0px none …`，视觉零差异；AeroFold 首轮 65 条 diff 中 
 
 末尾汇总行（总 diff 数/豁免数/未豁免数/跳过数）。
 
-报告另含两节（2026-09-25 起）：`## 跳过清单`（skipped 态条目，列 = role/selector/原因，
+报告另含两节：`## 跳过清单`（skipped 态条目，列 = role/selector/原因，
 skipped>0 才出，见 §7）；`## 豁免登记建议`（未豁免 diff 逐条给可直接粘贴进
 baseline.exemptions 的 JSON 行，格式 `{"selector":"…","props":["…"],"reason":"","source":""}`，
 按 selector+prop 去重——栏比例行的 selector 即组合串 `selA[nthA] ~ selB[nthB]`，nth 缺省
@@ -87,11 +87,11 @@ top-5 排序写死：数值属性按差幅降序，其余按生成序。
 行业判例：Chromatic 被豁免元素的**尺寸变化仍报**（豁免只遮渲染差异不遮几何漂移）——豁免粒度宁窄勿宽；各工具豁免命名盘点（Percy Ignore Regions / Chromatic ignoreSelectors / BackstopJS hide·removeSelectors / Playwright mask·clip / Applitools Ignore+Floating regions）见 research-ui-fidelity.md §三。
 
 栏比例 diff 的 selector 列 = 组合串 `<selA>[<nthA>] ~ <selB>[<nthB>]`（配对键域 = role，
-nth 缺省注 [0]；2026-09-25 R9-F1 起）——栏比例豁免登记的 selector 以报告行逐字为准
+nth 缺省注 [0]）——栏比例豁免登记的 selector 以报告行逐字为准
 （含 [0] 注记），手工改写易错，用 §4 豁免登记建议节的原样行（实战 F-g/T8-F3 文档
 精确化）。
 
-豁免 `source` 字段证据规约（2026-09-25 终审裁定，金样 deferred ③）：两类锚齐备——
+豁免 `source` 字段证据规约（金样 deferred ③）：两类锚齐备——
 ①裁定出处（裁定文档/会话/裁定门指针）；②机器证据锚（fidelity-report 文件名、
 shot-design/shot-impl 截图名、或实测记录文件路径，至少其一）。缺 ② 的豁免
 visual-reviewer 席位可不予背书（金样实证：tbl td 豁免机械两段式全绿，因设计侧视觉锚
@@ -101,7 +101,7 @@ visual-reviewer 席位可不予背书（金样实证：tbl td 豁免机械两段
 
 未豁免 diff > 50 条时报告只出汇总 + 按族 top-5，全文落附件（防噪音淹没——同源教训 = AeroFold-ui 仓 `docs/learnings/2026-09-24-relay-integration-false-greens.md` U-M2-02 集成假绿复盘：单轮 PASS 无证据力，跨仓只读引用）。
 
-## 7. 可见性与 skipped 态（2026-09-25 起，金样 deferred ②⑥ + 实战 L13/L15 裁定）
+## 7. 可见性与 skipped 态（金样 deferred ②⑥ + 实战 L13/L15 裁定）
 
 提取侧为每个元素记录 `_visible`（原生可见性，揭示前判定）：谓词 =
 `node.getClientRects().length > 0 && computed display !== 'none' && visibility !== 'hidden'`；

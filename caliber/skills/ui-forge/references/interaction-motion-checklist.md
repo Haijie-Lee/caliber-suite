@@ -2,12 +2,12 @@
 
 消费方：interaction 状态验收与状态声明对拍判定。每条一行「查什么 + 怎么判」；「怎么判」出处 = baseline 键名（`props.*` 14 属性集 / `_rect`）或 visual-gate-protocol.md §2 阈值表档位（零容差 / ±1px / 逐字等值 / 栏比例 ±2%）；动效类验收形态见挂起条款。
 
-**挂起条款**：动效（进入/退出/补间动画）的验收形态 v1 挂起——本文件只登记动效清单与状态声明，不做对拍判定；重审触发器 = 首个含明确动效需求的 UI 任务出现（2026-09-25 用户裁定）。
+**挂起条款**：动效（进入/退出/补间动画）的验收形态 v1 挂起——本文件只登记动效清单与状态声明，不做对拍判定；重审触发器 = 首个含明确动效需求的 UI 任务出现。
 
 ## hover 反馈
 
-- **状态色阶**：判据见 `fidelity-checklist.md`「状态色阶」条（单落点不复制——2026-09-25 终审并案，双写归指针）；本条义务 = 逐状态（hover/focus/active/disabled）构造样本送判。
-- **hover 反馈时限**：判据归并「过渡时长与曲线」节「(research §二) 时长惯例」条（单落点不复读——2026-09-25 终审并案）。
+- **状态色阶**：判据见 `fidelity-checklist.md`「状态色阶」条（单落点不复制——双写归指针）；本条义务 = 逐状态（hover/focus/active/disabled）构造样本送判。
+- **hover 反馈时限**：判据归并「过渡时长与曲线」节「(research §二) 时长惯例」条（单落点不复读）。
 - **(research §二) 静态截图只覆盖 default 态**：状态验收须逐态构造样本；CSS `:hover` 是 trusted event 难程序化模拟 → 用 Pseudo States 插件或 `.hover/.active` 镜像类；Chromatic 明确 hover/focus 需显式模拟：play function、.focus()。
 - **(research §二) 交互测试只拍终态**：play function 中间态不落图，要中间态就拆多个 story。
 - **(research §二) 机器可判交互项**：逐状态提取 background-color/color/border/box-shadow/opacity/outline/transform/transition-* 与双侧 diff（属性级对比是确定性判定）。〔推断：条目组合自 [S26] 检查项，非成文清单〕
@@ -15,14 +15,14 @@
 ## 过渡时长与曲线
 
 - **过渡声明齐备**：查实现 transition-property / transition-duration / transition-timing-function 三项是否显式声明；未声明即视为无过渡，动效清单登记有该动效而实现无声明即报。
-- **时长 ≤200ms 惯例**：判据归并下条「(research §二) 时长惯例」（单落点不复读——2026-09-25 终审并案）。
+- **时长 ≤200ms 惯例**：判据归并下条「(research §二) 时长惯例」（单落点不复读）。
 - **(research §二) 时长惯例**：微交互反馈 100-200ms（NNg：hover 150-200ms、focus/pressed 100-150ms）；WinUI 控件动画三档 250/167/83ms；MD3 duration token short1-4=50/100/150/200ms、medium1-4=250/300/350/400ms、long1-4=450/500/550/700ms、extra-long=900/1400ms → 双侧比 computed transition-duration 与 token 对齐。
 - **(research §二) 缓动惯例**：MD3：easing-standard cubic-bezier(0.2,0,0,1)、emphasized-decelerate (0.05,0.7,0.1,1)、legacy (0.4,0,0.2,1)；Fluent：进场 (0,0,0,1)、退场 (1,0,1,1) → 比 computed transition-timing-function 逐 token。
 
 ## 键盘焦点流
 
 - **tab 顺序**：tab 顺序同设计流程；逐 Tab 走查焦点落点顺序与设计一致，跳序/漏焦点即报。
-- **焦点环可见**：判据见 `fidelity-checklist.md`「焦点环」条（单落点不复制——2026-09-25 终审并案，双写归指针）；本条义务 = focus 态样本构造（:focus-visible 键盘触发、指针点击不出现）送判。
+- **焦点环可见**：判据见 `fidelity-checklist.md`「焦点环」条（单落点不复制——双写归指针）；本条义务 = focus 态样本构造（:focus-visible 键盘触发、指针点击不出现）送判。
 - **(research §二) 键盘可达与 tab 顺序**：tab 顺序同设计流程；focus-visible 只在键盘导航出现、鼠标点击不出现。
 - **(research §二) 焦点环会被截图裁掉**：Chromatic 裁到 story 根节点尺寸，outline 常被裁 → 样本根节点加 padding 再截。
 

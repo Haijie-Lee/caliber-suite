@@ -28,7 +28,7 @@
 - **padding/margin/gap**：读 baseline `props.padding`/`props.marginBottom`/`props.gap` 与实现 computed 逐边比；padding 四向可不等逐边比、margin 以「元素间最终间距」比而非声明值（折叠无对应）、gap 直接比 computed（无折叠/合成最可靠）；判定按阈值表「±1px」档。
 - **视觉密度**：抽样读 baseline `props.padding`/`props.gap`/`props.height` 值分布成簇并与 token 刻度档一致，散点孤值即报（密度漂移）。
 - **跨元素对齐**：对拍时双侧 live getBoundingClientRect 边缘量测（design/impl 两页各自 live 取 rect 边缘坐标比对，属 gate 侧运行时量测），同栏元素左缘对齐、同排元素基线/底缘对齐，≤1px 偏心不判负、>1px 判负；出处 = gate 运行时双侧 rect 边缘比对。
-- **(research §一) 非标值保真**：设计 22/15/11/30px 类非刻度值须原样进 CSS/token；漂移判据 = 实现值 ≠ 设计值（零容差），刻度表只归档命名不做就近取整。〔推断：机制为工程推导（同批四根因实证 9 处字号漂移），非行业成文惯例〕
+- **(research §一) 非标值保真**：设计 22/15/11/30px 类非刻度值须原样进 CSS/token；漂移判据 = 实现值 ≠ 设计值（零容差），刻度表只归档命名不做就近取整。〔推断：机制为工程推导，非行业成文惯例〕
 - **(research §一) 4px 级偏差必须机器判**：人工走查 4px 差在正常缩放下不可见，而 4px 偏差几乎必是实现错误（spacing 是最不可靠的人检项）→ 间距一律机器取 computed 比对。
 - **(research §一) 测距双源互验**：Figma Dev Mode 悬浮/⌥ 拖拽测距值 ↔ getBoundingClientRect 几何互验一致。
 - **(research §一) 尺寸语义**：Figma 尺寸含 padding → 对应 box-sizing: border-box；content-box 实现须加 padding+border 后再比。

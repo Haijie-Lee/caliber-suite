@@ -3,9 +3,11 @@
 仅在进入对应工序时读对应节。这里是对抗审查的**视角细目**；机制（双声部、
 共识表、裁定分类、审计追踪）在 plan-review-ritual v2，此处不重复。
 
+> 不定期条目纪律：本清单条目长期有效但非永久——新增条目须在 docs/skills-changelog.md 或 docs/learnings/ 落实证出处（批名 + 出处 + 日期），条目正文不落日期、不落版本标签、不落批名·轮次回指；复核时以 changelog 条目时间判定新旧，changelog 无出处条目按「验证时间不明」对待，优先抽验。
+
 ## 工序 2 — 制坯检查清单（已移交）
 
-本清单已随六道锻造下沉至 caliber/skills/plan-drafting/SKILL.md「自查清单」节（v1.8.0，2026-09-20）；工序 3-4 节清单不受影响。
+本清单已随六道锻造下沉至 caliber/skills/plan-drafting/SKILL.md「自查清单」节；工序 3-4 节清单不受影响。
 
 ## 工序 3 — 锻打五视角清单（轮 1 注入 plan-review-ritual 的 CHECKLIST；轮 ≥2 stance/prompt 骨架见本节末尾）
 
@@ -17,16 +19,16 @@
 - 有没有步骤完成判据模糊？（"处理一下边界情况"——什么算处理完？）
 - 任务间顺序依赖是否显式？（Task N+3 用了 Task N 的产物，说了吗？）
 - 每个文件路径是否精确到存在/将存在的具体位置？
-- **单元 plan 的终审任务必须显式列评估四步**（评估包装配 → 单次评估 dispatch → known-issues/TODO 落盘 → eval 行入账；实证：2026-09-22 AeroFold U-M1-02/03/04 三单元终审连续跳过 coding-forge §终审 deferred minor 评估 loop，31 条 deferred minor 停在终审 reviewer 的 accept-defer 分类即被当终态、静默悬挂，当晚批量补账）——终审任务只写「做终审」= 较弱执行者把评估 loop 当隐含步骤跳过；四步显式列出，终审组合行核查才有物可咬
+- **单元 plan 的终审任务必须显式列评估四步**（评估包装配 → 单次评估 dispatch → known-issues/TODO 落盘 → eval 行入账）——终审任务只写「做终审」= 较弱执行者把评估 loop 当隐含步骤跳过；四步显式列出，终审组合行核查才有物可咬
 
 ### 视角 2 — 契约（跨任务一致性）
 - Task N 定义的签名 vs Task N+M 的调用：逐字对
 - 消息/文件格式：生产者和消费者对同一字段的类型/可空性理解一致吗？
 - 常量/枚举值：所有使用点的取值集合一致吗？
 - "Interfaces: Consumes/Produces" 块与正文实际代码一致吗？
-- **文件/目录搬迁任务：替换表的旧字符串必须与实文逐字比对**（实证：2026-08-13 文档整合——两处旧串缺反引号、一处缺括号导致全文替换零匹配，另 8 处引用点漏列入表；grep 证据逐条对照，计数注解（"2 处"）在"显示文本+URL 双出现"的文件里必然失真——直接标"全文替换"）
+- **文件/目录搬迁任务：替换表的旧字符串必须与实文逐字比对**（grep 证据逐条对照，计数注解（"2 处"）在"显示文本+URL 双出现"的文件里必然失真——直接标"全文替换"）
 - **断链修复的目标必须实测存在**（实证：`plans/status_redesign.md` 全仓库不存在——幽灵旧名；修复时先 `find` 验证目标，判定旧名/笔误要写进 plan，不许静默猜测）
-- **plan 强制行为变更×既有共享物碰撞预扫**：对每个 plan 钉死的行为变更，grep 既有 pin 点（共享测试断言/桩接口/属主文件 API），碰撞件显式列进对应任务块或给出预授权裁定通道（实证：2026-09-24/25 flow-builder 波次二——同型 7 例（台账 Ruling-13①/14/15/16/21/24/31），三轮双声部+闸口+彩排全过均未抓到、全靠执行期开工前提问契约接住；未列明的碰撞在并行窗口=已知红窗口或静默扩权二选一）——全谱见 flow-builder docs/learnings/2026-09-25-wave2-orchestration-discipline.md §1
+- **plan 强制行为变更×既有共享物碰撞预扫**：对每个 plan 钉死的行为变更，grep 既有 pin 点（共享测试断言/桩接口/属主文件 API），碰撞件显式列进对应任务块或给出预授权裁定通道（未列明的碰撞在并行窗口=已知红窗口或静默扩权二选一）——全谱见 flow-builder docs/learnings/2026-09-25-wave2-orchestration-discipline.md §1
 
 ### 视角 3 — 环境（平台真实行为）
 - 每条平台断言（shell 行为、编码、路径分隔符、超时语义）是实测的还是想象的？
@@ -34,13 +36,23 @@
 - 并发/时序假设：有没有"这里肯定已经完成了"而未同步的点？
 - 资源假设：磁盘、内存、句柄——超限时的行为定义了吗？
 - **共享工作树的提交纪律**（实证：多 workstream 并行仓库，`git add -A`/`-u` 把 7 个他线修改 + 未跟踪文件卷入"纯搬迁"提交）：commit 步骤必须显式路径暂存；未跟踪他线文件"只改不提交"；含他线改动的文件用条件分支 + 简报说明
-- **外部声部/长任务引用的超时语义必须分档且实测**（实证：2026-09-01 backmigration plan 复审轮——ritual Voice B 全量任务单（读 plan + 交叉核对仓库）被固定 `timeout 300` 强杀 RC=124 零输出，转写验尸证明子进程健康（38 工具调用/242s/上下文 119.6K），同日 8 次调用 7 成功、唯一失败即封顶误杀）：凡 plan 步骤引用外部模型审查或长任务，超时按输入规模分档（纯文本 ≤300s；含计划外文件读取 → 后台 + 看门狗 + 停滞判杀），且 RC=124 的处置 = 先验尸转写再降级，禁止看到超时就降级；千行级/开放式读取优先改为摘录进 prompt 或移交主声部，而非仅换后台
-- **MSYS2/Git Bash 的 `sed -i` 默认剥 CRLF**（实证：2026-09-09 fed_console 移植 T4——plan 原样命令 `sed -i 's/Eco Console/Fed Console/g' tools/collect_dist.ps1` 执行后 162 个 `\r` 清零，触发自己的 CRLF 门禁；`sed -b -i`（binary I/O）保 162 个且替换正确）：凡 plan 步骤用 sed 编辑 `*.ps1` 等 CRLF 强制文件，命令必须写 `sed -b -i`，且验证步骤必须含 `file` 或 `\r` 计数断言
-- **派 subagent 去某包体内挖子系统前，plan 必须含一条「该子系统确实在此包体内」的实测断言**（实证：2026-09-19 ZCode 动态工作流调研 workflow——「实现层」面 brief 写「从 app.asar 里挖 CreateWorkflow 实现」，实际引擎在服务端，客户端包 27068 文件内 `dwf_run`/`caps_max_concurrency`/`actor_site_id` 命中数均为 0，只有工具名注册表项；该 subagent 执行 6m40s 仍停在第一步挖不存在的引擎，同批整轮已烧 270K tokens）。**关键：为该面配的独立核验者抓不到此错**——核验者被要求「独立重读同一证据源」，与调研者共享同一错误前提；**换人复审只能证伪证据源能证伪的东西，前提本身错了双人复核会一致地错**。故 plan 的每条「去 X 里找 Y」任务，须由编排者先用一个特征标识符 grep 坐实（成本约 1 次调用），而不是交给执行者或审查者验证
-- **凡 plan 含 `report()` / 事件上报类调用，payload 必须只含该下游真正消费的字段，且 plan 须给出上限量级**（实证：2026-09-19 同上 workflow——把 88 条 claims 数组塞进 `report()` 得 62685 字节，超 32768 上限，整轮以 `ReportCapExceeded` 终止于 19.1M tokens；该数组对只声明四列的 `artifact.table` 毫无用处，属「顺手多带一点」打死整轮）。完整数据走返回值交下游、上报只留摘要。配套排障纪律：**工作流失败的第一动作是查持久化的节点结果（如 `dwf_node.result_json`）而非看失败通知**——该轮 5 个已完成面的 261 条结果全部可从中取回，改 payload 后重跑 6 步命中缓存
-- **凡 plan 判据依赖容器日志（docker logs），redeploy 会清空证据——plan 须钉死「最终二进制上一次性跑完判据矩阵」或日志落盘步骤**（实证：2026-09-24 AeroFold U-M2-01 T5——执行期三轮修复各 `compose up --build` 重建容器，早前 runs 的 conn 判据日志随容器丢失，被迫在最终二进制上重跑全矩阵补证据）
-- **凡 plan 用公网回显服务（ifconfig.me/ip.sb 等）断言网络身份：多宿主/策略路由环境下该流量走固定境外出口，与被测路径无关——身份判据必须用对端服务端观测（XFF/remote 日志）**（实证：2026-09-24 同单元 T5——A 机切蜂窝后 ifconfig.me 仍报切换前的 HK 固定出口 IP，服务端 XFF 实测 112.97.80.81 才是真身；企业宽带阶段同现象）
-- **凡网络身份/限速归因类 plan：多宿主出口（企业宽带境外走专线、国内走本地 ISP）下「同一机器」可有多身份，预检断言须钉对端观测值而非本机回显值**（实证：2026-09-24 同上——plan 步 0 钉 ifconfig.me 段断言在两网连续误报，D5 裁定服务端 remote 为权威后才闭环）
+- **外部声部/长任务引用的超时语义必须分档且实测**：凡 plan 步骤引用外部模型审查或长任务，超时按输入规模分档（纯文本 ≤300s；含计划外文件读取 → 后台 + 看门狗 + 停滞判杀），且 RC=124 的处置 = 先验尸转写再降级，禁止看到超时就降级；千行级/开放式读取优先改为摘录进 prompt 或移交主声部，而非仅换后台
+- **MSYS2/Git Bash 的 `sed -i` 默认剥 CRLF**：凡 plan 步骤用 sed 编辑 `*.ps1` 等 CRLF 强制文件，命令必须写 `sed -b -i`，且验证步骤必须含 `file` 或 `\r` 计数断言
+- **派 subagent 去某包体内挖子系统前，plan 必须含一条「该子系统确实在此包体内」的实测断言**。**关键：为该面配的独立核验者抓不到此错**——核验者被要求「独立重读同一证据源」，与调研者共享同一错误前提；**换人复审只能证伪证据源能证伪的东西，前提本身错了双人复核会一致地错**。故 plan 的每条「去 X 里找 Y」任务，须由编排者先用一个特征标识符 grep 坐实（成本约 1 次调用），而不是交给执行者或审查者验证
+- **凡 plan 含 `report()` / 事件上报类调用，payload 必须只含该下游真正消费的字段，且 plan 须给出上限量级**。完整数据走返回值交下游、上报只留摘要。配套排障纪律：**工作流失败的第一动作是查持久化的节点结果（如 `dwf_node.result_json`）而非看失败通知**——该轮 5 个已完成面的 261 条结果全部可从中取回，改 payload 后重跑 6 步命中缓存
+- **凡 plan 判据依赖容器日志（docker logs），redeploy 会清空证据——plan 须钉死「最终二进制上一次性跑完判据矩阵」或日志落盘步骤**
+- **凡 plan 用公网回显服务（ifconfig.me/ip.sb 等）断言网络身份：多宿主/策略路由环境下该流量走固定境外出口，与被测路径无关——身份判据必须用对端服务端观测（XFF/remote 日志）**
+- **凡网络身份/限速归因类 plan：多宿主出口（企业宽带境外走专线、国内走本地 ISP）下「同一机器」可有多身份，预检断言须钉对端观测值而非本机回显值**
+- **凡 plan 指令加编译期断言（`_Static_assert`/`static_assert`）必须钉死落点文件；被 C++ TU include 的 C 头禁落 C11 断言**：混合 C/C++ 工程里头文件的编译面 = 所有 include 它的 TU 语言并集——断言落点写 `.c` 文件，或给 `#if !__cplusplus` 围栏/C-C++ 双安全宏形态，plan 逐字钉死
+- **凡 plan 产出 `.ps1`/PowerShell 脚本且含非 ASCII（中文）内容：必须钉死 UTF-8 带 BOM**：PS 5.1 判 UTF-8 的通道 = BOM，无 BOM + 非 ASCII = 编码误读吞结构符；验证步骤加 AST 解析断言（`[System.Management.Automation.Language.Parser]::ParseFile`）一次即证
+- **凡指令文本含反斜杠转义序列（`\r`/`\n`/`\\`）经 shell 工具传输层会被双解码——转义落成真控制字符，污染脚本字面量与 heredoc 终止符**：零转义写法（`chr(13)+chr(10)`、`bytes([13])`、`grep -F` 固定串）；脚本一律用文件写入工具落盘、禁 heredoc 内嵌长串/转义序列；plan/脚本统一 LF 落盘，含 `$` 锚断言先核文件行尾制式
+- **ssh 远端命令串里禁止内联 `$?`/`$VAR` 取值——双引号命令串经本地 MSYS 壳与对端中间壳（POSIX sh 与 cmd+bash -c 两路同病）会被提前展开，远端真实退出码永远丢失；改外层单引号遇内嵌双引号段仍炸**：退出码走 ssh 链路本身（`ssh …; echo EXIT=$?` 在本地壳取）；远端命令复杂时用 stdin 脚本通道 `ssh host "bash -s" < script.sh`（零引号层级，本地转义不影响远端字节流）；含 ssh 的 plan 命令先本地实测等价形态再落笔
+- **git ≥2.53 `worktree remove` 对 ignored-only 工作树静默放行：exit 0 且内容被删——只有 untracked 非 ignored 或已修改才拒绝**：plan 的「删 worktree」前置禁止写「先 `rm -rf` 清 ignored 再 remove」（=亲手删掉再让 git 放行）；改清点制——`git status --ignored` 列清单进台账留证，人确认后一把 `worktree remove`
+- **docker compose 冒烟/多实例三语义**：①`ports` 合并=按唯一键**追加**非替换，替换须给 `ports` 打 `!override` 标签；②显式 `container_name` **不受** `-p` project 前缀影响，多实例并存必须在 override 里改名；③`up -d` 自动拉起硬 `depends_on`（service_healthy 型），单服务冒烟须 `--no-deps`；④override 端口映射的容器侧以 Dockerfile EXPOSE 为准，别照抄宿主侧端口
+- **宿主/平台契约断言的第一证据源 = 用户级 memory 实证档案，先于文档与源码**：凡 plan/方案含宿主事件契约、stdin 键集、hook 注入语义等平台断言，勘探顺序钉死——先扫用户级 memory 实证档案（含日期与证伪记录），再扫官方文档与生产源码；文档是通用句、档案是事件级实证，冲突时以档案为权威并对失真处做带回写日期的修正标注
+- **hook 探针/哨兵的 JSON 输出必须 hookSpecificOutput 包络——裸顶层过不了严格 schema，「通道死」与「JSON 形态错」不可区分 = 假阴性误杀方案**（发现全文 = docs/learnings/2026-10-15-fusion-review-seat-lessons.md）：凡 plan 设计 hook 探针/哨兵，输出 JSON 逐字钉 `{"hookSpecificOutput":{"hookEventName":"<事件>","additionalContext":"..."}}` 形态，或双哨兵（两形态各挂一个注册）一次实验消歧
+- **插件 hook 用户级生效、与工作区无关——探针/哨兵脚本必须含工程根守卫**：凡 plan 装临时探针 hook（尤 matcher `.*` 的 UserPromptSubmit），脚本必含 cwd/工程根守卫（非测试目录即 exit 0 静默）+ 安装窗口压短 + 即验即卸；无守卫探针对本机所有会话注入哨兵并把各会话提示词原文随 stdin 落盘 = 隐私事故面
+- **hooks/agents 类机制的实现 plan 必含部署链声明**：凡 plan 交付 hooks/agents 类机制，部署步骤钉死四拍——版本 bump → 卸载+重装 → 全新会话 → 哨兵验证；配套 hook 文档写明「旧会话不生效非故障」，防「机制坏了」假结论
 
 ### 视角 4 — 风险（失败模式）
 - 每个外部交互点：失败时 plan 说什么了吗？（超时、拒绝、空响应、畸形响应）
@@ -48,21 +60,28 @@
 - 取消路径：用户中途取消，资源（子进程、临时文件、锁）谁清理？
 - 风险登记表每条处置与正文一致吗？（登记说"兜底"，正文有兜底代码吗？）
 
+- **时症空药签名（时间维症状 × 空间补丁）可机械检测**：plan 出现下列签名即报——①以「记住/注意/届时检查」类自觉依赖治时间问题而无工件承载（无触发器、无日期、无消费端）；②对「碎」型问题加条目（条目本身即碎片，组织层问题须再条件化）；③承重断言（版本/计数/路径/前提）无第二来源交叉对账（档案防腐：谎言随时间增值——道二交叉对账并入本条）
+- **能力争议发实验、不发辩论**：plan 含「某 agent/席位能否产出 X」的承重断言（插入点取舍/插入时机依赖它）而无实证支撑时必报——处置 = 把争议转成 plan 内最小证伪实验任务（标本 + 判据 + 阴性对照），禁写裸「假定能/不能」
+- **编织裁定留痕核查**：plan 含信号命中件时，编织裁定节逐命中件有处置（编织/豁免+理由）；裁定在而工序无生产者 = 断裂，必报
+
 ### 视角 5 — 测试（断言可复现）
 - 每条断言：输入代入实现，期望值能心算复现吗？复现不出来 = 断言是抄的
 - fixture 是真实数据还是手编的？手编数据的"干净度假象"排了吗？
 - 模块级语句（regex、常量、装饰器）：import 时就执行——它会炸吗？
 - 有没有测试只断言"不抛异常"（= 没断言）？
-- **本地验证门必须逐项镜像 CI 门，缺哪条 CI 就在哪条红**（实证×2：2026-09-29 AeroFold UC-04——plan 验证门写了 clippy/test/build/lint 却漏 `cargo fmt --check`，CI fmt 臂独红 e18b607 补修；同日 UR-02 同型——fmt 先红遮蔽 bool_assert 真错）：写 plan 验证门前先读该仓 CI workflow 的步骤清单，把每条门逐字抄进 plan（fmt --check / clippy -D warnings / check:no-mock…），coder 派工 prompt 的验证门节与之同源
-- 逐字交付的破坏性/不可逆核心脚本，有没有只被 plan 自带断言（快乐路径）验证？——补对抗性边界探针（盘符相对路径 / 同 basename 碰撞 / 异常 schema 输入），实证：2026-09-16 file-hygiene T4 F1/F2（3 轮审查+3 闸口+彩排全过快乐路径，执行期对抗探针抓出「崩溃无 manifest」与「trash 静默覆盖」两缺陷）
-- **验证锚两查——写入清单 ↔ 验证锚一一对应、条件-动作对动作分支有独立验证**（实证：2026-09-23 trans-forge plan T9 终审 F-A——M10 四件落盘清单只有建图一件有验证锚，双产物从未落盘而四锚全绿；锚全部由草稿/隐藏件即可满足）：每件「写入/落盘」类交付物必配「路径存在 + 关键属性实测」锚，且验证锚不得能由中间产物满足；「X 过 → 做 Y」型停点/门，动作分支 Y 必须有自身验证命令——只验条件 X 时，Y 的缺失在全部锚绿下不可见
-- **凡自环/冒烟用例含预算或配额语义：预算型用例天然只覆盖「触顶收口」路径，「预算打不满走正常收口」的路径零覆盖——plan 须显式补一个大预算短窗用例**（实证：2026-09-24 AeroFold U-M2-01 T3——自环四例+补测全绿，但全部走预算 cap 路径或无数据泵；真实测速必然 timer 收口 + 发送方阻塞在写，该路径假报 midstream_cut，审查分席抓出 P0，真实 ul runs 部署即全红）
-- **计数类断言命令的五族伪影纪律**（实证：2026-09-25 ui-forge 批 G6/T11 扫描五连发——`^version:` 漏算 frontmatter 两格缩进致假漏报、`\.md（` 漏算中间反引号致假绿、`grep|grep -v|head` 取 head 退出码掩真状态、`node … | tail` 致 EXIT-B=0 假象、`&&` 链短路让后续计数断言静默不跑）：①`grep -c` 数的是命中行数不是命中次数，含 `\|` 交替的模式必须注明计数语义（一行多命中只计 1）；②禁管道吞 exit code——计数断言独立调用或 `;` 分隔，禁 `&&` 链、禁 `| tail/head` 收尾；③零命中先校准仪器——模式对一个「已知在场」的锚串试跑，锚都不命中 = 模式伪影而非产品事实；④行数留痕（「恰 N 行」类白名单）必须实测落账，禁凭记忆或设计预期写数；⑤断言命令格附可复跑形态，复核者逐字重跑必得同数
-- **验证清单的计数预期必须与给定逐字改写文本机械对账**（实证：2026-10-05 挑战者先验按域换装批——验证清单写「`grep -n 理论域` 预期 ≥5 处」，而给定逐字改写文本只产 4 处，「审计条目」类不含该字面串；执行者被夹在「逐字执行」与「凑够计数」之间，只能报偏差、不得补字）：写验证清单的计数预期前，先对给定文本跑 `grep -o <串> | wc -l` 机械计数，预期值 = 实测值再落笔；列举命中位置类别时逐类核对该类文字真含目标串
+- **本地验证门必须逐项镜像 CI 门，缺哪条 CI 就在哪条红**：写 plan 验证门前先读该仓 CI workflow 的步骤清单，把每条门逐字抄进 plan（fmt --check / clippy -D warnings / check:no-mock…），coder 派工 prompt 的验证门节与之同源
+- 逐字交付的破坏性/不可逆核心脚本，有没有只被 plan 自带断言（快乐路径）验证？——补对抗性边界探针（盘符相对路径 / 同 basename 碰撞 / 异常 schema 输入）
+- **验证锚两查——写入清单 ↔ 验证锚一一对应、条件-动作对动作分支有独立验证**：每件「写入/落盘」类交付物必配「路径存在 + 关键属性实测」锚，且验证锚不得能由中间产物满足；「X 过 → 做 Y」型停点/门，动作分支 Y 必须有自身验证命令——只验条件 X 时，Y 的缺失在全部锚绿下不可见
+- **凡自环/冒烟用例含预算或配额语义：预算型用例天然只覆盖「触顶收口」路径，「预算打不满走正常收口」的路径零覆盖——plan 须显式补一个大预算短窗用例**
+- **计数类断言命令的五族伪影纪律**：①`grep -c` 数的是命中行数不是命中次数，含 `\|` 交替的模式必须注明计数语义（一行多命中只计 1）；②禁管道吞 exit code——计数断言独立调用或 `;` 分隔，禁 `&&` 链、禁 `| tail/head` 收尾；③零命中先校准仪器——模式对一个「已知在场」的锚串试跑，锚都不命中 = 模式伪影而非产品事实；④行数留痕（「恰 N 行」类白名单）必须实测落账，禁凭记忆或设计预期写数；⑤断言命令格附可复跑形态，复核者逐字重跑必得同数
+- **验证清单的计数预期必须与给定逐字改写文本机械对账**：写验证清单的计数预期前，先对给定文本跑 `grep -o <串> | wc -l` 机械计数，预期值 = 实测值再落笔；列举命中位置类别时逐类核对该类文字真含目标串；**计数拆解的每一份内容必须由指令保证存在**——未被指令钉死的注释/日志文案不得计入锚，要么期望值只数指令保证的部分、要么把注释文本在指令里逐字钉死；「恰 N 行」型白名单预判伴生提及（围栏注释/日志文案），不稳则改 ≥N
+- **「验证 X」先问被测字节从哪条路进执行体——对长驻在跑栈 `docker exec` 验证新产物 = 永远测旧码假绿**：验证形态=一次性容器 `-v` 挂同步副本（`docker run --rm -v <副本>:/src <镜像>`）；写验证步骤时答不出「被测字节进路」就是验证对象错位
+- **以宿主测试套件为判据时先实测宿主基线，禁写裸 exit=0 门**：plan 先跑基线测量钉失败集与 PASS 计数，判据=「失败集 ⊆ 基线 且 `grep -c '^--- PASS'` ≥ 基线值」
+- **git 历史类断言锚禁用 log 窗口深度（「`git log -20` 里应看到 X」）——plan 锻造/执行自身的修复 commit 会挤爆窗口致假红**：一律内容寻址写法（`git log --grep=<串> -1` 非空 / `merge-base --is-ancestor`）
 
 ### 轮次化 stance 与 prompt 骨架（轮 ≥2 由 forge 工序 3 装配注入）
 
-**stance 轮换表**（写死，不许即兴换；2026-09-14 起轮 3 方法互换——同一方法
+**stance 轮换表**（写死，不许即兴换；轮 3 方法互换——同一方法
 相邻两轮由不同声部执行，防视角固化；B 永不分配仓库依赖方法）：
 - 轮 2 声部 A：修复验尸（旧名 delta 验尸；主）+ 恶意字面执行者（次）+ 完整性批判；
 - 轮 2 声部 B（纯文本）：恶意字面执行者 + 回填漂移猎手；
@@ -93,7 +112,7 @@ ordering between dependent tasks.
 纪律追加：Do NOT re-report already-fixed items (see DELTA) unless the fix
 itself is wrong or incomplete.
 
-DRIFT WATCH（一行必答，2026-09-08 新增）：Did any fix this round change
+DRIFT WATCH（一行必答）：Did any fix this round change
 WHAT the plan promises to deliver (not just HOW it delivers)? If yes —
 escalate as P2 immediately; do NOT silently classify as Mechanical.
 （它管不了的由工序 3.5 兜底——本行只抓最明显的承诺变更。）
@@ -121,16 +140,16 @@ escalate as P2 immediately; do NOT silently classify as Mechanical.
    登记未覆盖的失败模式。
 ```
 **成本纪律**：轮 ≥2 checklist ≤ 轮 1 一半；声部 B 一律缩域纯文本
-（禁全量任务单，2026-09-01 实证：全量单被 300s 封顶误杀健康任务）。
+（禁全量任务单）。
 
-## 工序 3.5 — 准出闸口检查清单（exit gate，2026-09-08 新增）
+## 工序 3.5 — 准出闸口检查清单（exit gate）
 
 通用纪律（与轮内审查**相反**）：**不看 DELTA 表、不看任何轮次审计、不知道
 修了什么**；只对照三样——原始 CONTEXT、当前 plan 全文、仓库现实。
 每条发现必须同时引用 plan 原文 + CONTEXT 原文（或仓库证据），引不到的不报；
 风格/组织问题不报。
 
-编排者侧放行判据（SKILL.md 工序 3.5 同节，2026-09-24 回写）：闸口发现数
+编排者侧放行判据（SKILL.md 工序 3.5 同节）：闸口发现数
 不收敛于零是机制属性——放行判据 = 无结构级新发现（新缺陷类别/前提级
 断裂/承诺变更），非零发现。
 
@@ -154,9 +173,9 @@ escalate as P2 immediately; do NOT silently classify as Mechanical.
       活），查前提是否被修复悄然撤走；
 - [ ] 风险登记每条的处置与修复后正文一致吗？（处置引用的机制可能已被
       修复改掉）
-- [ ] 预分配表席位（含审查槽）存在性对会话清单抽核——引用不存在的 agent 席位 = 预绑定空转（实证：2026-09-20 彩排预绑定 skill-reviewer，用户纠正为 plan-reviewer）
+- [ ] 预分配表席位（含审查槽）存在性对会话清单抽核——引用不存在的 agent 席位 = 预绑定空转
 
-### pre-mortem 固定段（问 4，2026-10-05 解禁；复制自轮 3 声部 B pre-mortem，轮 3 原位保留）
+### pre-mortem 固定段（问 4，复制自轮 3 声部 B pre-mortem，轮 3 原位保留）
 - [ ] 两周后实现失败——哪行 plan 被逐字执行导致了它？只报风险登记未覆盖的
       失败模式（登记已覆盖者不报，防与风险登记重复计账）
 
@@ -185,7 +204,7 @@ Q2 FACT RE-VERIFICATION — do factual claims (files, signatures, versions,
 Q3 ASSUMPTION CHAIN — for each task, do its stated/implied prerequisites
    still hold in the CURRENT text of earlier tasks? Hunt vanished premises,
    not text contradictions.
-Q4 PRE-MORTEM (fixed lookahead segment, added 2026-10-05 — copied from the
+Q4 PRE-MORTEM (fixed lookahead segment, copied from the
    round-3 voice-B pre-mortem stance, which stays in place): two weeks from
    now the implementation has failed. Which plan line, executed verbatim,
    caused it? Report ONLY failure modes NOT covered by the plan's risk
@@ -195,7 +214,7 @@ Report: PASS, or FINDINGS table (location | question | claim | evidence).
 Any FINDING is P2 minimum. Fix nothing. No style comments.
 ```
 
-## 工序 4 — 成型检查清单（litmus 真实彩排，2026-09-16 新增）
+## 工序 4 — 成型检查清单（litmus 真实彩排）
 
 机制与级别语义在 SKILL.md 工序 4；本节只放派遣 prompt 骨架与回收检查。
 
@@ -236,7 +255,17 @@ component? Base judgments on the real capability intersection between task
 text and component description/body — never guess from component names.
 If no component fits a task, answer "无" explicitly (silence = you forgot
 to judge).
-Output TWO tables:
+MANDATORY LANDING-POINT RECONCILIATION: for each PRE-BOUND component in the plan's 技能消费表, FIRST
+read its SKILL.md body and enumerate its mandatory process steps at the
+plan's declared dose level (e.g. ui-forge ML = 基线/差集/验收锚/彩排增节/
+对拍门); then verify EVERY step has a landing point (which task, which
+step) in the plan. Output a third table:
+工序落点对账表: | 组件 | 必经工序 | plan 落点(任务/步) | 缺口处置 |
+A binding whose steps are not all landed = the plan must NOT freeze;
+report it (编排者回工序 2 补落点或显式 Ruling 豁免). 「表里有名字」≠「消费」.
+Also report any brief/plan quote of skill content lacking a "skill 原文 §"
+anchor (B2: 疑似凭记忆转写 — 上报，补锚后才许 dispatch).
+Output THREE tables:
 技能消费建议表: | 任务 | 适用步骤 | 建议组件 | 来源(路由表命中/全局清单) | 理由 |
 弃用建议(可空): | 任务 | plan 已有候选组件 | 弃用理由 |
 Suggestions from the 全局清单 must quote the component's description line
@@ -257,4 +286,8 @@ line: 无路由表，技能映射未执行.
 - [ ] 全局清单来源的建议逐条附 description 摘录
 - [ ] 弃用建议逐条有理由
 - [ ] 编排者裁定逐条留痕（采用/调整/弃用 + 理由），SKILL.md 工序 4「回传与回写」三处回写完成
-- [ ] **预分配表全部席位（执行者/审查槽）对会话 Agent 在场清单核存在性**（2026-09-21 复盘提议 3）：缺席席位须已走 2b 兜底链；plan 阶段产物审查槽默认 = plan-reviewer（本批用户裁定判例）
+- [ ] **预分配表全部席位（执行者/审查槽）对会话 Agent 在场清单核存在性**：缺席席位须已走 2b 兜底链；plan 阶段产物审查槽默认 = plan-reviewer
+- [ ] **编织裁定节在场且逐命中件有处置**：无信号命中件 = 「无信号命中」一行亦合法；节缺席或命中件无处置 = 遗漏，回工序 2
+- [ ] **预绑定技能必经工序落点对账表回收**：每绑定组件的必经工序逐条有 plan 落点；列不全 = plan 不许冻结（补落点或显式 Ruling 豁免）；核对轴=工序齐全，**不是**席位在不在
+- [ ] **brief/plan 引技能带「skill 原文 §」出处锚**：无出处锚 = 没读原文，补锚后才许 dispatch
+- [ ] **非 CLEAN 席位全文消费**：verdict 非 CLEAN 的席位，编排者回读落盘全文再处置，回执摘要不得作唯一证据源

@@ -36,5 +36,5 @@ docs/
 - 组件 AGENTS.md：≤80 行/份，进目录工作前读；只写「进该目录就会踩」的操作规则。
 - docs/plans/：ML/L 级任务 plan 文档归口（YYYY-MM-DD-<主题>-plan.md）。
 - 维护节奏：见 docs/README.md §9（会话收尾四层路由，caliber Stop hook 机械提醒）。
-- 历史名注：本层曾名「组件 CLAUDE.md」（≤1.2.0 模板），2026-09-14 起改名「组件 AGENTS.md」；已播种项目不回改。
+- 历史名注：本层曾名「组件 CLAUDE.md」（≤1.2.0 模板），已改名「组件 AGENTS.md」；已播种项目不回改。
 <!-- /caliber:docs-map -->

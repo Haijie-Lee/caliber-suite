@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# caliber 插件 Stop hook：learnings 收尾提醒（caliber-suite v1.1.0）
+# caliber 插件 Stop hook：learnings 收尾提醒
 # 会话有实质编辑（≥3 次 Write|Edit，计数由 index-registry-check.sh 维护）但
 # 未触 docs/learnings 时，以 Stop continuation（顶层 decision:block）递送
 # §9 收尾检查单。契约 C3/C4/C5/C6/C8；每会话至多提醒一次，有新 HEAD 可再一次。

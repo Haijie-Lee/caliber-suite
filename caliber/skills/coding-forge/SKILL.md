@@ -2,7 +2,7 @@
 name: coding-forge
 description: "Use when executing an ML/L-level implementation plan whose tasks are predominantly coding (new features, bug fixes, refactors) with git — caliber 阶段 4 编码执行引擎（非 coding 归兄弟引擎 caliber:exec-forge）：brief 文件化、双 verdict 审查门、TDD 证据强制、编辑纪律注入、ledger 断点恢复。中文触发：编码执行、代码派发、TDD 驱动、编码 forge"
 metadata:
-  version: "1.0.5"
+  version: "1.0.6"
   source: distilled-from-practice
 ---
 
@@ -15,7 +15,7 @@ dispatch 纪律 / 四状态 / 双 verdict 审查门 / fix loop / 过程日志契
 `caliber:exec-forge`（路由规则单一真源 = caliber §动态组合「执行引擎选择」节）。
 本 skill 是 caliber 编排下的执行引擎，不是
 独立工作流：定级、plan 锻造、阶段路由均在 caliber 侧完成。
-> 变更日志归工作仓 `docs/skills-changelog.md`（skill 文件不携带 changelog——2026-09-25 用户裁定：log 只记工作仓，不进发布仓）。
+> 变更日志归工作仓 `docs/skills-changelog.md`（skill 文件不携带 changelog——log 只记工作仓，不进发布仓）。
 
 ## 为什么有效（理解了才会用对）
 
@@ -82,7 +82,7 @@ dispatch 纪律 / 四状态 / 双 verdict 审查门 / fix loop / 过程日志契
    - 工作区 `.caliber/` 不入 git——仓 `.gitignore` 缺 `.caliber/` 行则开工前
      追加（否则运行工件卷入 commits 污染审查包）。
 3. **ledger**：`<ws>/progress.md`，首行逐字 =
-   `# coding-forge ledger — plan: <plan 路径>`（身份行常量；v1.16.0 起亦接受
+   `# coding-forge ledger — plan: <plan 路径>`（身份行常量；亦接受
    任务台账表头首行——见本条末追加注）。恢复语义
    （同源 exec-forge §Setup）：首行对不上 = 别人的进度，原样保留、另起新
    ledger；已有 `Task <N>: complete` 行的任务不重派，从首个无完成行的任务
@@ -90,7 +90,7 @@ dispatch 纪律 / 四状态 / 双 verdict 审查门 / fix loop / 过程日志契
    阶段 4 入口停止点不重复停等、pre-flight 不重复扫描；有新增调整另记
    Ruling。压缩后信 ledger 与 `git log`，不信记忆。启用过程日志
    （§过程日志契约）时同建 `<ws>/process-log.md`。
-   plan 期台账：caliber 阶段 2 出口已开账（v1.16.0 起，.caliber/exec/<plan-stem>/progress.md，首行 = 任务台账表头形态）——引擎启动续写同一文件，plan 期流水行保留，不重建不覆盖；首行为任务台账表头（含同一 plan 路径）时视同本 plan 账目直接续写，「首行对不上另起新 ledger」仅适用于其他 plan 占用。
+   plan 期台账：caliber 阶段 2 出口已开账（.caliber/exec/<plan-stem>/progress.md，首行 = 任务台账表头形态）——引擎启动续写同一文件，plan 期流水行保留，不重建不覆盖；首行为任务台账表头（含同一 plan 路径）时视同本 plan 账目直接续写，「首行对不上另起新 ledger」仅适用于其他 plan 占用。
 4. **读 plan 一遍**，建逐任务 todo；plan 指名 Spec 则同读（冲突以 Spec 为
    绑定权威；无 Spec → ledger 记一笔，其后 ruling 均为临时裁定）。
 5. **pre-flight 冲突扫描**（派 Task 1 前；同源 + 编码特化）：逐对共享
@@ -100,6 +100,11 @@ dispatch 纪律 / 四状态 / 双 verdict 审查门 / fix loop / 过程日志契
    （先提交 / 先 stash / 纳入本 plan），ruling 记 ledger。输出是表不是
    结论——"扫描干净"必须带这些行进 ledger；发现的冲突在执行开始前逐条
    裁定（plan 文本为准）。
+   **任务边界漂移抽验**：`git status --porcelain` 比对从
+   「派 Task 1 前一次」扩为「每任务边界一行」——各任务派发前与上一
+   边界快照对账，新增交集非空 = 记 Ruling 处置（先提交 / 先 stash /
+   纳入本 plan / 重验锚），不停。plan 前提清单列名的跨仓依赖路径
+   同口径（跨仓工作树新增改动 = Ruling）。
 
 ## 阶段 4 入口停止点 — 执行确认（批量，唯一）
 
@@ -160,7 +165,10 @@ exec-forge §2 四步：
    合法空转，本步不省略）；审查边界同法（`stages` ⊇ review → 摘录进
    审查包 constraints 块）——语义同源 exec-forge §2 ②。
 ③ **定档注入**（指令化 = 默认档 / 许可清单 = 须显式授予）：档规则同源
-   exec-forge §2 ③。**编码特化——代码 dispatch 的注入默认内容源** =
+   exec-forge §2 ③——**单引擎加载时先 Read 该节取操作细则**（指令化档
+   产物 = brief 末「## 注入」节，由该节生产步骤写入；本 skill §5 审查门
+   与 §终审以该节为保真核查基准，生产步骤不在场则基准无源）。
+   **编码特化——代码 dispatch 的注入默认内容源** =
    用户环境内编辑纪律 skill 的「注入模板」节（在场才读取展开；指针式
    引用，模板正文不复制进本文档）：
    - 槽位填充规则 = operator 填验证命令（模板末行验证命令槽，填本任务
@@ -213,10 +221,7 @@ dispatch prompt 构成（五件，同源）：
 - **长任务心跳**：预期 >10 分钟的任务，dispatch 里要求"每完成一个子任务
   向 report 文件追加一行"——文件 mtime = 确定性心跳；卡死从心跳续派
   （不从零重派）。
-- **派发后存活确认**（2026-09-25，flow-builder 波次二 T10 实证——
-  doc-writer 席三连秒败 ~600ms × harness「launched successfully」表象 ×
-  provider 账户级订阅错误；根因=该席唯一 `thoughtLevel: enabled` 路由至
-  过期订阅模型）：background 派发后必须 TaskOutput block 15-20s 确认
+- **派发后存活确认**：background 派发后必须 TaskOutput block 15-20s 确认
   agent 越过秒败窗才登记「在飞」——「launched successfully」只是进程拉起
   表象，agent 内首个模型调用可能即死。秒败签名（秒级返回+订阅/账户级
   报错）定位链：金丝雀探针法（一行 PROBE prompt 派同家族他席，区分家族
@@ -224,8 +229,8 @@ dispatch prompt 构成（五件，同源）：
   差异字段）。
 - **不贴会话史**：dispatch 描述一个任务，不是会话历史；前序摘要史禁止
   粘进 prompt。
-- **禁反向泛化句**（2026-09-24，trans-forge L1 T2-F1 实证，与 exec-forge
-  1.7.1 同源）：brief/plan 已写明提交义务（C10 类）的任务，dispatch prompt
+- **禁反向泛化句**（与 exec-forge
+  同源）：brief/plan 已写明提交义务（C10 类）的任务，dispatch prompt
   禁写「不要 git commit」类反向泛化句——worker 据此跳过 brief 明令的提交。
   提交纪律唯一权威 = brief/编排侧；worker 的边界是「不替编排者决定何时
   提交」，不是被泛化句豁免既有义务。
@@ -251,7 +256,7 @@ context——工件走文件。）
 - **commits 列表** `<base7>..<head7>`（本任务全部提交的短 sha 区间，编码特化——
   exec-forge 记文件清单，本引擎以 git 提交区间替代）。
 
-**证据回填**（2026-09-24，与 exec-forge 1.7.1 同源）：变更清单/文件计数/
+**证据回填**（与 exec-forge 同源）：变更清单/文件计数/
 commits 区间断言一律以实时命令输出支撑（`git status --short` /
 `git diff --stat <base7>..<head7>` / `git log --oneline`），禁凭记忆填清单
 或区间——计划时态的动作不是完成时态的事实。与 §6 报告准确性 防线同源
@@ -296,7 +301,7 @@ commits 区间断言一律以实时命令输出支撑（`git status --short` /
   里裁定。
 - 不让 reviewer 重跑实现者已跑的验证（report 带证据）；疑点聚焦测试
   可以，package-wide 重跑禁止。
-- **叙事性断言事实性核对**（2026-09-24，与 exec-forge 1.7.1 落盘声明
+- **叙事性断言事实性核对**（与 exec-forge 落盘声明
   存在性核对同源）：审查包 = git 区间 diff，只覆盖代码变更，不覆盖
   report 的叙事性断言（「全量套件零失败」声明、commits 区间、变更清单
   文件集）——reviewer 对每条叙事性断言做低成本实测核对（commits 区间
@@ -336,10 +341,9 @@ commits 区间断言一律以实时命令输出支撑（`git status --short` /
   report（把值改对），并记独立一条 ledger Ruling（启用过程日志时另记
   偏离恢复 类条目）——report 是终审与判读的证据底座，失真承重，修复
   窗口不过夜；产物本体不动，无需 scoped 重审。**防线**（exec-forge
-  1.6.3 同源补齐）：写「已提交/已推送/已写入 X」类陈述前，X 动作必须
+  同源补齐）：写「已提交/已推送/已写入 X」类陈述前，X 动作必须
   **已发生**且有可指档案（commit hash / grep 锚 / 文件实文）；动作未做的
-  先做再写——「先写后做」在报告里与虚称不可区分（实证 2026-09-23
-  AeroFold U-M1-06 报告虚称 runbook 已同步，独立审查 Major 抓获）。
+  先做再写——「先写后做」在报告里与虚称不可区分。
 - **plan-mandated / 与 plan 文本冲突的发现** → 编排者裁定（Spec 为绑定
   权威、plan 是其论证），ruling 记 ledger 后才行动；不许因 plan 要求而
   静默驳回，也不许派与 plan 矛盾的修复而无 ruling 记录。
@@ -623,7 +627,7 @@ scoped 重审 + 残量裁定（同 §6 breaker）。无第二波——残量承�
 | "重构顺手把行为也改了" | 行为冻结：行为变更与结构变更分提交，禁同提交双改。 |
 | "HEAD~1 取基线省事" | 多提交任务会被截断——BASE 族一律用记录的 sha。 |
 | "Edit 失败就整文件重写" | 编辑纪律：Edit 连续 2 次失败停下报告——Write 全覆盖抹掉上下文外的近期改动。 |
-| "锚文本我记得，省一次 Read" | Edit 前必须 Read 实文取锚——凭记忆或乱码 tail 输出写的锚必失配（2026-09-25 flow-builder 波次二编排者自身 3 次失配全同因）。 |
+| "锚文本我记得，省一次 Read" | Edit 前必须 Read 实文取锚——凭记忆或乱码 tail 输出写的锚必失配。 |
 | "再来一轮就收敛" | 过 cap 不收敛 = 结构性失败。裁定并路由。 |
 | "ledger 记账是开销" | ledger 是压缩后唯一幸存物——没有它的控制器重派过整个已完成任务序列。 |
 
@@ -653,12 +657,14 @@ scoped 重审 + 残量裁定（同 §6 breaker）。无第二波——残量承�
    `| ID | 日期 | 来源(plan/任务) | 发现 | 类别 | 重访触发 | 状态 |`
    与分隔行（类别 ∈ {计划强制, 执行引入, 其他}；状态 ∈ {open, closed}）。
    关闭 = 状态改 closed 并补关闭理由，不删除原行——处置留痕。
-7. **收口点后新浮出观察的处置出口**（2026-09-25，flow-builder 波次二
-   Ruling-39/40 实证）：终审+评估 loop 闭环后的 fix 席 concerns 与
+7. **收口点后新浮出观察的处置出口**：终审+评估 loop 闭环后的 fix 席 concerns 与
    scoped 重审 Out-of-Scope Observations 不再进评估通道——处置出口 =
    known-issues 追加登记（重访触发必填），编排者以 Ruling 落账。修复
    执行本身是新的检测面（实证：fix 席 concern 挖出镜像内维护页路径恒
    失配，触发面比评估裁定更宽）——concerns 是检测输出，不是噪声。
+8. **首败预测回记（可选）**：台账前瞻行（首败步 + 验证信号）
+   存在时，收尾简报加一行——命中 / 未命中 / 被前置拦下 + 实际首挫点
+   （阶段与事件指针）；无前瞻行则跳过。积累用途 = 跨批校准。
 
 ## 调用方关系
 
@@ -670,13 +676,12 @@ exec-forge §2 同源，本 skill 不复制决策规则全文）。prompts/ 四�
 §3、§5、§6、§终审 以 `prompts/<文件名>` 相对路径引用消费。
 
 **兄弟引擎 exec-forge**（路由语境形态 `caliber:exec-forge`）：两引擎
-共享同源机制集——同源节清单 = §1 brief / §2 组合决策 / §3 dispatch
+共享同源机制集——同源节清单 = §Setup / §1 brief / §2 组合决策 / §3 dispatch
 五件 / §4 四状态 / §5 双 verdict 门 / §6 fix loop / §7 完成 / §过程
 日志契约 / §终审 / §四停止。**触发条件：改上述任一同源节必须双改
 两侧**（语义对齐，编码特化处显式标注「编码特化」/「编码版」），否则
 本清单的互引失效。git 重度语义（worktree/commit/
-branch）的主场在本引擎；exec-forge 侧的 coding 扩展位已关闭
-（1.6.0），其重访触发器移交本 skill §延期决策。
+   branch）的主场在本引擎；exec-forge 侧的 coding 扩展位已关闭，其重访触发器移交本 skill §延期决策。
 
 延期项与重访触发器见 §延期决策。
 
@@ -686,12 +691,12 @@ branch）的主场在本引擎；exec-forge 侧的 coding 扩展位已关闭
 主题者（「③编辑纪律规则在 exec-forge 轻量代码任务的适用」属 exec-forge
 主题，不录）：
 
-1. **中程审查机制**：不进 v1.0.0。触发器 =
+1. **中程审查机制**：不进现版。触发器 =
    本引擎经 ≥2 个真实 L 级编码任务检验后评估审查门逃逸率。
-2. **worktree 模式冒烟覆盖**：v1.0.0 只冒烟 branch 默认路径。触发器 =
+2. **worktree 模式冒烟覆盖**：现版只冒烟 branch 默认路径。触发器 =
    首个真实 worktree 需求任务。
-3. **双独立审查（AND 门）**：不进 v1.0.0（与现行单
-   reviewer + 来源标签体系冲突面未评估）。触发器 = v10 冒烟判读时审查
+3. **双独立审查（AND 门）**：不进现版（与现行单
+   reviewer + 来源标签体系冲突面未评估）。触发器 = 冒烟判读出现审查
    门逃逸率实证。
 4. **git 重度语义完整支持重访**（exec-forge coding 扩展位关闭后的移交
    项）：触发器 = 本引擎经 ≥2 个真实编码任务检验后评估。

@@ -38,7 +38,7 @@ const USAGE = `用法：node visual-gate.mjs --design-url <url> --impl-url <url>
   --viewport    视口宽高，格式 WxH（例 1200x860）
   --out         报告输出路径，缺省 fidelity-report.md；双截图挂 out 词干落同目录（<out词干>.shot-design.png/.shot-impl.png）
   --prepare     提取前对 impl 页面 page.evaluate 该 JS 文件（SPA 切屏等预备动作），缺省无
-  --prepare-design 截 shot-design 前对 design 页面 page.evaluate 该 JS 文件（设计稿切屏预备，2026-09-25 起），缺省无
+  --prepare-design 截 shot-design 前对 design 页面 page.evaluate 该 JS 文件（设计稿切屏预备），缺省无
   --help        打印本用法并退出（退出码 0）
 
 退出码：0 无未豁免 diff；1 有未豁免 diff；2 运行错误（含用法错误、playwright 模块或浏览器二进制缺失）
@@ -358,7 +358,7 @@ async function main() {
     // 双页对拍：design 页出截图（shot-design.png），impl 页出提取 + 截图（shot-impl.png）。
     // --prepare 只施 impl 提取侧（C3 字面「提取前对页面」；T12 golden prepare 逐字稿为 impl
     // 侧选择器，design 页无对应 DOM，同施必抛 → 退 2 零产出，exec-review F1）；
-    // design 侧预备用 --prepare-design（2026-09-25 起，金样 deferred ①——此前 design
+    // design 侧预备用 --prepare-design（金样 deferred ①——此前 design
     // 截图恒为默认屏，非默认屏形态二判定缺设计侧视觉锚）
     const designPage = await browser.newPage({ viewport });
     await designPage.goto(values['design-url'], { waitUntil: 'load' });

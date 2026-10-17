@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# caliber 插件 SessionStart hook：工程有 CONTEXT.md 则全量注入（caliber-suite v1.0.0）
+# caliber 插件 SessionStart hook：工程有 CONTEXT.md 则全量注入
 # 契约 C5/C6：stdout=单行 JSON 或空输出；exit 恒 0；文件缺失静默
 PROJ="${ZCODE_PROJECT_DIR:-${CLAUDE_PROJECT_DIR:-}}"
 [ -n "$PROJ" ] || exit 0

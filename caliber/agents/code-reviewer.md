@@ -316,7 +316,7 @@ When available, also check project-specific conventions from `AGENTS.md` or proj
 
 Adapt your review to the project's established patterns. When in doubt, match what the rest of the codebase does.
 
-## v1.8 AI-Generated Code Review Addendum
+## AI-Generated Code Review Addendum
 
 When reviewing AI-generated changes, prioritize:
 

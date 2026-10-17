@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# caliber 插件 PostToolUse(Write|Edit) hook（caliber-suite v1.1.0）
+# caliber 插件 PostToolUse(Write|Edit) hook
 # ① 写 docs/learnings/*.md 未登记 INDEX.md 时注入登记提醒（C7/C8，已证
 # additionalContext 通道）；② 维护 session 编辑计数器与 wrote 标记供
 # learnings-wrapup.sh 门控（C5）。契约 C3/C4/C5/C7；exit 恒 0；任何异常静默
